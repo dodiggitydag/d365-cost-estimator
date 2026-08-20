@@ -1,0 +1,82 @@
+[
+  {
+    "id": "PROD",
+    "label": "Production",
+    "description": "The environment used for mock go-live and by end users after go-live. All approved code is merged into the release branch to create a deployable package that moves through UAT into Production in a scheduled window.",
+    "componentPriceIds": ["env.appInsights"],
+    "defaultStorageGB": { "fscmData": 100, "fscmFile": 40, "dvData": 5, "dvFile": 10 }
+  },
+  {
+    "id": "UAT",
+    "label": "UAT / Sandbox",
+    "description": "Where the functional team spends most of its time: setup, configuration, and modeling. Custom modifications are integrated here for regression and acceptance testing before promotion to GOLD.",
+    "componentPriceIds": ["env.appInsights"],
+    "defaultStorageGB": { "fscmData": 60, "fscmFile": 20, "dvData": 3, "dvFile": 5 }
+  },
+  {
+    "id": "SIT",
+    "label": "System Integration Testing",
+    "description": "Used to test the promotion of development through version control. Guarantees code is promoted correctly before it reaches UAT, minimizing unexpected behavior there.",
+    "componentPriceIds": ["env.addonTier2"],
+    "defaultStorageGB": { "fscmData": 30, "fscmFile": 10 }
+  },
+  {
+    "id": "GOLD",
+    "label": "GOLD (seed)",
+    "description": "Stores and prepares approved data and code. As configuration is finalized in UAT, functional users update GOLD so it becomes the seed environment eventually used to create PROD. Deprecated when comfortable after go-live.",
+    "componentPriceIds": ["env.appInsights", "env.addonTier2"],
+    "defaultStorageGB": { "fscmData": 40, "fscmFile": 10 }
+  },
+  {
+    "id": "MIG",
+    "label": "Data Migration",
+    "description": "Dedicated to data migration from legacy systems. A corrupted test run can be restored from backup with minimal disruption to the rest of the project. Uses the data entity framework; treated as a development server when customization is needed.",
+    "componentPriceIds": ["env.appInsights", "env.addonTier2"],
+    "defaultStorageGB": { "fscmData": 80, "fscmFile": 20 }
+  },
+  {
+    "id": "PERF",
+    "label": "Performance Testing",
+    "description": "A production-sized environment (Tier-4/5 equivalent) for load and performance testing ahead of go-live.",
+    "componentPriceIds": ["env.appInsights", "env.perfTier"],
+    "defaultStorageGB": { "fscmData": 100, "fscmFile": 40 }
+  },
+  {
+    "id": "DEMO",
+    "label": "Demo / CRP",
+    "description": "For reviewing out-of-the-box functionality with Microsoft demo data. Errors are reproduced here before opening Microsoft tickets, proving custom code was not responsible. No custom code is deployed, keeping it pristine.",
+    "componentPriceIds": ["env.devVm"],
+    "defaultStorageGB": {}
+  },
+  {
+    "id": "SUP",
+    "label": "Hotfix / Support",
+    "description": "Post-go-live environment for reproducing and fixing production issues on the release branch without disturbing ongoing development.",
+    "componentPriceIds": ["env.appInsights", "env.addonTier2"],
+    "defaultStorageGB": { "fscmData": 40, "fscmFile": 10 }
+  },
+  {
+    "id": "TRAIN",
+    "label": "Training",
+    "description": "Used to train the wider team on work instructions. Code comes from the release branch; data from UAT or a milestone activity such as mock go-live.",
+    "componentPriceIds": ["env.appInsights", "env.addonTier2"],
+    "defaultStorageGB": { "fscmData": 30, "fscmFile": 10 },
+    "optional": true
+  },
+  {
+    "id": "DEV",
+    "label": "Developer",
+    "description": "One per concurrent developer. All custom code projects originate here; code is tested by developers and functional consultants, compiles cleanly, and is reasonably free of best-practice violations before promotion.",
+    "componentPriceIds": ["env.devVm"],
+    "defaultStorageGB": { "fscmData": 5, "fscmFile": 2 },
+    "allowMultiple": true
+  },
+  {
+    "id": "BUILD",
+    "label": "Build",
+    "description": "Creates deployable packages from the approved branch. With Microsoft-hosted build pipelines this is usually a pipeline, not a persistent environment — included for methodology completeness.",
+    "componentPriceIds": [],
+    "defaultStorageGB": {},
+    "optional": true
+  }
+]

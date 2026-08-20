@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.local
+# Golden fixtures extracted from the real (client) workbook stay local-only.
+tests/golden/fixtures/local/
+.DS_Store

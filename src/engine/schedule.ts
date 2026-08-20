@@ -1,0 +1,174 @@
+import type {
+  Anchor,
+  EnvInstance,
+  Estimate,
+  EstimatorConfig,
+  Rollout,
+  ScheduleCell,
+  ScheduleMatrix,
+  ScheduleRule,
+} from './types';
+
+/** Go-live month of a rollout: explicit override, else end of the Prepare phase,
+ *  else end of the last phase. */
+export function goLiveMonth(rollout: Rollout): number {
+  if (rollout.goLiveMonthOverride) return rollout.goLiveMonthOverride;
+  const prepare = rollout.phases.find((p) => p.kind === 'prepare');
+  const last = rollout.phases[rollout.phases.length - 1];
+  const phase = prepare ?? last;
+  if (!phase) return 1;
+  return phase.startMonth + phase.lengthMonths - 1;
+}
+
+function resolveAnchor(
+  anchor: Anchor,
+  rollout: Rollout,
+  horizon: number,
+): number | undefined {
+  const offset = anchor.offsetMonths ?? 0;
+  if ('event' in anchor) {
+    switch (anchor.event) {
+      case 'projectStart':
+        return 1 + offset;
+      case 'horizonEnd':
+        return horizon + offset;
+      case 'goLive':
+        return goLiveMonth(rollout) + offset;
+    }
+  }
+  const phase = rollout.phases.find((p) => p.kind === anchor.phaseKind);
+  if (!phase) return undefined; // rollout has no such phase → rule silent for it
+  const base =
+    anchor.edge === 'start' ? phase.startMonth : phase.startMonth + phase.lengthMonths - 1;
+  return base + offset;
+}
+
+export interface RuleWindow {
+  ruleId: string;
+  rolloutId: string;
+  from: number;
+  to: number;
+}
+
+/** Every rule is evaluated once per rollout; a rule whose phase anchor is missing
+ *  in a rollout is skipped for that rollout. Active months are the union. */
+export function ruleWindows(
+  rules: ScheduleRule[],
+  rollouts: Rollout[],
+  horizon: number,
+): Map<string, RuleWindow[]> {
+  const byEnvType = new Map<string, RuleWindow[]>();
+  for (const rule of rules) {
+    for (const rollout of rollouts) {
+      const from = resolveAnchor(rule.from, rollout, horizon);
+      const to = resolveAnchor(rule.to, rollout, horizon);
+      if (from === undefined || to === undefined) continue;
+      const clampedFrom = Math.max(1, from);
+      const clampedTo = Math.min(horizon, to);
+      if (clampedTo < clampedFrom) continue;
+      const list = byEnvType.get(rule.envTypeId) ?? [];
+      list.push({ ruleId: rule.id, rolloutId: rollout.id, from: clampedFrom, to: clampedTo });
+      byEnvType.set(rule.envTypeId, list);
+    }
+  }
+  return byEnvType;
+}
+
+export function resolveRuleCount(
+  rule: ScheduleRule,
+  estimate: Estimate,
+): number {
+  if (rule.count === undefined) return 1;
+  if (typeof rule.count === 'number') return rule.count;
+  return estimate.team[rule.count.input];
+}
+
+/**
+ * Derive the environment instance list: instances the rules require (e.g. one DEV
+ * per concurrent developer) merged with instances the user added manually.
+ * User-added instances (fromRule !== true) are always kept.
+ */
+export function deriveInstances(
+  estimate: Estimate,
+  config: EstimatorConfig,
+): EnvInstance[] {
+  const rules = estimate.ruleOverrides ?? config.rules;
+  const instances: EnvInstance[] = [];
+  const seenTypes = new Set<string>();
+
+  for (const envType of config.environments) {
+    const envRules = rules.filter((r) => r.envTypeId === envType.id);
+    if (envRules.length === 0) continue;
+    const count = envType.allowMultiple
+      ? Math.max(...envRules.map((r) => resolveRuleCount(r, estimate)))
+      : 1;
+    if (count <= 0) continue;
+    seenTypes.add(envType.id);
+    for (let i = 1; i <= count; i++) {
+      const id = envType.allowMultiple
+        ? `${envType.id}${String(i).padStart(2, '0')}`
+        : envType.id;
+      const name = envType.allowMultiple ? `${envType.label} ${i}` : envType.label;
+      // Preserve user customizations (storage steps, name) on regenerated instances.
+      const existing = estimate.environments.find((e) => e.id === id);
+      instances.push(
+        existing ?? { id, typeId: envType.id, name, fromRule: true },
+      );
+    }
+  }
+
+  // User-added instances of types without rules, or extras beyond the rule count.
+  for (const inst of estimate.environments) {
+    if (!inst.fromRule && !instances.some((i) => i.id === inst.id)) {
+      instances.push(inst);
+    }
+  }
+  return instances;
+}
+
+export function buildSchedule(
+  estimate: Estimate,
+  config: EstimatorConfig,
+): ScheduleMatrix {
+  const horizon = estimate.horizonMonths;
+  const rules = (estimate.ruleOverrides ?? config.rules).map((r) =>
+    r.envTypeId === 'PROD' && r.id === 'prod-lead'
+      ? {
+          ...r,
+          from: { event: 'goLive' as const, offsetMonths: -estimate.settings.prodLeadMonths },
+        }
+      : r,
+  );
+  const windows = ruleWindows(rules, estimate.rollouts, horizon);
+  const instances = deriveInstances(estimate, config);
+
+  const cells: Record<string, ScheduleCell[]> = {};
+  for (const inst of instances) {
+    const row: ScheduleCell[] = Array.from({ length: horizon }, () => ({
+      active: false,
+      ruleIds: [],
+      rolloutIds: [],
+      overridden: false,
+    }));
+    for (const w of windows.get(inst.typeId) ?? []) {
+      for (let m = w.from; m <= w.to; m++) {
+        const cell = row[m - 1];
+        cell.active = true;
+        if (!cell.ruleIds.includes(w.ruleId)) cell.ruleIds.push(w.ruleId);
+        if (!cell.rolloutIds.includes(w.rolloutId)) cell.rolloutIds.push(w.rolloutId);
+      }
+    }
+    cells[inst.id] = row;
+  }
+
+  // Sparse user overrides win over rules and are flagged.
+  for (const ov of estimate.gridOverrides) {
+    const row = cells[ov.envInstanceId];
+    if (!row || ov.month < 1 || ov.month > horizon) continue;
+    const cell = row[ov.month - 1];
+    cell.active = ov.active;
+    cell.overridden = true;
+  }
+
+  return { months: horizon, instances, cells };
+}

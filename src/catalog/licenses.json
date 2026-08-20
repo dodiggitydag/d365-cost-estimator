@@ -1,0 +1,96 @@
+{
+  "types": [
+    {
+      "id": "erpPremium",
+      "label": "ERP Premium (Finance / SCM Premium)",
+      "priceId": "license.erpPremium",
+      "accrualGB": { "fscmData": 10, "fscmFile": 10, "dvData": 0.5, "dvFile": 3 },
+      "copilotCreditsPerUser": 1000
+    },
+    {
+      "id": "erpFull",
+      "label": "ERP full user (Finance / SCM)",
+      "priceId": "license.erpFull",
+      "accrualGB": { "fscmData": 5, "fscmFile": 5, "dvData": 0.25, "dvFile": 2 }
+    },
+    {
+      "id": "cePremium",
+      "label": "CE Premium (Sales / Customer Service / Contact Center)",
+      "priceId": "license.cePremium",
+      "accrualGB": {},
+      "copilotCreditsPerUser": 1000,
+      "notes": "CE storage entitlements accrue to Dataverse per the Power Platform guide; extend accrualGB if CE is primary."
+    },
+    {
+      "id": "ceEnterprise",
+      "label": "CE Enterprise (Sales / Customer Service)",
+      "priceId": "license.ceEnterprise",
+      "accrualGB": {}
+    },
+    {
+      "id": "csProfessional",
+      "label": "Professional (Sales or Customer Service)",
+      "priceId": "license.csProfessional",
+      "accrualGB": {}
+    },
+    {
+      "id": "attach",
+      "label": "Attach license",
+      "priceId": "license.attach",
+      "accrualGB": {},
+      "copilotCreditsPerUser": 1000,
+      "notes": "Adds no storage entitlement. Counts toward Copilot Studio credit entitlement (mirrors source workbook)."
+    },
+    {
+      "id": "activity",
+      "label": "Operations – Activity",
+      "priceId": "license.activity",
+      "accrualGB": { "fscmData": 1, "fscmFile": 2, "dvData": 0.064, "dvFile": 0.512 }
+    },
+    {
+      "id": "teamMember",
+      "label": "Team Members",
+      "priceId": "license.teamMember",
+      "accrualGB": {},
+      "notes": "Adds no storage entitlement."
+    },
+    {
+      "id": "device",
+      "label": "Operations – Device",
+      "priceId": "license.device",
+      "accrualGB": { "fscmData": 2, "fscmFile": 3, "dvData": 0.102, "dvFile": 0.819 }
+    }
+  ],
+  "tenantBases": [
+    {
+      "id": "base-erp-premium",
+      "ifAnyOf": ["erpPremium"],
+      "gb": { "fscmData": 125, "fscmFile": 110, "dvData": 30, "dvFile": 40, "dvLog": 3 },
+      "notes": "Tenant base when any F&SCM Premium license is present."
+    },
+    {
+      "id": "base-erp-full",
+      "ifAnyOf": ["erpFull"],
+      "gb": { "fscmData": 90, "fscmFile": 80, "dvData": 30, "dvFile": 40, "dvLog": 2 },
+      "notes": "Tenant base when any F&SCM full user license is present (no Premium)."
+    }
+  ],
+  "addons": [
+    {
+      "id": "customerInsights",
+      "label": "Customer Insights entitlement",
+      "gb": { "dvData": 15, "dvFile": 20 },
+      "notes": "Additional Dataverse entitlement when Customer Insights is licensed."
+    }
+  ],
+  "overagePriceIds": {
+    "fscmData": "storage.fscmData.overage",
+    "fscmFile": "storage.fscmFile.overage",
+    "dvData": "storage.dvData.overage",
+    "dvFile": "storage.dvFile.overage"
+  },
+  "copilot": {
+    "creditsPerPack": 25000,
+    "packPriceId": "copilotstudio.pack"
+  }
+}

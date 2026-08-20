@@ -1,0 +1,16 @@
+{
+  "horizonMonths": 36,
+  "rollouts": [
+    {
+      "id": "rollout-1",
+      "name": "Rollout 1",
+      "phases": [
+        { "id": "r1-initiate", "kind": "initiate", "name": "Initiate", "startMonth": 1, "lengthMonths": 2 },
+        { "id": "r1-implement", "kind": "implement", "name": "Implement", "startMonth": 3, "lengthMonths": 6 },
+        { "id": "r1-prepare", "kind": "prepare", "name": "Prepare", "startMonth": 9, "lengthMonths": 2 },
+        { "id": "r1-operate", "kind": "operate", "name": "Operate", "startMonth": 11, "lengthMonths": 26 }
+      ]
+    }
+  ],
+  "notes": "Default single-rollout timeline following Microsoft Success by Design (Initiate, Implement, Prepare, Operate). Go-live defaults to the end of Prepare. Add rollouts for phased deployments; every phase is editable."
+}

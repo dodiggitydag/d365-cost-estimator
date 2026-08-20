@@ -1,0 +1,259 @@
+{
+  "version": "2025-12",
+  "asOf": "2025-02-01",
+  "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+  "entries": [
+    {
+      "id": "storage.fscmData.overage",
+      "label": "F&SCM database storage add-on",
+      "value": 40,
+      "currency": "USD",
+      "unit": "GB/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Additional database capacity (Finance and Operations)",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "storage.fscmFile.overage",
+      "label": "F&SCM file storage add-on",
+      "value": 2,
+      "currency": "USD",
+      "unit": "GB/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Additional file capacity (Finance and Operations)",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "storage.dvData.overage",
+      "label": "Dataverse database capacity add-on",
+      "value": 40,
+      "currency": "USD",
+      "unit": "GB/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Power Platform Licensing Guide — Dataverse capacity add-ons (Database)",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "storage.dvFile.overage",
+      "label": "Dataverse file capacity add-on",
+      "value": 2.4,
+      "currency": "USD",
+      "unit": "GB/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Power Platform Licensing Guide — Dataverse capacity add-ons (File)",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "storage.dvLog.overage",
+      "label": "Dataverse log capacity add-on",
+      "value": 10,
+      "currency": "USD",
+      "unit": "GB/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Power Platform Licensing Guide — Dataverse capacity add-ons (Log)",
+      "asOf": "2025-02-01",
+      "notes": "Tracked but not billed by default in this tool (mirrors source workbook)."
+    },
+    {
+      "id": "license.erpPremium",
+      "label": "Dynamics 365 Finance / SCM Premium",
+      "value": 300,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Finance and Operations Premium",
+      "asOf": "2025-02-01",
+      "notes": "List price. Verify against the current licensing guide; actuals vary by agreement."
+    },
+    {
+      "id": "license.erpFull",
+      "label": "Dynamics 365 Finance / SCM (full user)",
+      "value": 210,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Finance / Supply Chain Management",
+      "asOf": "2025-02-01",
+      "notes": "List price. Verify against the current licensing guide."
+    },
+    {
+      "id": "license.cePremium",
+      "label": "Dynamics 365 Sales / Customer Service Premium",
+      "value": 150,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Sales Premium",
+      "asOf": "2025-02-01",
+      "notes": "Sales Premium list. Customer Service Premium differs — verify."
+    },
+    {
+      "id": "license.ceEnterprise",
+      "label": "Dynamics 365 Sales / Customer Service Enterprise",
+      "value": 105,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Sales / Customer Service Enterprise",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "license.csProfessional",
+      "label": "Dynamics 365 Sales / Customer Service Professional",
+      "value": 70,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Sales Professional",
+      "asOf": "2025-02-01",
+      "notes": "Sales Pro list. Customer Service Pro differs — verify."
+    },
+    {
+      "id": "license.attach",
+      "label": "Dynamics 365 attach license",
+      "value": 30,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Base and attach licenses",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "license.activity",
+      "label": "Dynamics 365 Operations – Activity",
+      "value": 50,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Operations Activity",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "license.teamMember",
+      "label": "Dynamics 365 Team Members",
+      "value": 8,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Team Members",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "license.device",
+      "label": "Dynamics 365 Operations – Device",
+      "value": 75,
+      "currency": "USD",
+      "unit": "device/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Operations Device",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "copilotstudio.pack",
+      "label": "Microsoft Copilot Studio message pack (25,000 credits)",
+      "value": 200,
+      "currency": "USD",
+      "unit": "pack",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Power Platform Licensing Guide — Microsoft Copilot Studio",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "env.appInsights",
+      "label": "Azure Application Insights (per environment)",
+      "value": 400,
+      "currency": "USD",
+      "unit": "env/mo",
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/monitor/",
+      "guideSection": "Azure Monitor pricing — Log Analytics ingestion (experience-based monthly estimate)",
+      "asOf": "2025-02-01",
+      "notes": "Experience-based estimate for a monitored D365 environment; tune to your telemetry volume."
+    },
+    {
+      "id": "env.devVm",
+      "label": "Developer VM allotment (per environment)",
+      "value": 180,
+      "currency": "USD",
+      "unit": "env/mo",
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/virtual-machines/",
+      "guideSection": "Azure VM pricing (dev box run-hours estimate, ~14x5 schedule)",
+      "asOf": "2025-02-01",
+      "notes": "Assumes the VM is deallocated outside working hours."
+    },
+    {
+      "id": "env.addonTier2",
+      "label": "Additional sandbox environment (Tier-2 equivalent)",
+      "value": 0,
+      "currency": "USD",
+      "unit": "env/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Additional environment add-ons",
+      "asOf": "2025-02-01",
+      "notes": "Enter from your agreement. With unified developer experience, extra environments are often licensed via Dataverse capacity instead."
+    },
+    {
+      "id": "env.perfTier",
+      "label": "Performance testing environment (Tier-4/5)",
+      "value": 0,
+      "currency": "USD",
+      "unit": "env/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
+      "guideSection": "Dynamics 365 Licensing Guide — Additional environment add-ons (Tier 4 / Tier 5)",
+      "asOf": "2025-02-01",
+      "notes": "Enter the tier price from your agreement when a dedicated perf environment is used."
+    },
+    {
+      "id": "ado.basic",
+      "label": "Azure DevOps Basic license",
+      "value": 6,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/devops/azure-devops-services/",
+      "guideSection": "Azure DevOps Services pricing — Basic Plan",
+      "asOf": "2025-02-01",
+      "notes": "First 5 users free — assumed consumed by the client's own team."
+    },
+    {
+      "id": "ado.testPlans",
+      "label": "Azure DevOps Test Plans license",
+      "value": 52,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/devops/azure-devops-services/",
+      "guideSection": "Azure DevOps Services pricing — Test Plans",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "ado.pipelines",
+      "label": "Microsoft-hosted pipelines (3 parallel jobs)",
+      "value": 120,
+      "currency": "USD",
+      "unit": "mo",
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/devops/azure-devops-services/",
+      "guideSection": "Azure DevOps Services pricing — Microsoft-hosted CI/CD",
+      "asOf": "2025-02-01",
+      "notes": "$40 per additional parallel job; default assumes 3."
+    },
+    {
+      "id": "ado.artifacts",
+      "label": "Azure DevOps artifact storage",
+      "value": 10,
+      "currency": "USD",
+      "unit": "mo",
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/devops/azure-devops-services/",
+      "guideSection": "Azure DevOps Services pricing — Artifacts",
+      "asOf": "2025-02-01"
+    },
+    {
+      "id": "azure.integration",
+      "label": "Azure Integration Services (Logic Apps / Functions)",
+      "value": 50,
+      "currency": "USD",
+      "unit": "mo",
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/logic-apps/",
+      "guideSection": "Azure Logic Apps / Functions consumption estimate",
+      "asOf": "2025-02-01",
+      "notes": "Placeholder for light integration workloads; replace with a sized estimate."
+    }
+  ]
+}
