@@ -44,18 +44,27 @@ export function App() {
           <a href="#settings">Settings</a>
         </nav>
         <div className="spacer" />
-        <button onClick={() => downloadJson(`${fileName}.estimate.json`, estimate)}>
+        <button
+          title="Download this estimate as a JSON file — the durable save you can reopen or share"
+          onClick={() => downloadJson(`${fileName}.estimate.json`, estimate)}
+        >
           Save JSON
         </button>
         <JsonFileButton
           label="Open JSON"
+          tooltip="Open a previously saved estimate JSON file (replaces what's on screen)"
           onText={(text) => update(() => parseEstimateJson(text))}
           onError={(err) => alert(`Not a valid estimate file:\n${String(err)}`)}
         />
-        <button className="primary" onClick={() => exportXlsx(estimate, config, result)}>
+        <button
+          className="primary"
+          title="Download a multi-sheet Excel workbook: Inputs, Schedule, Worksheet, Report, By Environment, Assumptions"
+          onClick={() => exportXlsx(estimate, config, result)}
+        >
           Export .xlsx
         </button>
         <button
+          title="Start a blank estimate with default timeline and settings"
           onClick={() => {
             if (confirm('Start a new estimate? Unsaved changes are kept in this browser only.'))
               reset();

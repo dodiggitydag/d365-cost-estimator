@@ -60,6 +60,7 @@ export function CopilotPanel() {
             />
             <button
               className="small danger"
+              title="Remove this agent"
               onClick={() =>
                 update((e) => ({
                   ...e,
@@ -74,6 +75,7 @@ export function CopilotPanel() {
         <div className="row">
           <button
             className="small"
+            title="Add an agent that consumes Copilot Studio credits each month it runs"
             onClick={() =>
               update((e) => ({
                 ...e,

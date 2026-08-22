@@ -36,6 +36,7 @@ export function LicensesPanel() {
               {estimate.licenseSteps.length > 1 && (
                 <button
                   className="small danger"
+                  title="Remove this count step"
                   onClick={() =>
                     update((e) => ({
                       ...e,
@@ -77,6 +78,7 @@ export function LicensesPanel() {
         ))}
         <button
           className="small"
+          title="Add a step so user counts change over time (e.g. pilot users first, everyone at go-live)"
           onClick={() =>
             update((e) => ({
               ...e,

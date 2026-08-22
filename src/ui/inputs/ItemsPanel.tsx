@@ -85,6 +85,7 @@ export function ItemsPanel() {
               />
               <button
                 className="small danger"
+                title="Remove this cost item"
                 onClick={() =>
                   update((e) => ({
                     ...e,
@@ -113,6 +114,7 @@ export function ItemsPanel() {
         ))}
         <button
           className="small"
+          title="Add a monthly cost the catalog doesn't cover — ISV licensing, Fabric capacity, integration VMs…"
           onClick={() =>
             update((e) => ({
               ...e,

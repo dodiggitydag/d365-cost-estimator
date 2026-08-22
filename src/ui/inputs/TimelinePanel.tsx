@@ -133,6 +133,7 @@ export function TimelinePanel() {
             ))}
             <button
               className="small"
+              title="Add a phase to this rollout (rules anchor to phase kinds, so set the kind)"
               onClick={() =>
                 patchRollout(r.id, {
                   phases: [
@@ -153,7 +154,12 @@ export function TimelinePanel() {
           </div>
         ))}
         <div className="row" style={{ marginTop: 8 }}>
-          <button onClick={() => update((e) => addRollout(e))}>+ Add rollout</button>
+          <button
+            title="Add a phased-deployment rollout with its own Implement/Prepare phases and go-live, starting after the last one"
+            onClick={() => update((e) => addRollout(e))}
+          >
+            + Add rollout
+          </button>
           <span className="help">Phased deployment? Each rollout gets its own go-live.</span>
         </div>
       </div>

@@ -49,6 +49,7 @@ export function SettingsPanel() {
       </p>
       <div className="row">
         <button
+          title="Download all four sections as one config-overrides.json to share your team's defaults"
           onClick={() => downloadJson('config-overrides.json', overrides ?? config)}
         >
           Export overrides
@@ -56,11 +57,13 @@ export function SettingsPanel() {
         <JsonFileButton
           label="Import overrides…"
           small
+          tooltip="Load a config-overrides.json — its sections replace the bundled defaults"
           onText={(text) => setOverrides(parseOverridesJson(text))}
           onError={(err) => alert(`Invalid config-overrides.json:\n${String(err)}`)}
         />
         <button
           className="danger"
+          title="Discard every customization in all four sections and return to the bundled catalog"
           onClick={() => {
             if (confirm('Discard all config customizations and restore defaults?'))
               setOverrides(null);
@@ -137,19 +140,29 @@ function SectionEditor({
         <div className="row">
           <button
             className="primary"
+            title="Check the JSON above against the schema and make it the active config"
             onClick={() => text !== null && applyText(text)}
             disabled={text === null}
           >
             Validate &amp; apply
           </button>
-          <button onClick={() => setText(null)} disabled={text === null}>
+          <button
+            title="Throw away your unapplied edits and show the active config again"
+            onClick={() => setText(null)}
+            disabled={text === null}
+          >
             Discard edits
           </button>
-          <button onClick={revert} disabled={!isOverridden}>
+          <button
+            title="Remove this section's customization and recompute with the bundled default"
+            onClick={revert}
+            disabled={!isOverridden}
+          >
             Revert to bundled default
           </button>
           <button
             className="small"
+            title="Fill the editor with the factory default for comparison or as a starting point — nothing applies until Validate & apply"
             onClick={() =>
               setText(JSON.stringify(defaultConfig()[section.key], null, 2))
             }
@@ -160,6 +173,7 @@ function SectionEditor({
         <div className="row">
           <button
             className="small"
+            title="Download just this section as a JSON file"
             onClick={() => downloadJson(`${section.key}.json`, current)}
           >
             Export JSON
@@ -167,6 +181,7 @@ function SectionEditor({
           <JsonFileButton
             label="Import JSON…"
             small
+            tooltip="Load a JSON file into this section (validated, applied immediately)"
             onText={(t) => applyText(t, 'Import failed: ')}
             onError={(err) => setError(`Import failed: ${String(err)}`)}
           />

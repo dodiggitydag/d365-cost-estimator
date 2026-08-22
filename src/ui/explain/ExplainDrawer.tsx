@@ -47,7 +47,9 @@ export function ExplainDrawer() {
       <div className="drawer">
         <div className="row" style={{ justifyContent: 'space-between' }}>
           <h2>{explain.title}</h2>
-          <button onClick={() => setExplain(null)}>Close</button>
+          <button title="Close this explanation (or click outside the drawer)" onClick={() => setExplain(null)}>
+            Close
+          </button>
         </div>
         <p className="muted">
           {lines.length} cost line{lines.length === 1 ? '' : 's'} · {money(total)}
