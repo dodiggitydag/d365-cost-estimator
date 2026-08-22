@@ -1,4 +1,4 @@
-import ExcelJS from 'exceljs';
+﻿import ExcelJS from 'exceljs';
 import type {
   Estimate,
   EstimateResult,
@@ -6,12 +6,15 @@ import type {
   ItemCategory,
 } from '../engine/types';
 import {
+  bucketTotals,
   byCategoryMonth,
   byEnvMonth,
   CATEGORY_LABELS,
   grandTotal,
+  monthLabel,
   monthlyTotals,
-  yearTotals,
+  parseYearMonth,
+  yearBuckets,
 } from '../engine/aggregate';
 import { triggerDownload } from '../model/persistence';
 
@@ -39,6 +42,10 @@ export async function buildWorkbook(
   const wb = new ExcelJS.Workbook();
   wb.creator = 'D365 F&SCM Cost Estimator';
   const months = estimate.horizonMonths;
+  const start = parseYearMonth(estimate.startYearMonth);
+  const monthHeaders = Array.from({ length: months }, (_, i) =>
+    monthLabel(i + 1, start),
+  );
 
   // --- Inputs -------------------------------------------------------------
   const inputs = wb.addWorksheet('Inputs');
@@ -48,6 +55,7 @@ export async function buildWorkbook(
   addKV('Created', estimate.meta.createdAt);
   addKV('Catalog version', estimate.meta.catalogVersion);
   addKV('Horizon (months)', months);
+  if (estimate.startYearMonth) addKV('Anticipated start', estimate.startYearMonth);
   addKV('Concurrent developers', estimate.team.concurrentDevs);
   addKV('Functional consultants', estimate.team.functionalConsultants);
   addKV('Solution architects', estimate.team.solutionArchitects);
@@ -79,7 +87,7 @@ export async function buildWorkbook(
 
   // --- Schedule -----------------------------------------------------------
   const sched = wb.addWorksheet('Schedule');
-  sched.addRow(['Environment', ...monthHeaders(months)]);
+  sched.addRow(['Environment', ...monthHeaders]);
   for (const inst of result.schedule.instances) {
     const row = sched.addRow([
       inst.name,
@@ -105,7 +113,7 @@ export async function buildWorkbook(
 
   // --- Worksheet (line items × months) --------------------------------------
   const detail = wb.addWorksheet('Worksheet');
-  detail.addRow(['Line item', 'Category', 'Environment', ...monthHeaders(months), 'Total']);
+  detail.addRow(['Line item', 'Category', 'Environment', ...monthHeaders, 'Total']);
   const byLabel = new Map<string, { category: string; env: string; byMonth: number[] }>();
   for (const line of result.lines) {
     const env = line.envInstanceId ?? '';
@@ -139,7 +147,7 @@ export async function buildWorkbook(
 
   // --- Report (category × month) -------------------------------------------
   const report = wb.addWorksheet('Report');
-  report.addRow(['Category', ...monthHeaders(months), 'Total']);
+  report.addRow(['Category', ...monthHeaders, 'Total']);
   const cats = byCategoryMonth(result.lines, months);
   for (const [cat, arr] of cats) {
     const row = report.addRow([
@@ -154,17 +162,25 @@ export async function buildWorkbook(
   totalRow.font = { bold: true };
   for (let c = 2; c <= 2 + months; c++) totalRow.getCell(c).numFmt = MONEY_FMT;
   report.addRow([]);
-  const years = yearTotals(monthly);
-  years.forEach((y, i) => {
-    const r = report.addRow([`Year ${i + 1}`, round2(y)]);
+  const elapsed = yearBuckets(months, null);
+  bucketTotals(monthly, elapsed).forEach((y, i) => {
+    const r = report.addRow([elapsed[i].label, round2(y)]);
     r.getCell(2).numFmt = MONEY_FMT;
   });
+  if (start) {
+    report.addRow([]);
+    const calendar = yearBuckets(months, start);
+    bucketTotals(monthly, calendar).forEach((y, i) => {
+      const r = report.addRow([`CY ${calendar[i].label}`, round2(y)]);
+      r.getCell(2).numFmt = MONEY_FMT;
+    });
+  }
   styleHeader(report, months + 1);
   report.getColumn(1).width = 30;
 
   // --- Per-environment rollup ------------------------------------------------
   const envSheet = wb.addWorksheet('By Environment');
-  envSheet.addRow(['Environment', ...monthHeaders(months), 'Total']);
+  envSheet.addRow(['Environment', ...monthHeaders, 'Total']);
   for (const [env, arr] of byEnvMonth(result.lines, months)) {
     const inst = result.schedule.instances.find((i) => i.id === env);
     const row = envSheet.addRow([
@@ -193,10 +209,6 @@ export async function buildWorkbook(
   }
 
   return (await wb.xlsx.writeBuffer()) as ArrayBuffer;
-}
-
-function monthHeaders(months: number): string[] {
-  return Array.from({ length: months }, (_, i) => `M${i + 1}`);
 }
 
 function styleHeader(ws: ExcelJS.Worksheet, cols: number): void {

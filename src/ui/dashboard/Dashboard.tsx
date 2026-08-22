@@ -11,13 +11,16 @@ import {
 } from 'recharts';
 import { useStore } from '../store';
 import {
+  bucketTotals,
   byCategoryMonth,
   byEnvMonth,
   CATEGORY_LABELS,
   grandTotal,
   money,
+  monthLabel,
   monthlyTotals,
-  yearTotals,
+  parseYearMonth,
+  yearBuckets,
 } from '../../engine';
 import type { ItemCategory, StoragePool } from '../../engine/types';
 import { STORAGE_POOL_LABELS } from '../../engine/types';
@@ -29,10 +32,17 @@ export function Dashboard() {
   const result = useStore((s) => s.result);
   const setExplain = useStore((s) => s.setExplain);
   const [stackBy, setStackBy] = useState<'category' | 'environment'>('category');
+  const [yearMode, setYearMode] = useState<'elapsed' | 'calendar'>('elapsed');
 
   const months = estimate.horizonMonths;
+  const start = parseYearMonth(estimate.startYearMonth);
   const monthly = useMemo(() => monthlyTotals(result.lines, months), [result.lines, months]);
-  const years = useMemo(() => yearTotals(monthly), [monthly]);
+  const buckets = useMemo(
+    () => yearBuckets(months, yearMode === 'calendar' ? start : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [months, yearMode, estimate.startYearMonth],
+  );
+  const years = useMemo(() => bucketTotals(monthly, buckets), [monthly, buckets]);
   const total = grandTotal(monthly);
 
   const categories = useMemo(
@@ -47,12 +57,13 @@ export function Dashboard() {
         : byEnvMonth(result.lines, months);
     const keys = [...groups.keys()];
     const data = Array.from({ length: months }, (_, i) => {
-      const row: Record<string, number | string> = { month: `M${i + 1}` };
+      const row: Record<string, number | string> = { month: monthLabel(i + 1, start) };
       for (const k of keys) row[k] = groups.get(k)![i];
       return row;
     });
     return { keys, data };
-  }, [categories, result.lines, months, stackBy]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categories, result.lines, months, stackBy, estimate.startYearMonth]);
 
   return (
     <div>
@@ -64,9 +75,26 @@ export function Dashboard() {
         {years.map((y, i) => (
           <div className="card" key={i}>
             <div className="value">{money(y)}</div>
-            <div className="label">Year {i + 1}</div>
+            <div className="label">
+              {buckets[i].label}
+              {buckets[i].to - buckets[i].from < 11 ? ' (partial)' : ''}
+            </div>
           </div>
         ))}
+        {start && (
+          <div className="card">
+            <label style={{ display: 'block', fontSize: 12, color: 'var(--muted)' }}>
+              years by
+            </label>
+            <select
+              value={yearMode}
+              onChange={(ev) => setYearMode(ev.target.value as 'elapsed' | 'calendar')}
+            >
+              <option value="elapsed">elapsed (Year 1, 2…)</option>
+              <option value="calendar">calendar ({start.y}, {start.y + 1}…)</option>
+            </select>
+          </div>
+        )}
         <div className="card">
           <div className="value">{money(avg(monthly.filter((m) => m > 0)))}</div>
           <div className="label">Avg active month</div>
@@ -119,15 +147,15 @@ export function Dashboard() {
           <thead>
             <tr>
               <th>Category</th>
-              {years.map((_, i) => (
-                <th key={i}>Year {i + 1}</th>
+              {buckets.map((b) => (
+                <th key={b.label}>{b.label}</th>
               ))}
               <th>Total</th>
             </tr>
           </thead>
           <tbody>
             {[...categories.entries()].map(([cat, arr]) => {
-              const catYears = yearTotals(arr);
+              const catYears = bucketTotals(arr, buckets);
               return (
                 <tr key={cat}>
                   <td>{CATEGORY_LABELS[cat as ItemCategory]}</td>

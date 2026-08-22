@@ -52,6 +52,7 @@ export function newEstimate(catalogVersion: string): Estimate {
     copilotPacksOwned: 0,
     customerInsightsAddon: false,
     environments: [],
+    disabledEnvIds: [],
     customItems: [
       {
         id: 'example-fabric',

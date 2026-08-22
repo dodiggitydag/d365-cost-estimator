@@ -65,22 +65,33 @@ export function EnvPanel() {
                 <strong style={{ minWidth: 150 }} title={t?.description}>
                   {inst.name}
                 </strong>
-                {!inst.fromRule && (
-                  <button
-                    className="small danger"
-                    onClick={() =>
-                      update((e) => ({
+                <button
+                  className="small danger"
+                  title="Remove this environment from the plan"
+                  onClick={() =>
+                    update((e) => {
+                      // Rule-derived instances would regenerate, so they are
+                      // disabled by id; user-added ones are deleted outright.
+                      const isManual = e.environments.some(
+                        (x) => x.id === inst.id && !x.fromRule,
+                      );
+                      return {
                         ...e,
-                        environments: e.environments.filter((x) => x.id !== inst.id),
+                        disabledEnvIds: isManual
+                          ? e.disabledEnvIds
+                          : [...e.disabledEnvIds, inst.id],
+                        environments: isManual
+                          ? e.environments.filter((x) => x.id !== inst.id)
+                          : e.environments,
                         gridOverrides: e.gridOverrides.filter(
                           (o) => o.envInstanceId !== inst.id,
                         ),
-                      }))
-                    }
-                  >
-                    remove
-                  </button>
-                )}
+                      };
+                    })
+                  }
+                >
+                  remove
+                </button>
               </div>
               <div className="row" style={{ gap: 6 }}>
                 {EDIT_POOLS.map((pool) => (
@@ -103,6 +114,26 @@ export function EnvPanel() {
             </div>
           );
         })}
+        {estimate.disabledEnvIds.length > 0 && (
+          <div className="row" style={{ marginTop: 6 }}>
+            <span className="muted">Removed:</span>
+            {estimate.disabledEnvIds.map((id) => (
+              <button
+                key={id}
+                className="small"
+                title="Restore this environment"
+                onClick={() =>
+                  update((e) => ({
+                    ...e,
+                    disabledEnvIds: e.disabledEnvIds.filter((x) => x !== id),
+                  }))
+                }
+              >
+                {id} ↩
+              </button>
+            ))}
+          </div>
+        )}
         <div className="row" style={{ marginTop: 6 }}>
           <label>Add instance</label>
           <select

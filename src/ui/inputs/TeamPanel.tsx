@@ -6,7 +6,7 @@ export function TeamPanel() {
   const update = useStore((s) => s.update);
 
   return (
-    <details className="section" open>
+    <details className="section">
       <summary>Team</summary>
       <div className="body">
         <NumberRow

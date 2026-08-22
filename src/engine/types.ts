@@ -232,6 +232,8 @@ export interface Estimate {
     catalogVersion: string;
   };
   horizonMonths: number; // <= 60
+  /** Anticipated project start, "YYYY-MM". Enables calendar-year reporting. */
+  startYearMonth?: string;
   rollouts: Rollout[];
   team: {
     concurrentDevs: number;
@@ -246,6 +248,8 @@ export interface Estimate {
   copilotPacksOwned: number;
   customerInsightsAddon: boolean;
   environments: EnvInstance[];
+  /** Rule-derived instances the user removed (e.g. TRAIN, GOLD, DEV03). */
+  disabledEnvIds: string[];
   customItems: CustomCostItem[];
   gridOverrides: GridOverride[];
   /** Built-in tenant-level items (AzDO, integrations...) the user can toggle. */

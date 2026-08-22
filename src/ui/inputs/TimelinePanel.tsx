@@ -1,6 +1,6 @@
 import { useStore } from '../store';
 import { addRollout, patchById } from '../../model/estimate';
-import { goLiveMonth } from '../../engine';
+import { goLiveMonth, monthLabel, parseYearMonth } from '../../engine';
 import type { Phase, PhaseKind, Rollout } from '../../engine/types';
 
 const KINDS: PhaseKind[] = ['initiate', 'implement', 'prepare', 'operate', 'custom'];
@@ -14,6 +14,8 @@ export function TimelinePanel() {
 
   const setPhase = (rollout: Rollout, phaseId: string, patch: Partial<Phase>) =>
     patchRollout(rollout.id, { phases: patchById(rollout.phases, phaseId, patch) });
+
+  const start = parseYearMonth(estimate.startYearMonth);
 
   return (
     <details className="section" open>
@@ -38,6 +40,17 @@ export function TimelinePanel() {
             }
           />
         </div>
+        <div className="row">
+          <label>Anticipated start</label>
+          <input
+            type="month"
+            value={estimate.startYearMonth ?? ''}
+            onChange={(ev) =>
+              update((e) => ({ ...e, startYearMonth: ev.target.value || undefined }))
+            }
+          />
+          <span className="muted">enables calendar-year view</span>
+        </div>
         {estimate.rollouts.map((r) => (
           <div key={r.id} style={{ marginTop: 8 }}>
             <div className="row">
@@ -46,7 +59,10 @@ export function TimelinePanel() {
                 value={r.name}
                 onChange={(ev) => patchRollout(r.id, { name: ev.target.value })}
               />
-              <span className="badge">go-live: month {goLiveMonth(r)}</span>
+              <span className="badge">
+                go-live: month {goLiveMonth(r)}
+                {start ? ` (${monthLabel(goLiveMonth(r), start)})` : ''}
+              </span>
               {estimate.rollouts.length > 1 && (
                 <button
                   className="small danger"

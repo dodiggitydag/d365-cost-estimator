@@ -133,7 +133,9 @@ export function deriveInstances(
       instances.push(inst);
     }
   }
-  return instances;
+  // Instances the user removed (any environment can be dropped from the plan).
+  const disabled = new Set(estimate.disabledEnvIds);
+  return instances.filter((i) => !disabled.has(i.id));
 }
 
 export function buildSchedule(

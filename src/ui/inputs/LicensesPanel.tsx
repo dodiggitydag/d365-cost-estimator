@@ -8,7 +8,7 @@ export function LicensesPanel() {
   const mode = estimate.licenseCostMode;
 
   return (
-    <details className="section">
+    <details className="section" open>
       <summary>Licenses &amp; users</summary>
       <div className="body">
         <p className="help">

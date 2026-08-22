@@ -123,6 +123,7 @@ export const estimateSchema = z.object({
     catalogVersion: z.string(),
   }),
   horizonMonths: z.number().int().min(1).max(60),
+  startYearMonth: z.string().regex(/^\d{4}-\d{2}$/).optional(),
   rollouts: z.array(
     z.object({
       id: z.string(),
@@ -177,6 +178,8 @@ export const estimateSchema = z.object({
       fromRule: z.boolean().optional(),
     }),
   ),
+  // default([]) keeps estimates saved before this field existed loadable
+  disabledEnvIds: z.array(z.string()).default([]),
   customItems: z.array(
     z.object({
       id: z.string(),

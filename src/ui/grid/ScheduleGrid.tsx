@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useStore } from '../store';
+import { monthLabel, parseYearMonth } from '../../engine';
 
 /**
  * Environment × month grid. Rules paint the base schedule; clicking or dragging
@@ -17,6 +18,7 @@ export function ScheduleGrid() {
   const paint = useRef<boolean | null>(null);
 
   const goLives = new Set(result.goLiveMonths.map((g) => g.month));
+  const start = parseYearMonth(estimate.startYearMonth);
 
   const setCell = (envInstanceId: string, month: number, active: boolean) =>
     update((e) => ({
@@ -53,7 +55,16 @@ export function ScheduleGrid() {
             <tr>
               <th className="env-name">Environment</th>
               {Array.from({ length: months }, (_, i) => (
-                <th key={i} className={goLives.has(i + 1) ? 'golive' : undefined} title={goLives.has(i + 1) ? 'Go-live' : undefined}>
+                <th
+                  key={i}
+                  className={goLives.has(i + 1) ? 'golive' : undefined}
+                  title={[
+                    start ? monthLabel(i + 1, start) : null,
+                    goLives.has(i + 1) ? 'Go-live' : null,
+                  ]
+                    .filter(Boolean)
+                    .join(' — ') || undefined}
+                >
                   {i + 1}
                 </th>
               ))}
