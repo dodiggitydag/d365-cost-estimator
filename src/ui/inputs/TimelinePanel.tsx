@@ -1,7 +1,7 @@
 import { useStore } from '../store';
-import { addRollout } from '../../model/estimate';
+import { addRollout, patchById } from '../../model/estimate';
 import { goLiveMonth } from '../../engine';
-import type { Phase, PhaseKind } from '../../engine/types';
+import type { Phase, PhaseKind, Rollout } from '../../engine/types';
 
 const KINDS: PhaseKind[] = ['initiate', 'implement', 'prepare', 'operate', 'custom'];
 
@@ -9,18 +9,11 @@ export function TimelinePanel() {
   const estimate = useStore((s) => s.estimate);
   const update = useStore((s) => s.update);
 
-  const setPhase = (rolloutId: string, phaseId: string, patch: Partial<Phase>) =>
-    update((e) => ({
-      ...e,
-      rollouts: e.rollouts.map((r) =>
-        r.id !== rolloutId
-          ? r
-          : {
-              ...r,
-              phases: r.phases.map((p) => (p.id === phaseId ? { ...p, ...patch } : p)),
-            },
-      ),
-    }));
+  const patchRollout = (rolloutId: string, patch: Partial<Rollout>) =>
+    update((e) => ({ ...e, rollouts: patchById(e.rollouts, rolloutId, patch) }));
+
+  const setPhase = (rollout: Rollout, phaseId: string, patch: Partial<Phase>) =>
+    patchRollout(rollout.id, { phases: patchById(rollout.phases, phaseId, patch) });
 
   return (
     <details className="section" open>
@@ -51,14 +44,7 @@ export function TimelinePanel() {
               <input
                 type="text"
                 value={r.name}
-                onChange={(ev) =>
-                  update((e) => ({
-                    ...e,
-                    rollouts: e.rollouts.map((x) =>
-                      x.id === r.id ? { ...x, name: ev.target.value } : x,
-                    ),
-                  }))
-                }
+                onChange={(ev) => patchRollout(r.id, { name: ev.target.value })}
               />
               <span className="badge">go-live: month {goLiveMonth(r)}</span>
               {estimate.rollouts.length > 1 && (
@@ -88,12 +74,12 @@ export function TimelinePanel() {
                 <input
                   type="text"
                   value={p.name}
-                  onChange={(ev) => setPhase(r.id, p.id, { name: ev.target.value })}
+                  onChange={(ev) => setPhase(r, p.id, { name: ev.target.value })}
                 />
                 <select
                   value={p.kind}
                   onChange={(ev) =>
-                    setPhase(r.id, p.id, { kind: ev.target.value as PhaseKind })
+                    setPhase(r, p.id, { kind: ev.target.value as PhaseKind })
                   }
                 >
                   {KINDS.map((k) => (
@@ -107,7 +93,7 @@ export function TimelinePanel() {
                   min={1}
                   value={p.startMonth}
                   onChange={(ev) =>
-                    setPhase(r.id, p.id, { startMonth: parseInt(ev.target.value) || 1 })
+                    setPhase(r, p.id, { startMonth: parseInt(ev.target.value) || 1 })
                   }
                 />
                 <input
@@ -115,21 +101,14 @@ export function TimelinePanel() {
                   min={1}
                   value={p.lengthMonths}
                   onChange={(ev) =>
-                    setPhase(r.id, p.id, { lengthMonths: parseInt(ev.target.value) || 1 })
+                    setPhase(r, p.id, { lengthMonths: parseInt(ev.target.value) || 1 })
                   }
                 />
                 <button
                   className="small danger"
                   title="Remove phase"
                   onClick={() =>
-                    update((e) => ({
-                      ...e,
-                      rollouts: e.rollouts.map((x) =>
-                        x.id === r.id
-                          ? { ...x, phases: x.phases.filter((q) => q.id !== p.id) }
-                          : x,
-                      ),
-                    }))
+                    patchRollout(r.id, { phases: r.phases.filter((q) => q.id !== p.id) })
                   }
                 >
                   ✕
@@ -139,26 +118,18 @@ export function TimelinePanel() {
             <button
               className="small"
               onClick={() =>
-                update((e) => ({
-                  ...e,
-                  rollouts: e.rollouts.map((x) =>
-                    x.id === r.id
-                      ? {
-                          ...x,
-                          phases: [
-                            ...x.phases,
-                            {
-                              id: `${r.id}-p${Date.now()}`,
-                              kind: 'custom',
-                              name: 'New phase',
-                              startMonth: 1,
-                              lengthMonths: 1,
-                            },
-                          ],
-                        }
-                      : x,
-                  ),
-                }))
+                patchRollout(r.id, {
+                  phases: [
+                    ...r.phases,
+                    {
+                      id: `${r.id}-p${Date.now()}`,
+                      kind: 'custom',
+                      name: 'New phase',
+                      startMonth: 1,
+                      lengthMonths: 1,
+                    },
+                  ],
+                })
               }
             >
               + phase

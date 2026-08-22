@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useStore } from './store';
 import { TimelinePanel } from './inputs/TimelinePanel';
 import { TeamPanel } from './inputs/TeamPanel';
@@ -10,6 +9,7 @@ import { ScheduleGrid } from './grid/ScheduleGrid';
 import { Dashboard } from './dashboard/Dashboard';
 import { ExplainDrawer } from './explain/ExplainDrawer';
 import { SettingsPanel } from './settings/SettingsPanel';
+import { JsonFileButton } from './JsonFileButton';
 import { downloadJson, parseEstimateJson } from '../model/persistence';
 import { exportXlsx } from '../export/xlsx';
 
@@ -20,9 +20,7 @@ export function App() {
   const config = useStore((s) => s.config);
   const result = useStore((s) => s.result);
   const update = useStore((s) => s.update);
-  const replaceEstimate = useStore((s) => s.replaceEstimate);
   const reset = useStore((s) => s.reset);
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const fileName = estimate.meta.name.trim() || 'estimate';
 
@@ -49,22 +47,10 @@ export function App() {
         <button onClick={() => downloadJson(`${fileName}.estimate.json`, estimate)}>
           Save JSON
         </button>
-        <button onClick={() => fileRef.current?.click()}>Open JSON</button>
-        <input
-          ref={fileRef}
-          type="file"
-          accept="application/json"
-          style={{ display: 'none' }}
-          onChange={async (ev) => {
-            const file = ev.target.files?.[0];
-            if (!file) return;
-            try {
-              replaceEstimate(parseEstimateJson(await file.text()));
-            } catch (err) {
-              alert(`Not a valid estimate file:\n${String(err)}`);
-            }
-            ev.target.value = '';
-          }}
+        <JsonFileButton
+          label="Open JSON"
+          onText={(text) => update(() => parseEstimateJson(text))}
+          onError={(err) => alert(`Not a valid estimate file:\n${String(err)}`)}
         />
         <button className="primary" onClick={() => exportXlsx(estimate, config, result)}>
           Export .xlsx
@@ -87,12 +73,18 @@ export function App() {
         <section id="inputs">
           <h2>Inputs</h2>
           <div className="panels-grid">
-            <TimelinePanel />
-            <TeamPanel />
-            <LicensesPanel />
-            <EnvPanel />
-            <CopilotPanel />
-            <ItemsPanel />
+            <div className="panel-col">
+              <TimelinePanel />
+              <TeamPanel />
+              <CopilotPanel />
+            </div>
+            <div className="panel-col">
+              <LicensesPanel />
+              <ItemsPanel />
+            </div>
+            <div className="panel-col">
+              <EnvPanel />
+            </div>
           </div>
         </section>
         <section id="schedule">

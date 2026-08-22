@@ -43,6 +43,7 @@ export function computeCopilot(
       0,
     );
     const cost = cents(additionalPacks * packPrice.value);
+    const entitledRounded = cents(entitledPacks);
 
     months.push({
       month: m,
@@ -65,12 +66,12 @@ export function computeCopilot(
           priceRefs: [packPriceId],
           formula:
             `MAX(ROUNDUP(${credits.toLocaleString()} credits ÷ ${creditsPerPack.toLocaleString()}) = ${packsRequired}` +
-            ` − ${round2(entitledPacks)} entitled − ${estimate.copilotPacksOwned} owned, 0)` +
+            ` − ${entitledRounded} entitled − ${estimate.copilotPacksOwned} owned, 0)` +
             ` × ${money(packPrice.value)} = ${money(cost)}`,
           inputs: {
             'agent credits/mo': credits,
             'packs required': packsRequired,
-            'entitled packs': round2(entitledPacks),
+            'entitled packs': entitledRounded,
             'packs owned': estimate.copilotPacksOwned,
             ...Object.fromEntries(
               agents.map((a) => [`agent: ${a.name}`, a.creditsPerMonth]),
@@ -82,8 +83,4 @@ export function computeCopilot(
     }
   }
   return { months, lines };
-}
-
-function round2(n: number): number {
-  return Math.round(n * 100) / 100;
 }

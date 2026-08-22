@@ -8,21 +8,17 @@ import type {
   StoragePool,
 } from './types';
 import { STORAGE_POOLS, STORAGE_POOL_LABELS } from './types';
-import { cents, money, priceEntry } from './catalogUtil';
+import { cents, money, priceEntry, stepAt } from './catalogUtil';
 
 /** License counts in effect for a given month (steps sorted by fromMonth). */
 export function licenseCountsAt(
   estimate: Estimate,
   month: number,
 ): Record<string, number> {
-  let counts: Record<string, number> = {};
-  for (const step of [...estimate.licenseSteps].sort((a, b) => a.fromMonth - b.fromMonth)) {
-    if (step.fromMonth <= month) counts = step.counts;
-  }
-  return counts;
+  return stepAt(estimate.licenseSteps, month)?.counts ?? {};
 }
 
-export function tenantBaseAt(
+function tenantBaseAt(
   estimate: Estimate,
   config: EstimatorConfig,
   month: number,
@@ -69,18 +65,16 @@ export function includedGB(
   return { total, parts };
 }
 
-function instanceStorageAt(
+/** Storage demand of one environment instance in a month, per pool.
+ *  User-set steps win; otherwise the environment type's default. */
+export function instanceStorageAt(
   inst: EnvInstance,
   config: EstimatorConfig,
   month: number,
   pool: StoragePool,
 ): number {
   if (inst.storageSteps && inst.storageSteps.length > 0) {
-    let gb = 0;
-    for (const step of [...inst.storageSteps].sort((a, b) => a.fromMonth - b.fromMonth)) {
-      if (step.fromMonth <= month) gb = step.gb[pool] ?? 0;
-    }
-    return gb;
+    return stepAt(inst.storageSteps, month)?.gb[pool] ?? 0;
   }
   const envType = config.environments.find((e) => e.id === inst.typeId);
   return envType?.defaultStorageGB[pool] ?? 0;

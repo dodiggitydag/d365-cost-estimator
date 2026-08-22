@@ -49,16 +49,37 @@ interface StandardItemDef {
   id: string;
   label: string;
   category: 'payg-ms';
+  enabledByDefault: boolean;
   /** Monthly amount + formula + inputs, computed from the estimate. */
   compute: (
     estimate: Estimate,
     config: EstimatorConfig,
   ) => { amount: number; priceRefs: string[]; formula: string; inputs: Record<string, number | string> };
-  defaultWindow: (estimate: Estimate) => { from: number; to: number };
+  /** Active window; defaults to the whole horizon. */
+  defaultWindow?: (estimate: Estimate) => { from: number; to: number };
 }
 
 function firstGoLive(estimate: Estimate): number {
   return Math.min(...estimate.rollouts.map(goLiveMonth));
+}
+
+/** A tenant item that is just a flat catalog price per month. */
+function flatFee(id: string, label: string, priceId: string, enabledByDefault: boolean): StandardItemDef {
+  return {
+    id,
+    label,
+    category: 'payg-ms',
+    enabledByDefault,
+    compute: (_est, cfg) => {
+      const price = priceEntry(cfg.pricing, priceId);
+      return {
+        amount: cents(price.value),
+        priceRefs: [priceId],
+        formula: `${price.label} = ${money(price.value)}/mo`,
+        inputs: {},
+      };
+    },
+  };
 }
 
 export const STANDARD_ITEMS: StandardItemDef[] = [
@@ -66,6 +87,7 @@ export const STANDARD_ITEMS: StandardItemDef[] = [
     id: 'azdoBasic',
     label: 'Azure DevOps Basic licenses (consulting team)',
     category: 'payg-ms',
+    enabledByDefault: true,
     compute: (est, cfg) => {
       const seats = est.team.functionalConsultants + est.team.solutionArchitects;
       const price = priceEntry(cfg.pricing, 'ado.basic');
@@ -76,12 +98,12 @@ export const STANDARD_ITEMS: StandardItemDef[] = [
         inputs: { 'functional consultants': est.team.functionalConsultants, 'solution architects': est.team.solutionArchitects },
       };
     },
-    defaultWindow: (est) => ({ from: 1, to: est.horizonMonths }),
   },
   {
     id: 'azdoTestPlans',
     label: 'Azure DevOps Test Plans licenses',
     category: 'payg-ms',
+    enabledByDefault: false,
     compute: (est, cfg) => {
       const seats = est.team.functionalConsultants + est.team.solutionArchitects;
       const price = priceEntry(cfg.pricing, 'ado.testPlans');
@@ -94,51 +116,9 @@ export const STANDARD_ITEMS: StandardItemDef[] = [
     },
     defaultWindow: (est) => ({ from: 1, to: firstGoLive(est) }),
   },
-  {
-    id: 'azdoPipelines',
-    label: 'Microsoft-hosted pipelines',
-    category: 'payg-ms',
-    compute: (_est, cfg) => {
-      const price = priceEntry(cfg.pricing, 'ado.pipelines');
-      return {
-        amount: cents(price.value),
-        priceRefs: ['ado.pipelines'],
-        formula: `${price.label} = ${money(price.value)}/mo`,
-        inputs: {},
-      };
-    },
-    defaultWindow: (est) => ({ from: 1, to: est.horizonMonths }),
-  },
-  {
-    id: 'azdoArtifacts',
-    label: 'Azure DevOps artifact storage',
-    category: 'payg-ms',
-    compute: (_est, cfg) => {
-      const price = priceEntry(cfg.pricing, 'ado.artifacts');
-      return {
-        amount: cents(price.value),
-        priceRefs: ['ado.artifacts'],
-        formula: `${price.label} = ${money(price.value)}/mo`,
-        inputs: {},
-      };
-    },
-    defaultWindow: (est) => ({ from: 1, to: est.horizonMonths }),
-  },
-  {
-    id: 'azureIntegration',
-    label: 'Azure Integration Services',
-    category: 'payg-ms',
-    compute: (_est, cfg) => {
-      const price = priceEntry(cfg.pricing, 'azure.integration');
-      return {
-        amount: cents(price.value),
-        priceRefs: ['azure.integration'],
-        formula: `${price.label} = ${money(price.value)}/mo`,
-        inputs: {},
-      };
-    },
-    defaultWindow: (est) => ({ from: 1, to: est.horizonMonths }),
-  },
+  flatFee('azdoPipelines', 'Microsoft-hosted pipelines', 'ado.pipelines', true),
+  flatFee('azdoArtifacts', 'Azure DevOps artifact storage', 'ado.artifacts', true),
+  flatFee('azureIntegration', 'Azure Integration Services', 'azure.integration', false),
 ];
 
 export function computeStandardItems(
@@ -149,7 +129,7 @@ export function computeStandardItems(
   for (const def of STANDARD_ITEMS) {
     const settings = estimate.standardItems[def.id];
     if (!settings || !settings.enabled) continue;
-    const win = def.defaultWindow(estimate);
+    const win = def.defaultWindow?.(estimate) ?? { from: 1, to: estimate.horizonMonths };
     const from = settings.fromMonth ?? win.from;
     const to = settings.toMonth ?? win.to;
     const { amount, priceRefs, formula, inputs } = def.compute(estimate, config);

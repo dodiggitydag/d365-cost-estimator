@@ -1,5 +1,15 @@
 import timelineJson from '../catalog/timeline.default.json';
 import type { Estimate, Rollout } from '../engine/types';
+import { STANDARD_ITEMS } from '../engine/costs';
+
+/** Immutable single-item update for id-keyed lists — shared by the input panels. */
+export function patchById<T extends { id: string }>(
+  arr: T[],
+  id: string,
+  patch: Partial<T>,
+): T[] {
+  return arr.map((x) => (x.id === id ? { ...x, ...patch } : x));
+}
 
 export function newEstimate(catalogVersion: string): Estimate {
   const timeline = structuredClone(timelineJson) as {
@@ -55,13 +65,9 @@ export function newEstimate(catalogVersion: string): Estimate {
       },
     ],
     gridOverrides: [],
-    standardItems: {
-      azdoBasic: { enabled: true },
-      azdoTestPlans: { enabled: false },
-      azdoPipelines: { enabled: true },
-      azdoArtifacts: { enabled: true },
-      azureIntegration: { enabled: false },
-    },
+    standardItems: Object.fromEntries(
+      STANDARD_ITEMS.map((d) => [d.id, { enabled: d.enabledByDefault }]),
+    ),
     settings: {
       prodLeadMonths: 2,
     },

@@ -74,9 +74,13 @@ body {
 }
 .panels-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   align-items: start;
+}
+.panel-col { min-width: 0; }
+@media (max-width: 1100px) {
+  .panels-grid { grid-template-columns: 1fr; }
 }
 
 .section { margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--panel); }
@@ -110,10 +114,6 @@ button.primary:hover { background: #0c5aa0; }
 button.small { padding: 2px 6px; font-size: 12px; }
 button.danger { color: #a4262c; }
 
-.tabs { display: flex; gap: 4px; margin-bottom: 12px; }
-.tabs button { border-radius: 6px 6px 0 0; border-bottom: none; padding: 6px 14px; }
-.tabs button.active { background: var(--panel); font-weight: 600; border-color: var(--accent); }
-
 .muted { color: var(--muted); font-size: 12.5px; }
 .help { color: var(--muted); font-size: 12px; margin: 2px 0 6px; }
 
@@ -138,7 +138,6 @@ td.cell.overridden::after {
   border-style: solid; border-width: 0 8px 8px 0;
   border-color: transparent var(--override) transparent transparent;
 }
-tr.phase-band th { background: var(--accent-soft); font-weight: 500; }
 th.golive { background: #d9f0dc !important; }
 
 /* Dashboard */

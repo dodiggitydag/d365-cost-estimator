@@ -23,6 +23,9 @@ Scheduling rules) shows the effective JSON. Edit → **Validate & apply**. Chang
 - **Change when DEV environments run**: edit the `dev-during-build` rule's `from`/`to`
   anchors. Anchors are either `{ "phaseKind": "implement", "edge": "start", "offsetMonths": 0 }`
   or `{ "event": "goLive" | "projectStart" | "horizonEnd", "offsetMonths": -2 }`.
+  `offsetMonths` can also reference an estimate setting instead of a fixed number —
+  `{ "setting": "prodLeadMonths", "negate": true }` is how the default `prod-lead` rule
+  ties PROD's start to the "PROD lead time" input.
 - **Price a Tier-4 performance environment**: set `env.perfTier`'s `value` in Prices —
   it ships as 0 because add-on environment pricing depends on your agreement.
 - **ISVs / Fabric / anything monthly**: use custom cost items in the left panel — those
@@ -39,7 +42,7 @@ enforced by `npm run validate:catalog` and the test suite.
 Every rule is evaluated once per rollout; an environment is active in the union of the
 resulting windows, so:
 
-- `perRollout`-minded rules (UAT, MIG, PERF, TRAIN) naturally re-fire for each rollout.
+- Per-rollout environments (UAT, MIG, PERF, TRAIN) naturally re-fire for each rollout.
 - Long-lived environments (PROD from first go-live − lead time, Hotfix from first
   go-live) stay on because their window extends to the horizon.
 - A rule whose phase anchor doesn't exist in a rollout is skipped for that rollout.

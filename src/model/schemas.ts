@@ -77,22 +77,29 @@ export const environmentTypeSchema = z.object({
   optional: z.boolean().optional(),
 });
 
+const anchorOffsetSchema = z.union([
+  z.number().int(),
+  z.object({
+    setting: z.literal('prodLeadMonths'),
+    negate: z.boolean().optional(),
+  }),
+]);
+
 const anchorSchema = z.union([
   z.object({
     phaseKind: z.enum(['initiate', 'implement', 'prepare', 'operate', 'custom']),
     edge: z.enum(['start', 'end']),
-    offsetMonths: z.number().int().optional(),
+    offsetMonths: anchorOffsetSchema.optional(),
   }),
   z.object({
     event: z.enum(['goLive', 'projectStart', 'horizonEnd']),
-    offsetMonths: z.number().int().optional(),
+    offsetMonths: anchorOffsetSchema.optional(),
   }),
 ]);
 
 export const scheduleRuleSchema = z.object({
   id: z.string().min(1),
   envTypeId: z.string().min(1),
-  scope: z.enum(['global', 'perRollout']),
   from: anchorSchema,
   to: anchorSchema,
   count: z
@@ -136,7 +143,6 @@ export const estimateSchema = z.object({
     concurrentDevs: z.number().int().nonnegative(),
     functionalConsultants: z.number().int().nonnegative(),
     solutionArchitects: z.number().int().nonnegative(),
-    devHoursBudget: z.number().nonnegative().optional(),
   }),
   licenseSteps: z.array(
     z.object({
@@ -201,5 +207,4 @@ export const estimateSchema = z.object({
   settings: z.object({
     prodLeadMonths: z.number().int().nonnegative(),
   }),
-  ruleOverrides: z.array(scheduleRuleSchema).optional(),
 });

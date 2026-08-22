@@ -12,9 +12,9 @@ import {
 export * from './types';
 export * from './aggregate';
 export { goLiveMonth, buildSchedule } from './schedule';
-export { includedGB, neededGB, licenseCountsAt } from './storage';
+export { includedGB, neededGB, licenseCountsAt, instanceStorageAt } from './storage';
 export { STANDARD_ITEMS } from './costs';
-export { money, cents, priceEntry } from './catalogUtil';
+export { money, cents, priceEntry, stepAt } from './catalogUtil';
 
 export function computeEstimate(
   estimate: Estimate,

@@ -1,8 +1,7 @@
-[
+﻿[
   {
     "id": "demo-early",
     "envTypeId": "DEMO",
-    "scope": "global",
     "from": { "event": "projectStart" },
     "to": { "phaseKind": "implement", "edge": "start", "offsetMonths": 1 },
     "rationale": "A demo environment with Microsoft data supports Initiate-phase discovery and CRP sessions, and remains briefly available as build begins for troubleshooting against out-of-the-box behavior."
@@ -10,7 +9,6 @@
   {
     "id": "dev-during-build",
     "envTypeId": "DEV",
-    "scope": "global",
     "from": { "phaseKind": "implement", "edge": "start" },
     "to": { "phaseKind": "prepare", "edge": "end" },
     "count": { "input": "concurrentDevs" },
@@ -19,7 +17,6 @@
   {
     "id": "gold-through-golive",
     "envTypeId": "GOLD",
-    "scope": "global",
     "from": { "phaseKind": "implement", "edge": "start" },
     "to": { "event": "goLive", "offsetMonths": 1 },
     "rationale": "GOLD accumulates approved configuration and code to become the seed for Production; it is deprecated shortly after go-live once the team is comfortable."
@@ -27,7 +24,6 @@
   {
     "id": "sit-during-build",
     "envTypeId": "SIT",
-    "scope": "global",
     "from": { "phaseKind": "implement", "edge": "start", "offsetMonths": 1 },
     "to": { "phaseKind": "prepare", "edge": "end" },
     "rationale": "SIT validates code promotion through version control before it reaches UAT, from the first promotions early in build until go-live."
@@ -35,7 +31,6 @@
   {
     "id": "mig-per-rollout",
     "envTypeId": "MIG",
-    "scope": "perRollout",
     "from": { "phaseKind": "implement", "edge": "start" },
     "to": { "event": "goLive", "offsetMonths": 1 },
     "rationale": "Data migration gets a dedicated environment per rollout so a corrupted test run can be restored without disrupting the wider project; it stays available through cutover reconciliation."
@@ -43,7 +38,6 @@
   {
     "id": "uat-per-rollout",
     "envTypeId": "UAT",
-    "scope": "perRollout",
     "from": { "phaseKind": "implement", "edge": "start" },
     "to": { "event": "horizonEnd" },
     "rationale": "The main functional sandbox: configuration and modeling during build, acceptance and regression testing through Prepare, and the pre-production staging environment after go-live."
@@ -51,7 +45,6 @@
   {
     "id": "perf-before-golive",
     "envTypeId": "PERF",
-    "scope": "perRollout",
     "from": { "event": "goLive", "offsetMonths": -2 },
     "to": { "event": "goLive" },
     "rationale": "Performance testing runs in a production-sized environment for roughly two months ending at go-live, when volumes and code are representative."
@@ -59,7 +52,6 @@
   {
     "id": "train-per-rollout",
     "envTypeId": "TRAIN",
-    "scope": "perRollout",
     "from": { "phaseKind": "prepare", "edge": "start" },
     "to": { "event": "goLive", "offsetMonths": 1 },
     "rationale": "End-user training happens during Prepare on release-branch code, continuing briefly past go-live for stragglers."
@@ -67,15 +59,13 @@
   {
     "id": "prod-lead",
     "envTypeId": "PROD",
-    "scope": "global",
-    "from": { "event": "goLive", "offsetMonths": -2 },
+    "from": { "event": "goLive", "offsetMonths": { "setting": "prodLeadMonths", "negate": true } },
     "to": { "event": "horizonEnd" },
-    "rationale": "Production is provisioned ahead of go-live (default two months, configurable) for mock go-live and cutover rehearsal, then runs for the life of the system."
+    "rationale": "Production is provisioned ahead of go-live (the PROD lead time setting) for mock go-live and cutover rehearsal, then runs for the life of the system."
   },
   {
     "id": "sup-after-golive",
     "envTypeId": "SUP",
-    "scope": "global",
     "from": { "event": "goLive" },
     "to": { "event": "horizonEnd" },
     "rationale": "A hotfix environment mirrors production from go-live onward so fixes can be built and tested without disturbing ongoing development."

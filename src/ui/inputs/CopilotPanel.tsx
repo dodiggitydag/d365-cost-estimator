@@ -1,8 +1,14 @@
 import { useStore } from '../store';
+import { patchById } from '../../model/estimate';
+import type { CopilotAgent } from '../../engine/types';
+import { NumberRow } from './NumberRow';
 
 export function CopilotPanel() {
   const estimate = useStore((s) => s.estimate);
   const update = useStore((s) => s.update);
+
+  const patchAgent = (id: string, patch: Partial<CopilotAgent>) =>
+    update((e) => ({ ...e, copilotAgents: patchById(e.copilotAgents, id, patch) }));
 
   return (
     <details className="section">
@@ -24,28 +30,16 @@ export function CopilotPanel() {
             <input
               type="text"
               value={a.name}
-              onChange={(ev) =>
-                update((e) => ({
-                  ...e,
-                  copilotAgents: e.copilotAgents.map((x) =>
-                    x.id === a.id ? { ...x, name: ev.target.value } : x,
-                  ),
-                }))
-              }
+              onChange={(ev) => patchAgent(a.id, { name: ev.target.value })}
             />
             <input
               type="number"
               min={0}
               value={a.creditsPerMonth}
               onChange={(ev) =>
-                update((e) => ({
-                  ...e,
-                  copilotAgents: e.copilotAgents.map((x) =>
-                    x.id === a.id
-                      ? { ...x, creditsPerMonth: Math.max(0, parseInt(ev.target.value) || 0) }
-                      : x,
-                  ),
-                }))
+                patchAgent(a.id, {
+                  creditsPerMonth: Math.max(0, parseInt(ev.target.value) || 0),
+                })
               }
             />
             <input
@@ -53,12 +47,7 @@ export function CopilotPanel() {
               min={1}
               value={a.fromMonth}
               onChange={(ev) =>
-                update((e) => ({
-                  ...e,
-                  copilotAgents: e.copilotAgents.map((x) =>
-                    x.id === a.id ? { ...x, fromMonth: parseInt(ev.target.value) || 1 } : x,
-                  ),
-                }))
+                patchAgent(a.id, { fromMonth: Math.max(1, parseInt(ev.target.value) || 1) })
               }
             />
             <input
@@ -66,12 +55,7 @@ export function CopilotPanel() {
               min={1}
               value={a.toMonth}
               onChange={(ev) =>
-                update((e) => ({
-                  ...e,
-                  copilotAgents: e.copilotAgents.map((x) =>
-                    x.id === a.id ? { ...x, toMonth: parseInt(ev.target.value) || 1 } : x,
-                  ),
-                }))
+                patchAgent(a.id, { toMonth: Math.max(1, parseInt(ev.target.value) || 1) })
               }
             />
             <button
@@ -109,20 +93,11 @@ export function CopilotPanel() {
             + agent
           </button>
         </div>
-        <div className="row">
-          <label>Packs already owned</label>
-          <input
-            type="number"
-            min={0}
-            value={estimate.copilotPacksOwned}
-            onChange={(ev) =>
-              update((e) => ({
-                ...e,
-                copilotPacksOwned: Math.max(0, parseInt(ev.target.value) || 0),
-              }))
-            }
-          />
-        </div>
+        <NumberRow
+          label="Packs already owned"
+          value={estimate.copilotPacksOwned}
+          onChange={(n) => update((e) => ({ ...e, copilotPacksOwned: n }))}
+        />
       </div>
     </details>
   );

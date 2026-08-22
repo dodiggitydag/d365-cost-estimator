@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useStore } from '../store';
 
 /**
@@ -13,8 +13,8 @@ export function ScheduleGrid() {
   const setExplain = useStore((s) => s.setExplain);
 
   const months = estimate.horizonMonths;
-  const paint = useRef<{ active: boolean } | null>(null);
-  const [, force] = useState(0);
+  // Target state while drag-painting; null when not painting.
+  const paint = useRef<boolean | null>(null);
 
   const goLives = new Set(result.goLiveMonths.map((g) => g.month));
 
@@ -87,13 +87,14 @@ export function ScheduleGrid() {
                       onMouseDown={(ev) => {
                         if (ev.button !== 0) return;
                         ev.preventDefault();
-                        const target = !cell.active;
-                        paint.current = { active: target };
-                        setCell(inst.id, mIdx + 1, target);
-                        force((n) => n + 1);
+                        paint.current = !cell.active;
+                        setCell(inst.id, mIdx + 1, paint.current);
                       }}
                       onMouseEnter={() => {
-                        if (paint.current) setCell(inst.id, mIdx + 1, paint.current.active);
+                        // Skip cells already in the target state — each setCell
+                        // triggers a full recompute, so no-ops matter while dragging.
+                        if (paint.current !== null && cell.active !== paint.current)
+                          setCell(inst.id, mIdx + 1, paint.current);
                       }}
                       onContextMenu={(ev) => {
                         ev.preventDefault();
@@ -140,18 +141,15 @@ function cellTitle(
 }
 
 function RuleLegend() {
-  const estimate = useStore((s) => s.estimate);
   const config = useStore((s) => s.config);
-  const rules = estimate.ruleOverrides ?? config.rules;
   return (
     <details className="section">
       <summary>Scheduling rules in effect</summary>
       <div className="body">
-        {rules.map((r) => (
+        {config.rules.map((r) => (
           <p key={r.id} style={{ margin: '6px 0' }}>
             <span className="badge">{r.envTypeId}</span>
             <strong>{r.id}</strong>
-            <span className="muted"> ({r.scope})</span>
             <br />
             <span className="muted">{r.rationale}</span>
           </p>

@@ -12,7 +12,7 @@ import {
 } from '../model/persistence';
 
 export interface ExplainTarget {
-  kind: 'month' | 'cell' | 'env' | 'category';
+  kind: 'month' | 'cell' | 'category';
   month?: number;
   category?: string;
   envInstanceId?: string | null;
@@ -26,43 +26,50 @@ interface Store {
   result: EstimateResult;
   explain: ExplainTarget | null;
   update: (fn: (e: Estimate) => Estimate) => void;
-  replaceEstimate: (e: Estimate) => void;
   setOverrides: (o: ConfigOverrides | null) => void;
   setExplain: (t: ExplainTarget | null) => void;
   reset: () => void;
 }
 
-function recompute(estimate: Estimate, overrides: ConfigOverrides | null) {
-  const config = effectiveConfig(overrides);
-  return { config, result: computeEstimate(estimate, config) };
+// Autosave is debounced: a synchronous JSON.stringify + localStorage write per
+// keystroke or drag-paint mousemove is the main source of input lag.
+let saveTimer: ReturnType<typeof setTimeout> | undefined;
+function scheduleSave(estimate: Estimate): void {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => saveEstimate(estimate), 300);
 }
 
 const initialOverrides = loadSavedOverrides();
+const initialConfig = effectiveConfig(initialOverrides);
 const initialEstimate =
   loadSavedEstimate() ?? newEstimate(defaultConfig().pricing.version);
 
 export const useStore = create<Store>((set, get) => ({
   estimate: initialEstimate,
   overrides: initialOverrides,
-  ...recompute(initialEstimate, initialOverrides),
+  config: initialConfig,
+  result: computeEstimate(initialEstimate, initialConfig),
   explain: null,
   update: (fn) => {
     const estimate = fn(get().estimate);
-    saveEstimate(estimate);
-    set({ estimate, ...recompute(estimate, get().overrides) });
-  },
-  replaceEstimate: (estimate) => {
-    saveEstimate(estimate);
-    set({ estimate, ...recompute(estimate, get().overrides) });
+    scheduleSave(estimate);
+    // config is unchanged here — keeping its identity stable avoids re-rendering
+    // every config subscriber (e.g. the Settings editors) on each keystroke.
+    set({ estimate, result: computeEstimate(estimate, get().config) });
   },
   setOverrides: (overrides) => {
     saveOverrides(overrides);
-    set({ overrides, ...recompute(get().estimate, overrides) });
+    const config = effectiveConfig(overrides);
+    set({ overrides, config, result: computeEstimate(get().estimate, config) });
   },
   setExplain: (explain) => set({ explain }),
   reset: () => {
-    const estimate = newEstimate(defaultConfig().pricing.version);
+    const estimate = newEstimate(get().config.pricing.version);
     saveEstimate(estimate);
-    set({ estimate, ...recompute(estimate, get().overrides), explain: null });
+    set({
+      estimate,
+      result: computeEstimate(estimate, get().config),
+      explain: null,
+    });
   },
 }));

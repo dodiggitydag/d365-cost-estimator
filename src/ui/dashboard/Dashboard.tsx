@@ -19,7 +19,8 @@ import {
   monthlyTotals,
   yearTotals,
 } from '../../engine';
-import type { ItemCategory } from '../../engine/types';
+import type { ItemCategory, StoragePool } from '../../engine/types';
+import { STORAGE_POOL_LABELS } from '../../engine/types';
 
 const COLORS = ['#0f6cbd', '#77b7e5', '#f2a900', '#8764b8', '#1a7f37', '#d13438', '#5b6675', '#00b7c3'];
 
@@ -30,19 +31,19 @@ export function Dashboard() {
   const [stackBy, setStackBy] = useState<'category' | 'environment'>('category');
 
   const months = estimate.horizonMonths;
-  const monthly = useMemo(() => monthlyTotals(result.lines, months), [result, months]);
+  const monthly = useMemo(() => monthlyTotals(result.lines, months), [result.lines, months]);
   const years = useMemo(() => yearTotals(monthly), [monthly]);
   const total = grandTotal(monthly);
+
+  const categories = useMemo(
+    () => byCategoryMonth(result.lines, months),
+    [result.lines, months],
+  );
 
   const stacked = useMemo(() => {
     const groups =
       stackBy === 'category'
-        ? new Map(
-            [...byCategoryMonth(result.lines, months)].map(([k, v]) => [
-              CATEGORY_LABELS[k],
-              v,
-            ]),
-          )
+        ? new Map([...categories].map(([k, v]) => [CATEGORY_LABELS[k], v]))
         : byEnvMonth(result.lines, months);
     const keys = [...groups.keys()];
     const data = Array.from({ length: months }, (_, i) => {
@@ -51,9 +52,7 @@ export function Dashboard() {
       return row;
     });
     return { keys, data };
-  }, [result, months, stackBy]);
-
-  const categories = useMemo(() => byCategoryMonth(result.lines, months), [result, months]);
+  }, [categories, result.lines, months, stackBy]);
 
   return (
     <div>
@@ -63,11 +62,7 @@ export function Dashboard() {
           <div className="label">Total over {months} months</div>
         </div>
         {years.map((y, i) => (
-          <div
-            className="card clickable"
-            key={i}
-            title="Click a month in the table below for detail"
-          >
+          <div className="card" key={i}>
             <div className="value">{money(y)}</div>
             <div className="label">Year {i + 1}</div>
           </div>
@@ -210,7 +205,7 @@ function StoragePanel() {
         <tbody>
           {[...byPool.entries()].map(([pool, v]) => (
             <tr key={pool}>
-              <td>{pool}</td>
+              <td>{STORAGE_POOL_LABELS[pool as StoragePool]}</td>
               <td>{v.months}</td>
               <td>{v.maxOver.toFixed(1)}</td>
               <td>{money(v.cost)}</td>

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useStore } from '../store';
-import { CATEGORY_LABELS, money } from '../../engine';
+import { CATEGORY_LABELS, cents, linesFor, money } from '../../engine';
 import type { CostLine, ItemCategory } from '../../engine/types';
 
 /**
@@ -12,26 +12,20 @@ export function ExplainDrawer() {
   const setExplain = useStore((s) => s.setExplain);
   const result = useStore((s) => s.result);
   const config = useStore((s) => s.config);
-  const estimate = useStore((s) => s.estimate);
 
   const lines = useMemo(() => {
     if (!explain) return [];
-    return result.lines
-      .filter((l) => {
-        if (explain.month !== undefined && l.month !== explain.month) return false;
-        if (explain.category !== undefined && l.category !== explain.category)
-          return false;
-        if (explain.kind === 'cell' && l.envInstanceId !== explain.envInstanceId)
-          return false;
-        return true;
-      })
-      .sort((a, b) => b.amount - a.amount);
+    return linesFor(result.lines, {
+      month: explain.month,
+      category: explain.category as ItemCategory | undefined,
+      envInstanceId: explain.kind === 'cell' ? (explain.envInstanceId ?? null) : undefined,
+    }).sort((a, b) => b.amount - a.amount);
   }, [explain, result]);
 
   if (!explain) return null;
 
-  const rules = estimate.ruleOverrides ?? config.rules;
-  const total = lines.reduce((s, l) => s + l.amount, 0);
+  const rules = config.rules;
+  const total = cents(lines.reduce((s, l) => s + l.amount, 0));
 
   // For a schedule cell, also surface the environment's methodology description
   // and the rule rationale even when the cell has no cost lines.
@@ -97,8 +91,7 @@ export function ExplainDrawer() {
 
 function ExplainLine({ line }: { line: CostLine }) {
   const config = useStore((s) => s.config);
-  const estimate = useStore((s) => s.estimate);
-  const rules = estimate.ruleOverrides ?? config.rules;
+  const rules = config.rules;
 
   return (
     <div className="explain-line">

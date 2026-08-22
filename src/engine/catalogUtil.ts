@@ -18,3 +18,15 @@ export function money(n: number): string {
 export function cents(n: number): number {
   return Math.round(n * 100) / 100;
 }
+
+/** The step in effect at a month: the last entry with fromMonth <= month. */
+export function stepAt<T extends { fromMonth: number }>(
+  steps: T[],
+  month: number,
+): T | undefined {
+  let current: T | undefined;
+  for (const step of [...steps].sort((a, b) => a.fromMonth - b.fromMonth)) {
+    if (step.fromMonth <= month) current = step;
+  }
+  return current;
+}

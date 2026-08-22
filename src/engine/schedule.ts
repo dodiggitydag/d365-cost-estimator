@@ -1,5 +1,6 @@
 import type {
   Anchor,
+  AnchorOffset,
   EnvInstance,
   Estimate,
   EstimatorConfig,
@@ -20,12 +21,23 @@ export function goLiveMonth(rollout: Rollout): number {
   return phase.startMonth + phase.lengthMonths - 1;
 }
 
+function resolveOffset(
+  offset: AnchorOffset | undefined,
+  settings: Estimate['settings'],
+): number {
+  if (offset === undefined) return 0;
+  if (typeof offset === 'number') return offset;
+  const value = settings[offset.setting];
+  return offset.negate ? -value : value;
+}
+
 function resolveAnchor(
   anchor: Anchor,
   rollout: Rollout,
   horizon: number,
+  settings: Estimate['settings'],
 ): number | undefined {
-  const offset = anchor.offsetMonths ?? 0;
+  const offset = resolveOffset(anchor.offsetMonths, settings);
   if ('event' in anchor) {
     switch (anchor.event) {
       case 'projectStart':
@@ -56,12 +68,13 @@ export function ruleWindows(
   rules: ScheduleRule[],
   rollouts: Rollout[],
   horizon: number,
+  settings: Estimate['settings'],
 ): Map<string, RuleWindow[]> {
   const byEnvType = new Map<string, RuleWindow[]>();
   for (const rule of rules) {
     for (const rollout of rollouts) {
-      const from = resolveAnchor(rule.from, rollout, horizon);
-      const to = resolveAnchor(rule.to, rollout, horizon);
+      const from = resolveAnchor(rule.from, rollout, horizon, settings);
+      const to = resolveAnchor(rule.to, rollout, horizon, settings);
       if (from === undefined || to === undefined) continue;
       const clampedFrom = Math.max(1, from);
       const clampedTo = Math.min(horizon, to);
@@ -92,18 +105,15 @@ export function deriveInstances(
   estimate: Estimate,
   config: EstimatorConfig,
 ): EnvInstance[] {
-  const rules = estimate.ruleOverrides ?? config.rules;
   const instances: EnvInstance[] = [];
-  const seenTypes = new Set<string>();
 
   for (const envType of config.environments) {
-    const envRules = rules.filter((r) => r.envTypeId === envType.id);
+    const envRules = config.rules.filter((r) => r.envTypeId === envType.id);
     if (envRules.length === 0) continue;
     const count = envType.allowMultiple
       ? Math.max(...envRules.map((r) => resolveRuleCount(r, estimate)))
       : 1;
     if (count <= 0) continue;
-    seenTypes.add(envType.id);
     for (let i = 1; i <= count; i++) {
       const id = envType.allowMultiple
         ? `${envType.id}${String(i).padStart(2, '0')}`
@@ -131,15 +141,7 @@ export function buildSchedule(
   config: EstimatorConfig,
 ): ScheduleMatrix {
   const horizon = estimate.horizonMonths;
-  const rules = (estimate.ruleOverrides ?? config.rules).map((r) =>
-    r.envTypeId === 'PROD' && r.id === 'prod-lead'
-      ? {
-          ...r,
-          from: { event: 'goLive' as const, offsetMonths: -estimate.settings.prodLeadMonths },
-        }
-      : r,
-  );
-  const windows = ruleWindows(rules, estimate.rollouts, horizon);
+  const windows = ruleWindows(config.rules, estimate.rollouts, horizon, estimate.settings);
   const instances = deriveInstances(estimate, config);
 
   const cells: Record<string, ScheduleCell[]> = {};

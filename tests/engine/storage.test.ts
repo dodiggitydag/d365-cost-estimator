@@ -68,9 +68,9 @@ describe('storage entitlements (workbook parity)', () => {
       month: i + 1,
       active: true,
     }));
-    est.ruleOverrides = []; // no rules → only the manual instance/overrides
-    const schedule = buildSchedule(est, config);
-    const { lines } = computeStorage(est, config, schedule);
+    const bare = { ...config, rules: [] }; // no rules → only the manual instance/overrides
+    const schedule = buildSchedule(est, bare);
+    const { lines } = computeStorage(est, bare, schedule);
     const m1 = lines.find((l) => l.id === 'storage.fscmData.m1');
     expect(m1?.amount).toBe((200 - 140) * 40); // $2,400
     expect(m1?.trace.formula).toContain('MAX(200 GB needed − 140 GB included, 0)');

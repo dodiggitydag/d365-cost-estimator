@@ -1,14 +1,9 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useStore } from '../store';
 import { defaultConfig, type ConfigOverrides } from '../../model/config';
 import { downloadJson, parseOverridesJson } from '../../model/persistence';
-import {
-  environmentTypeSchema,
-  licenseCatalogSchema,
-  pricingCatalogSchema,
-  scheduleRuleSchema,
-} from '../../model/schemas';
-import { z } from 'zod';
+import { configOverridesSchema } from '../../model/schemas';
+import { JsonFileButton } from '../JsonFileButton';
 
 type SectionKey = 'pricing' | 'licenses' | 'environments' | 'rules';
 
@@ -35,12 +30,10 @@ const SECTIONS: { key: SectionKey; label: string; help: string }[] = [
   },
 ];
 
-const validators: Record<SectionKey, (data: unknown) => void> = {
-  pricing: (d) => pricingCatalogSchema.parse(d),
-  licenses: (d) => licenseCatalogSchema.parse(d),
-  environments: (d) => z.array(environmentTypeSchema).parse(d),
-  rules: (d) => z.array(scheduleRuleSchema).parse(d),
-};
+/** Validate one section with the same schema the file-import path uses. */
+function validateSection(key: SectionKey, data: unknown): void {
+  configOverridesSchema.shape[key].unwrap().parse(data);
+}
 
 export function SettingsPanel() {
   const config = useStore((s) => s.config);
@@ -60,7 +53,12 @@ export function SettingsPanel() {
         >
           Export overrides
         </button>
-        <ImportOverrides />
+        <JsonFileButton
+          label="Import overrides…"
+          small
+          onText={(text) => setOverrides(parseOverridesJson(text))}
+          onError={(err) => alert(`Invalid config-overrides.json:\n${String(err)}`)}
+        />
         <button
           className="danger"
           onClick={() => {
@@ -83,32 +81,6 @@ export function SettingsPanel() {
   );
 }
 
-function ImportOverrides() {
-  const setOverrides = useStore((s) => s.setOverrides);
-  return (
-    <label className="small" style={{ cursor: 'pointer' }}>
-      <button className="small" style={{ pointerEvents: 'none' }}>
-        Import overrides…
-      </button>
-      <input
-        type="file"
-        accept="application/json"
-        style={{ display: 'none' }}
-        onChange={async (ev) => {
-          const file = ev.target.files?.[0];
-          if (!file) return;
-          try {
-            setOverrides(parseOverridesJson(await file.text()));
-          } catch (err) {
-            alert(`Invalid config-overrides.json:\n${String(err)}`);
-          }
-          ev.target.value = '';
-        }}
-      />
-    </label>
-  );
-}
-
 function SectionEditor({
   section,
 }: {
@@ -121,17 +93,19 @@ function SectionEditor({
   const [text, setText] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const apply = () => {
-    if (text === null) return;
+  const serialized = useMemo(() => JSON.stringify(current, null, 2), [current]);
+
+  /** Shared by the editor's Apply and the file import: validate, merge, persist. */
+  const applyText = (raw: string, errPrefix = '') => {
     try {
-      const data = JSON.parse(text);
-      validators[section.key](data);
+      const data = JSON.parse(raw);
+      validateSection(section.key, data);
       const next: ConfigOverrides = { ...(overrides ?? {}), [section.key]: data };
       setOverrides(next);
       setError(null);
       setText(null);
     } catch (err) {
-      setError(String(err));
+      setError(`${errPrefix}${String(err)}`);
     }
   };
 
@@ -145,20 +119,6 @@ function SectionEditor({
   };
 
   const isOverridden = overrides?.[section.key] !== undefined;
-  const defaults = defaultConfig()[section.key];
-
-  const importSection = async (file: File) => {
-    try {
-      const data = JSON.parse(await file.text());
-      validators[section.key](data);
-      const next: ConfigOverrides = { ...(overrides ?? {}), [section.key]: data };
-      setOverrides(next);
-      setError(null);
-      setText(null);
-    } catch (err) {
-      setError(`Import failed: ${String(err)}`);
-    }
-  };
 
   return (
     <details className="section">
@@ -169,13 +129,17 @@ function SectionEditor({
         <p className="help">{section.help}</p>
         <textarea
           className="json-editor"
-          value={text ?? JSON.stringify(current, null, 2)}
+          value={text ?? serialized}
           onChange={(ev) => setText(ev.target.value)}
           spellCheck={false}
         />
         {error && <p className="error-text">{error}</p>}
         <div className="row">
-          <button className="primary" onClick={apply} disabled={text === null}>
+          <button
+            className="primary"
+            onClick={() => text !== null && applyText(text)}
+            disabled={text === null}
+          >
             Validate &amp; apply
           </button>
           <button onClick={() => setText(null)} disabled={text === null}>
@@ -186,7 +150,9 @@ function SectionEditor({
           </button>
           <button
             className="small"
-            onClick={() => setText(JSON.stringify(defaults, null, 2))}
+            onClick={() =>
+              setText(JSON.stringify(defaultConfig()[section.key], null, 2))
+            }
           >
             Load default into editor
           </button>
@@ -198,21 +164,12 @@ function SectionEditor({
           >
             Export JSON
           </button>
-          <label style={{ minWidth: 0 }}>
-            <button className="small" style={{ pointerEvents: 'none' }}>
-              Import JSON…
-            </button>
-            <input
-              type="file"
-              accept="application/json"
-              style={{ display: 'none' }}
-              onChange={(ev) => {
-                const file = ev.target.files?.[0];
-                if (file) void importSection(file);
-                ev.target.value = '';
-              }}
-            />
-          </label>
+          <JsonFileButton
+            label="Import JSON…"
+            small
+            onText={(t) => applyText(t, 'Import failed: ')}
+            onError={(err) => setError(`Import failed: ${String(err)}`)}
+          />
           <span className="help">
             share just this section (e.g. your environment plan) as a file
           </span>

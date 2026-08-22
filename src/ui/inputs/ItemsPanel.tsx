@@ -1,12 +1,16 @@
 import { useStore } from '../store';
 import { STANDARD_ITEMS } from '../../engine';
-import type { ItemCategory } from '../../engine/types';
+import { patchById } from '../../model/estimate';
+import type { CustomCostItem, ItemCategory } from '../../engine/types';
 
 const CATEGORIES: ItemCategory[] = ['payg-ms', 'licensing-ms', 'isv', 'custom'];
 
 export function ItemsPanel() {
   const estimate = useStore((s) => s.estimate);
   const update = useStore((s) => s.update);
+
+  const patchItem = (id: string, patch: Partial<CustomCostItem>) =>
+    update((e) => ({ ...e, customItems: patchById(e.customItems, id, patch) }));
 
   return (
     <details className="section">
@@ -51,28 +55,16 @@ export function ItemsPanel() {
               <input
                 type="text"
                 value={item.name}
-                onChange={(ev) =>
-                  update((e) => ({
-                    ...e,
-                    customItems: e.customItems.map((x) =>
-                      x.id === item.id ? { ...x, name: ev.target.value } : x,
-                    ),
-                  }))
-                }
+                onChange={(ev) => patchItem(item.id, { name: ev.target.value })}
               />
               <input
                 type="number"
                 min={0}
                 value={item.monthlyAmount}
                 onChange={(ev) =>
-                  update((e) => ({
-                    ...e,
-                    customItems: e.customItems.map((x) =>
-                      x.id === item.id
-                        ? { ...x, monthlyAmount: Math.max(0, parseFloat(ev.target.value) || 0) }
-                        : x,
-                    ),
-                  }))
+                  patchItem(item.id, {
+                    monthlyAmount: Math.max(0, parseFloat(ev.target.value) || 0),
+                  })
                 }
               />
               <input
@@ -80,12 +72,7 @@ export function ItemsPanel() {
                 min={1}
                 value={item.fromMonth}
                 onChange={(ev) =>
-                  update((e) => ({
-                    ...e,
-                    customItems: e.customItems.map((x) =>
-                      x.id === item.id ? { ...x, fromMonth: parseInt(ev.target.value) || 1 } : x,
-                    ),
-                  }))
+                  patchItem(item.id, { fromMonth: Math.max(1, parseInt(ev.target.value) || 1) })
                 }
               />
               <input
@@ -93,12 +80,7 @@ export function ItemsPanel() {
                 min={1}
                 value={item.toMonth}
                 onChange={(ev) =>
-                  update((e) => ({
-                    ...e,
-                    customItems: e.customItems.map((x) =>
-                      x.id === item.id ? { ...x, toMonth: parseInt(ev.target.value) || 1 } : x,
-                    ),
-                  }))
+                  patchItem(item.id, { toMonth: Math.max(1, parseInt(ev.target.value) || 1) })
                 }
               />
               <button
@@ -117,14 +99,7 @@ export function ItemsPanel() {
               <select
                 value={item.category}
                 onChange={(ev) =>
-                  update((e) => ({
-                    ...e,
-                    customItems: e.customItems.map((x) =>
-                      x.id === item.id
-                        ? { ...x, category: ev.target.value as ItemCategory }
-                        : x,
-                    ),
-                  }))
+                  patchItem(item.id, { category: ev.target.value as ItemCategory })
                 }
               >
                 {CATEGORIES.map((c) => (

@@ -143,16 +143,18 @@ export interface Rollout {
 // Scheduling rules
 // ---------------------------------------------------------------------------
 
+/** A fixed month offset, or one driven by an estimate setting (e.g. PROD lead time). */
+export type AnchorOffset =
+  | number
+  | { setting: 'prodLeadMonths'; negate?: boolean };
+
 export type Anchor =
-  | { phaseKind: PhaseKind; edge: 'start' | 'end'; offsetMonths?: number }
-  | { event: 'goLive' | 'projectStart' | 'horizonEnd'; offsetMonths?: number };
+  | { phaseKind: PhaseKind; edge: 'start' | 'end'; offsetMonths?: AnchorOffset }
+  | { event: 'goLive' | 'projectStart' | 'horizonEnd'; offsetMonths?: AnchorOffset };
 
 export interface ScheduleRule {
   id: string;
   envTypeId: string;
-  /** global: one window per estimate (union over rollouts for phase anchors);
-   *  perRollout: the rule fires once per rollout. */
-  scope: 'global' | 'perRollout';
   from: Anchor;
   to: Anchor;
   /** Number of instances (DEV): fixed or driven by an input. */
@@ -235,7 +237,6 @@ export interface Estimate {
     concurrentDevs: number;
     functionalConsultants: number;
     solutionArchitects: number;
-    devHoursBudget?: number;
   };
   licenseSteps: LicenseStep[];
   licenseCostMode: LicenseCostMode;
@@ -252,8 +253,6 @@ export interface Estimate {
   settings: {
     prodLeadMonths: number; // PROD starts N months before first go-live
   };
-  /** Rule set replacing the defaults, if the user edited rules. */
-  ruleOverrides?: ScheduleRule[];
 }
 
 // ---------------------------------------------------------------------------

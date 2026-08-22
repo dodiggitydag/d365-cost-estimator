@@ -1,8 +1,12 @@
 import { useStore } from '../store';
+import { instanceStorageAt } from '../../engine';
+import { STORAGE_POOLS } from '../../engine/types';
 import type { EnvInstance, StoragePool } from '../../engine/types';
+import { NumberRow } from './NumberRow';
 
-const EDIT_POOLS: StoragePool[] = ['fscmData', 'fscmFile', 'dvData', 'dvFile'];
-const POOL_SHORT: Record<string, string> = {
+// dvLog is tracked but not billed, so it isn't edited per environment.
+const EDIT_POOLS: StoragePool[] = STORAGE_POOLS.filter((p) => p !== 'dvLog');
+const POOL_SHORT: Partial<Record<StoragePool, string>> = {
   fscmData: 'F&SCM data',
   fscmFile: 'F&SCM file',
   dvData: 'DV data',
@@ -12,13 +16,11 @@ const POOL_SHORT: Record<string, string> = {
 export function EnvPanel() {
   const config = useStore((s) => s.config);
   const result = useStore((s) => s.result);
+  const estimate = useStore((s) => s.estimate);
   const update = useStore((s) => s.update);
 
-  const storageOf = (inst: EnvInstance, pool: StoragePool): number => {
-    if (inst.storageSteps?.length) return inst.storageSteps[0].gb[pool] ?? 0;
-    const t = config.environments.find((e) => e.id === inst.typeId);
-    return t?.defaultStorageGB[pool] ?? 0;
-  };
+  const storageOf = (inst: EnvInstance, pool: StoragePool): number =>
+    instanceStorageAt(inst, config, 1, pool);
 
   const setStorage = (inst: EnvInstance, pool: StoragePool, gb: number) =>
     update((e) => {
@@ -39,7 +41,7 @@ export function EnvPanel() {
     });
 
   return (
-    <details className="section">
+    <details className="section" open>
       <summary>Environments &amp; storage demand</summary>
       <div className="body">
         <p className="help">
@@ -47,6 +49,14 @@ export function EnvPanel() {
           developers). Storage demand (GB while active) feeds the overage calculation —
           edit it per environment. Add extra instances if the project needs them.
         </p>
+        <NumberRow
+          label="PROD lead time (months)"
+          value={estimate.settings.prodLeadMonths}
+          onChange={(n) =>
+            update((e) => ({ ...e, settings: { ...e.settings, prodLeadMonths: n } }))
+          }
+          help="before first go-live"
+        />
         {result.schedule.instances.map((inst) => {
           const t = config.environments.find((e) => e.id === inst.typeId);
           return (
