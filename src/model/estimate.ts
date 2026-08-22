@@ -9,7 +9,7 @@ export function newEstimate(catalogVersion: string): Estimate {
   return {
     schemaVersion: 1,
     meta: {
-      name: 'New estimate',
+      name: '',
       createdAt: new Date().toISOString(),
       catalogVersion,
     },

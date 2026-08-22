@@ -19,12 +19,12 @@ export function App() {
   const estimate = useStore((s) => s.estimate);
   const config = useStore((s) => s.config);
   const result = useStore((s) => s.result);
-  const view = useStore((s) => s.view);
-  const setView = useStore((s) => s.setView);
   const update = useStore((s) => s.update);
   const replaceEstimate = useStore((s) => s.replaceEstimate);
   const reset = useStore((s) => s.reset);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const fileName = estimate.meta.name.trim() || 'estimate';
 
   return (
     <>
@@ -33,13 +33,20 @@ export function App() {
         <input
           className="estimate-name"
           type="text"
+          placeholder="Estimate name"
           value={estimate.meta.name}
           onChange={(ev) =>
             update((e) => ({ ...e, meta: { ...e.meta, name: ev.target.value } }))
           }
         />
+        <nav>
+          <a href="#inputs">Inputs</a>
+          <a href="#schedule">Schedule</a>
+          <a href="#estimate">Estimate</a>
+          <a href="#settings">Settings</a>
+        </nav>
         <div className="spacer" />
-        <button onClick={() => downloadJson(`${estimate.meta.name}.estimate.json`, estimate)}>
+        <button onClick={() => downloadJson(`${fileName}.estimate.json`, estimate)}>
           Save JSON
         </button>
         <button onClick={() => fileRef.current?.click()}>Open JSON</button>
@@ -76,32 +83,31 @@ export function App() {
         {config.pricing.version}, Microsoft Licensing Guides). Actual pricing varies by
         agreement.
       </div>
-      <div className="layout">
-        <aside className="sidebar">
-          <TimelinePanel />
-          <TeamPanel />
-          <LicensesPanel />
-          <EnvPanel />
-          <CopilotPanel />
-          <ItemsPanel />
-        </aside>
-        <main className="main">
-          <div className="tabs">
-            <button className={view === 'schedule' ? 'active' : ''} onClick={() => setView('schedule')}>
-              Schedule
-            </button>
-            <button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>
-              Estimate
-            </button>
-            <button className={view === 'settings' ? 'active' : ''} onClick={() => setView('settings')}>
-              Settings
-            </button>
+      <main className="page">
+        <section id="inputs">
+          <h2>Inputs</h2>
+          <div className="panels-grid">
+            <TimelinePanel />
+            <TeamPanel />
+            <LicensesPanel />
+            <EnvPanel />
+            <CopilotPanel />
+            <ItemsPanel />
           </div>
-          {view === 'schedule' && <ScheduleGrid />}
-          {view === 'dashboard' && <Dashboard />}
-          {view === 'settings' && <SettingsPanel />}
-        </main>
-      </div>
+        </section>
+        <section id="schedule">
+          <h2>Schedule</h2>
+          <ScheduleGrid />
+        </section>
+        <section id="estimate">
+          <h2>Estimate</h2>
+          <Dashboard />
+        </section>
+        <section id="settings">
+          <h2>Settings</h2>
+          <SettingsPanel />
+        </section>
+      </main>
       <footer className="footer">
         Open source (MIT) · built {__BUILD_DATE__} · prices are cited per line — click any
         figure for its explanation · not affiliated with Microsoft

@@ -25,8 +25,6 @@ interface Store {
   config: EstimatorConfig;
   result: EstimateResult;
   explain: ExplainTarget | null;
-  view: 'schedule' | 'dashboard' | 'settings';
-  setView: (v: Store['view']) => void;
   update: (fn: (e: Estimate) => Estimate) => void;
   replaceEstimate: (e: Estimate) => void;
   setOverrides: (o: ConfigOverrides | null) => void;
@@ -48,8 +46,6 @@ export const useStore = create<Store>((set, get) => ({
   overrides: initialOverrides,
   ...recompute(initialEstimate, initialOverrides),
   explain: null,
-  view: 'schedule',
-  setView: (view) => set({ view }),
   update: (fn) => {
     const estimate = fn(get().estimate);
     saveEstimate(estimate);

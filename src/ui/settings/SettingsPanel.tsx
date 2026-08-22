@@ -147,6 +147,19 @@ function SectionEditor({
   const isOverridden = overrides?.[section.key] !== undefined;
   const defaults = defaultConfig()[section.key];
 
+  const importSection = async (file: File) => {
+    try {
+      const data = JSON.parse(await file.text());
+      validators[section.key](data);
+      const next: ConfigOverrides = { ...(overrides ?? {}), [section.key]: data };
+      setOverrides(next);
+      setError(null);
+      setText(null);
+    } catch (err) {
+      setError(`Import failed: ${String(err)}`);
+    }
+  };
+
   return (
     <details className="section">
       <summary>
@@ -177,6 +190,32 @@ function SectionEditor({
           >
             Load default into editor
           </button>
+        </div>
+        <div className="row">
+          <button
+            className="small"
+            onClick={() => downloadJson(`${section.key}.json`, current)}
+          >
+            Export JSON
+          </button>
+          <label style={{ minWidth: 0 }}>
+            <button className="small" style={{ pointerEvents: 'none' }}>
+              Import JSON…
+            </button>
+            <input
+              type="file"
+              accept="application/json"
+              style={{ display: 'none' }}
+              onChange={(ev) => {
+                const file = ev.target.files?.[0];
+                if (file) void importSection(file);
+                ev.target.value = '';
+              }}
+            />
+          </label>
+          <span className="help">
+            share just this section (e.g. your environment plan) as a file
+          </span>
         </div>
       </div>
     </details>
