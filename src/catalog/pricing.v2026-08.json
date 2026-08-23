@@ -1,6 +1,6 @@
 {
-  "version": "2025-12",
-  "asOf": "2025-02-01",
+  "version": "2026-08",
+  "asOf": "2026-08-01",
   "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
   "entries": [
     {
@@ -10,8 +10,9 @@
       "currency": "USD",
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Additional database capacity (Finance and Operations)",
-      "asOf": "2025-02-01"
+      "guideSection": "Dynamics 365 Licensing Guide — Additional Operations capacity (Operations Database)",
+      "asOf": "2025-02-01",
+      "notes": "The August 2026 guide describes the add-on but no longer prints its price; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
     },
     {
       "id": "storage.fscmFile.overage",
@@ -20,8 +21,9 @@
       "currency": "USD",
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Additional file capacity (Finance and Operations)",
-      "asOf": "2025-02-01"
+      "guideSection": "Dynamics 365 Licensing Guide — Additional Operations capacity (Operations File)",
+      "asOf": "2025-02-01",
+      "notes": "The August 2026 guide describes the add-on but no longer prints its price; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
     },
     {
       "id": "storage.dvData.overage",
@@ -30,18 +32,20 @@
       "currency": "USD",
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Power Platform Licensing Guide — Dataverse capacity add-ons (Database)",
-      "asOf": "2025-02-01"
+      "guideSection": "Microsoft Copilot Studio Licensing Guide — Dataverse capacity add-ons (Database)",
+      "asOf": "2026-08-01",
+      "notes": "Subscription add-on. Tier 2 add-on is $30/GB/mo at 1,000+ GB. Pay-as-you-go meter is $48/GB/mo. Table also appears in the Power Platform Licensing Guide."
     },
     {
       "id": "storage.dvFile.overage",
       "label": "Dataverse file capacity add-on",
-      "value": 2.4,
+      "value": 2,
       "currency": "USD",
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Power Platform Licensing Guide — Dataverse capacity add-ons (File)",
-      "asOf": "2025-02-01"
+      "guideSection": "Microsoft Copilot Studio Licensing Guide — Dataverse capacity add-ons (File)",
+      "asOf": "2026-08-01",
+      "notes": "Subscription add-on. Pay-as-you-go meter is $2.40/GB/mo — the prior catalog value (2.4) was the meter price, corrected 2026-08. Table also appears in the Power Platform Licensing Guide."
     },
     {
       "id": "storage.dvLog.overage",
@@ -50,9 +54,9 @@
       "currency": "USD",
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Power Platform Licensing Guide — Dataverse capacity add-ons (Log)",
-      "asOf": "2025-02-01",
-      "notes": "Tracked but not billed by default in this tool (mirrors source workbook)."
+      "guideSection": "Microsoft Copilot Studio Licensing Guide — Dataverse capacity add-ons (Log)",
+      "asOf": "2026-08-01",
+      "notes": "Tracked but not billed by default in this tool (mirrors source workbook). Pay-as-you-go meter is $12/GB/mo."
     },
     {
       "id": "license.erpPremium",
@@ -60,10 +64,10 @@
       "value": 300,
       "currency": "USD",
       "unit": "user/mo",
-      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Finance and Operations Premium",
-      "asOf": "2025-02-01",
-      "notes": "List price. Verify against the current licensing guide; actuals vary by agreement."
+      "sourceUrl": "https://www.microsoft.com/en-us/dynamics-365/products/finance/pricing",
+      "guideSection": "Dynamics 365 Licensing Guide — Finance / Supply Chain Management entitlements (Premium)",
+      "asOf": "2026-08-01",
+      "notes": "List price. Includes 1,000 Copilot Credits per user/month. Actuals vary by agreement."
     },
     {
       "id": "license.erpFull",
@@ -71,9 +75,9 @@
       "value": 210,
       "currency": "USD",
       "unit": "user/mo",
-      "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Finance / Supply Chain Management",
-      "asOf": "2025-02-01",
+      "sourceUrl": "https://www.microsoft.com/en-us/dynamics-365/products/finance/pricing",
+      "guideSection": "Dynamics 365 Licensing Guide — Finance / Supply Chain Management entitlements",
+      "asOf": "2026-08-01",
       "notes": "List price. Verify against the current licensing guide."
     },
     {
@@ -83,9 +87,9 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Sales Premium",
-      "asOf": "2025-02-01",
-      "notes": "Sales Premium list. Customer Service Premium differs — verify."
+      "guideSection": "Dynamics 365 Licensing Guide — Sales entitlements (Sales Premium)",
+      "asOf": "2026-08-01",
+      "notes": "Sales Premium list. Customer Service Premium is $195 — verify which applies."
     },
     {
       "id": "license.ceEnterprise",
@@ -94,19 +98,19 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Sales / Customer Service Enterprise",
-      "asOf": "2025-02-01"
+      "guideSection": "Dynamics 365 Licensing Guide — Sales / Customer Service entitlements (Enterprise)",
+      "asOf": "2026-08-01"
     },
     {
       "id": "license.csProfessional",
       "label": "Dynamics 365 Sales / Customer Service Professional",
-      "value": 70,
+      "value": 65,
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Sales Professional",
-      "asOf": "2025-02-01",
-      "notes": "Sales Pro list. Customer Service Pro differs — verify."
+      "guideSection": "Dynamics 365 Licensing Guide — Sales entitlements (Sales Professional)",
+      "asOf": "2026-08-01",
+      "notes": "Sales Professional list (was 70 in catalog 2025-12; guide shows $65). Customer Service Professional is $50 — verify which applies."
     },
     {
       "id": "license.attach",
@@ -116,7 +120,8 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Base and attach licenses",
-      "asOf": "2025-02-01"
+      "asOf": "2025-02-01",
+      "notes": "The August 2026 guide describes attach licensing but no longer prints a general attach price; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
     },
     {
       "id": "license.activity",
@@ -126,7 +131,8 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Operations Activity",
-      "asOf": "2025-02-01"
+      "asOf": "2025-02-01",
+      "notes": "Not printed in the August 2026 guide; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
     },
     {
       "id": "license.teamMember",
@@ -136,7 +142,8 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Team Members",
-      "asOf": "2025-02-01"
+      "asOf": "2025-02-01",
+      "notes": "Not printed in the August 2026 guide; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
     },
     {
       "id": "license.device",
@@ -146,17 +153,19 @@
       "unit": "device/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Operations Device",
-      "asOf": "2025-02-01"
+      "asOf": "2025-02-01",
+      "notes": "Not printed in the August 2026 guide; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
     },
     {
       "id": "copilotstudio.pack",
-      "label": "Microsoft Copilot Studio message pack (25,000 credits)",
+      "label": "Microsoft Copilot Studio capacity pack (25,000 Copilot Credits)",
       "value": 200,
       "currency": "USD",
       "unit": "pack",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Power Platform Licensing Guide — Microsoft Copilot Studio",
-      "asOf": "2025-02-01"
+      "guideSection": "Microsoft Copilot Studio Licensing Guide — Copilot Studio License (Capacity pack)",
+      "asOf": "2026-08-01",
+      "notes": "$200 per credit pack/month, billed annually; 1 pack = 25,000 Copilot Credits/month, unused credits do not roll over. Pay-as-you-go alternative: $0.01/Copilot Credit. Moved from the Power Platform guide to the dedicated Copilot Studio Licensing Guide."
     },
     {
       "id": "env.appInsights",
@@ -187,7 +196,7 @@
       "currency": "USD",
       "unit": "env/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Additional environment add-ons",
+      "guideSection": "Dynamics 365 Licensing Guide — Operations sandbox add-ons",
       "asOf": "2025-02-01",
       "notes": "Enter from your agreement. With unified developer experience, extra environments are often licensed via Dataverse capacity instead."
     },
@@ -198,7 +207,7 @@
       "currency": "USD",
       "unit": "env/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Additional environment add-ons (Tier 4 / Tier 5)",
+      "guideSection": "Dynamics 365 Licensing Guide — Operations sandbox add-ons (Tier 4 / Tier 5)",
       "asOf": "2025-02-01",
       "notes": "Enter the tier price from your agreement when a dedicated perf environment is used."
     },

@@ -1,4 +1,4 @@
-import pricingJson from '../catalog/pricing.v2025-12.json';
+import pricingJson from '../catalog/pricing.v2026-08.json';
 import licensesJson from '../catalog/licenses.json';
 import environmentsJson from '../catalog/environments.json';
 import rulesJson from '../catalog/rules.default.json';

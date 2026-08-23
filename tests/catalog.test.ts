@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import pricing from '../src/catalog/pricing.v2025-12.json';
+import pricing from '../src/catalog/pricing.v2026-08.json';
 import licenses from '../src/catalog/licenses.json';
 import environments from '../src/catalog/environments.json';
 import rules from '../src/catalog/rules.default.json';

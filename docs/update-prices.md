@@ -1,14 +1,30 @@
 # Updating prices from a new Microsoft licensing guide
 
-Microsoft revises the Dynamics 365 and Power Platform licensing guides regularly
-(https://www.microsoft.com/licensing/docs/view/Licensing-Guides). This procedure keeps
-the pricing catalog current. It is deliberately written so you can hand it, plus the new
-guide PDF, to an AI assistant (Claude, Copilot, etc.) and review the diff it produces.
+Microsoft revises the Dynamics 365, Power Platform, and Copilot Studio licensing guides
+regularly (https://www.microsoft.com/licensing/docs/view/Licensing-Guides). This procedure
+keeps the pricing catalog current. It is deliberately written so you can hand it, plus the
+new guide PDFs, to an AI assistant (Claude, Copilot, etc.) and review the diff it produces.
 
 ## Procedure
 
-1. **Get the latest guides**: Dynamics 365 Licensing Guide and Power Platform Licensing
-   Guide (PDF), plus the Azure DevOps pricing page for the AzDO entries.
+1. **Get the latest guides** (all three PDFs):
+   - **Dynamics 365 Licensing Guide** — per-user license prices and entitlement tables
+   - **Power Platform Licensing Guide** — Power Platform entitlements
+   - **Microsoft Copilot Studio Licensing Guide** — the Copilot Studio capacity pack
+     (credits per pack, pack price, pay-as-you-go rate) **and the Dataverse capacity
+     add-on prices**, which moved here from the Power Platform guide (as of the
+     August 2026 edition)
+
+   Plus the Azure DevOps pricing page for the AzDO entries.
+
+   Note: some prices are **no longer printed in any guide** (observed August 2026:
+   attach, Team Members, Operations Activity/Device, and the Operations database/file
+   storage add-ons). For those, check the product pricing pages
+   (microsoft.com/en-us/dynamics-365/products/*/pricing); if a price appears nowhere
+   official, keep the last verified value, keep its old `asOf`, and note that it must be
+   verified via CSP price sheet or agreement. Watch out for subscription add-on vs
+   pay-as-you-go meter prices for the same capacity (e.g. Dataverse File is $2/GB as an
+   add-on but $2.40/GB on the meter) — this catalog uses the subscription add-on prices.
 
 2. **Locate each catalog entry in the guide.** Open
    `src/catalog/pricing.v<current>.json`. Every entry has a `guideSection` naming the
