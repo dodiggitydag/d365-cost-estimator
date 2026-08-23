@@ -15,14 +15,17 @@ formula in words, and a citation to the licensing-guide price it came from.
 **Download [`estimator.html`](./estimator.html) and open it in a browser (Ctrl+O).**
 That's the whole install: one self-contained file, no server, no build, no telemetry.
 Your work autosaves in the browser and can be saved/opened as a JSON file.
+Saved estimate files are forward-compatible by policy: every `.estimate.json` ever
+exported will open in every future version (enforced by `tests/compat.test.ts`).
 
 ## What it does
 
 1. **Timeline** — phases follow Microsoft's Success by Design (Initiate → Implement →
    Prepare → Operate). Supports **multiple rollouts**, each with its own go-live.
 2. **Rules + grid** — methodology rules derive when each environment (PROD, UAT, SIT,
-   GOLD, MIG, PERF, DEMO, Hotfix, Training, one DEV per developer) runs. Override any
-   cell in the environment × month grid; overrides are visually flagged and reversible.
+   GOLD, MIG, DEMO, Hotfix, Training, one DEV per developer — the lead DEV box runs for
+   the life of the system) runs. Override any cell in the environment × month grid;
+   overrides are visually flagged and reversible.
 3. **Storage math** — tenant base + per-license entitlement accrual vs. the demand of
    active environments, per pool (F&SCM data/file, Dataverse data/file), overage billed
    monthly at add-on prices.

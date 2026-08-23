@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "name": "Compat era 2026-08 (feature-complete)",
+    "createdAt": "2026-08-22T00:00:00.000Z",
+    "catalogVersion": "2026-08"
+  },
+  "horizonMonths": 48,
+  "startYearMonth": "2027-01",
+  "rollouts": [
+    {
+      "id": "rollout-1",
+      "name": "Wave 1",
+      "phases": [
+        { "id": "r1-initiate", "kind": "initiate", "name": "Initiate", "startMonth": 1, "lengthMonths": 2 },
+        { "id": "r1-implement", "kind": "implement", "name": "Implement", "startMonth": 3, "lengthMonths": 7 },
+        { "id": "r1-prepare", "kind": "prepare", "name": "Prepare", "startMonth": 10, "lengthMonths": 2 },
+        { "id": "r1-operate", "kind": "operate", "name": "Operate", "startMonth": 12, "lengthMonths": 37 }
+      ]
+    },
+    {
+      "id": "rollout-2",
+      "name": "Wave 2",
+      "phases": [
+        { "id": "r2-implement", "kind": "implement", "name": "Implement", "startMonth": 10, "lengthMonths": 6 },
+        { "id": "r2-prepare", "kind": "prepare", "name": "Prepare", "startMonth": 16, "lengthMonths": 2 },
+        { "id": "r2-operate", "kind": "operate", "name": "Operate", "startMonth": 18, "lengthMonths": 31 }
+      ],
+      "goLiveMonthOverride": 17
+    }
+  ],
+  "team": {
+    "concurrentDevs": 4,
+    "functionalConsultants": 8,
+    "solutionArchitects": 2
+  },
+  "licenseSteps": [
+    {
+      "fromMonth": 1,
+      "counts": {
+        "erpPremium": 10,
+        "erpFull": 250,
+        "cePremium": 0,
+        "ceEnterprise": 5,
+        "csProfessional": 0,
+        "attach": 5,
+        "activity": 20,
+        "teamMember": 50,
+        "device": 20
+      }
+    },
+    {
+      "fromMonth": 18,
+      "counts": {
+        "erpPremium": 10,
+        "erpFull": 400,
+        "cePremium": 0,
+        "ceEnterprise": 5,
+        "csProfessional": 0,
+        "attach": 5,
+        "activity": 30,
+        "teamMember": 80,
+        "device": 35
+      }
+    }
+  ],
+  "licenseCostMode": { "kind": "listPrices" },
+  "licenseStartMonth": 10,
+  "copilotAgents": [
+    { "id": "agent-returns", "name": "Returns triage agent", "creditsPerMonth": 10000, "fromMonth": 12, "toMonth": 48 },
+    { "id": "m365-copilot-cowork", "name": "M365 Copilot Cowork usage", "creditsPerMonth": 1000000, "fromMonth": 12, "toMonth": 48 }
+  ],
+  "copilotPacksOwned": 2,
+  "customerInsightsAddon": true,
+  "environments": [
+    {
+      "id": "PROD",
+      "typeId": "PROD",
+      "name": "Production",
+      "fromRule": true,
+      "storageSteps": [
+        { "fromMonth": 1, "gb": { "fscmData": 400, "fscmFile": 100, "dvData": 10, "dvFile": 20 } }
+      ]
+    },
+    { "id": "PROD-x2", "typeId": "PROD", "name": "Production 2" },
+    { "id": "TRAIN-x2", "typeId": "TRAIN", "name": "Training 2" }
+  ],
+  "disabledEnvIds": ["DEMO"],
+  "customItems": [
+    {
+      "id": "commerce-csu",
+      "name": "Commerce Scale Unit",
+      "category": "licensing-ms",
+      "monthlyAmount": 0,
+      "fromMonth": 12,
+      "toMonth": 48,
+      "notes": "pricing TBD"
+    },
+    {
+      "id": "fabric-capacity",
+      "name": "Microsoft Fabric capacity (F64 reserved)",
+      "category": "payg-ms",
+      "monthlyAmount": 8410,
+      "fromMonth": 12,
+      "toMonth": 48,
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/microsoft-fabric/"
+    },
+    {
+      "id": "isv-avalara",
+      "name": "Avalara AvaTax",
+      "category": "isv",
+      "monthlyAmount": 1200,
+      "fromMonth": 12,
+      "toMonth": 48
+    },
+    {
+      "id": "ip-mca",
+      "name": "MCA Connect IP subscription",
+      "category": "custom",
+      "monthlyAmount": 500,
+      "fromMonth": 12,
+      "toMonth": 48
+    }
+  ],
+  "gridOverrides": [
+    { "envInstanceId": "DEV01", "month": 20, "active": true },
+    { "envInstanceId": "PERF", "month": 5, "active": false }
+  ],
+  "standardItems": {
+    "azdoBasic": { "enabled": true },
+    "azdoTestPlans": { "enabled": true, "fromMonth": 3, "toMonth": 17 },
+    "azdoPipelines": { "enabled": true },
+    "azdoArtifacts": { "enabled": true },
+    "azureIntegration": { "enabled": true }
+  },
+  "settings": {
+    "prodLeadMonths": 3
+  }
+}
