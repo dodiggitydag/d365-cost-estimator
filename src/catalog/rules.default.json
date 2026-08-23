@@ -3,8 +3,8 @@
     "id": "demo-early",
     "envTypeId": "DEMO",
     "from": { "event": "projectStart" },
-    "to": { "phaseKind": "implement", "edge": "start", "offsetMonths": 1 },
-    "rationale": "A demo environment with Microsoft data supports Initiate-phase discovery and CRP sessions, and remains briefly available as build begins for troubleshooting against out-of-the-box behavior."
+    "to": { "event": "goLive" },
+    "rationale": "A demo environment with Microsoft data supports discovery and CRP sessions, and stays available through the last go-live for troubleshooting against out-of-the-box behavior — proving whether an issue is custom code before a Microsoft ticket is opened."
   },
   {
     "id": "dev-during-build",
@@ -13,6 +13,15 @@
     "to": { "phaseKind": "prepare", "edge": "end" },
     "count": { "input": "concurrentDevs" },
     "rationale": "Each concurrent developer needs a dedicated development environment from the start of build until go-live; version control requires one server per developer."
+  },
+  {
+    "id": "dev-lead-forever",
+    "envTypeId": "DEV",
+    "from": { "phaseKind": "implement", "edge": "start" },
+    "to": { "event": "horizonEnd" },
+    "count": { "input": "concurrentDevs" },
+    "appliesTo": "firstInstance",
+    "rationale": "The lead developer environment is kept for the life of the system to support ISV upgrades, installs, and troubleshooting after go-live."
   },
   {
     "id": "gold-through-golive",
@@ -31,9 +40,9 @@
   {
     "id": "mig-per-rollout",
     "envTypeId": "MIG",
-    "from": { "phaseKind": "implement", "edge": "start" },
+    "from": { "phaseKind": "implement", "edge": "start", "offsetMonths": -1 },
     "to": { "event": "goLive", "offsetMonths": 1 },
-    "rationale": "Data migration gets a dedicated environment per rollout so a corrupted test run can be restored without disrupting the wider project; it stays available through cutover reconciliation."
+    "rationale": "Data migration gets a dedicated environment per rollout, starting a month before build so extraction and mapping work begins early; a corrupted test run can be restored without disrupting the wider project, and it stays available through cutover reconciliation."
   },
   {
     "id": "uat-per-rollout",
@@ -41,13 +50,6 @@
     "from": { "phaseKind": "implement", "edge": "start" },
     "to": { "event": "horizonEnd" },
     "rationale": "The main functional sandbox: configuration and modeling during build, acceptance and regression testing through Prepare, and the pre-production staging environment after go-live."
-  },
-  {
-    "id": "perf-before-golive",
-    "envTypeId": "PERF",
-    "from": { "event": "goLive", "offsetMonths": -2 },
-    "to": { "event": "goLive" },
-    "rationale": "Performance testing runs in a production-sized environment for roughly two months ending at go-live, when volumes and code are representative."
   },
   {
     "id": "train-per-rollout",

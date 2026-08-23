@@ -42,11 +42,14 @@ enforced by `npm run validate:catalog` and the test suite.
 Every rule is evaluated once per rollout; an environment is active in the union of the
 resulting windows, so:
 
-- Per-rollout environments (UAT, MIG, PERF, TRAIN) naturally re-fire for each rollout.
+- Per-rollout environments (MIG, TRAIN) naturally re-fire for each rollout.
 - Long-lived environments (PROD from first go-live − lead time, Hotfix from first
-  go-live) stay on because their window extends to the horizon.
+  go-live, the lead DEV box) stay on because their window extends to the horizon.
 - A rule whose phase anchor doesn't exist in a rollout is skipped for that rollout.
 - `count: { "input": "concurrentDevs" }` spawns one instance per developer (DEV01…).
+- `appliesTo: "firstInstance"` limits a rule's window to the first instance of a
+  multi-instance type — how the default `dev-lead-forever` rule keeps only DEV01
+  running past go-live for ISV upgrades, installs, and troubleshooting.
 
 Grid overrides are sparse deltas on top of the rules: re-running rules (changing a phase,
 adding a rollout) never destroys your manual cell edits, and every overridden cell is

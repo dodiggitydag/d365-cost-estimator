@@ -37,9 +37,10 @@
   {
     "id": "PERF",
     "label": "Performance Testing",
-    "description": "A production-sized environment (Tier-4/5 equivalent) for load and performance testing ahead of go-live.",
+    "description": "A production-sized environment (Tier-4/5 equivalent) for load and performance testing ahead of go-live. Not in the default plan — add an instance and paint its months when a project needs one.",
     "componentPriceIds": ["env.appInsights", "env.perfTier"],
-    "defaultStorageGB": { "fscmData": 100, "fscmFile": 40 }
+    "defaultStorageGB": { "fscmData": 100, "fscmFile": 40 },
+    "optional": true
   },
   {
     "id": "DEMO",

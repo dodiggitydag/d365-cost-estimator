@@ -21,9 +21,14 @@ describe('cost lines & aggregation', () => {
     );
     expect(prodAI).toHaveLength(29);
     expect(prodAI[0].amount).toBe(400);
-    // DEV VMs: 4 devs × months 3–10 → 32 lines of $180
-    const devVm = result.lines.filter((l) => l.trace.priceRefs.includes('env.devVm') && l.envInstanceId?.startsWith('DEV'));
-    expect(devVm).toHaveLength(32);
+    // DEV VMs: lead DEV01 months 3–36 (34) + DEV02–04 months 3–10 (3 × 8) → 58 lines of $180
+    const devVm = result.lines.filter(
+      (l) =>
+        l.trace.priceRefs.includes('env.devVm') &&
+        l.envInstanceId !== 'DEMO' &&
+        l.envInstanceId?.startsWith('DEV'),
+    );
+    expect(devVm).toHaveLength(58);
     expect(devVm[0].amount).toBe(180);
   });
 

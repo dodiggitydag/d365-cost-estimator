@@ -105,6 +105,7 @@ export const scheduleRuleSchema = z.object({
   count: z
     .union([z.number().int().positive(), z.object({ input: z.literal('concurrentDevs') })])
     .optional(),
+  appliesTo: z.enum(['all', 'firstInstance']).optional(),
   rationale: z.string().min(1),
 });
 

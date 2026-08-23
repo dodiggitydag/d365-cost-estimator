@@ -29,15 +29,28 @@ describe('schedule rules (default SbD timeline: Initiate 1–2, Implement 3–8,
     expect(ids).toContain('DEV01');
     expect(ids).toContain('DEV03');
     expect(ids).not.toContain('DEV04');
+    expect(ids).not.toContain('PERF'); // no default rule — add-on only
 
     expect(activeMonths(s.cells['PROD'])).toEqual(range(8, 36)); // goLive−2 → horizon
     expect(activeMonths(s.cells['SUP'])).toEqual(range(10, 36)); // goLive → horizon
-    expect(activeMonths(s.cells['PERF'])).toEqual(range(8, 10)); // goLive−2 → goLive
-    expect(activeMonths(s.cells['DEV01'])).toEqual(range(3, 10)); // Implement start → Prepare end
-    expect(activeMonths(s.cells['MIG'])).toEqual(range(3, 11)); // Implement start → goLive+1
-    expect(activeMonths(s.cells['DEMO'])).toEqual(range(1, 4)); // start → Implement start+1
+    expect(activeMonths(s.cells['DEV01'])).toEqual(range(3, 36)); // lead dev box: kept for ISV support
+    expect(activeMonths(s.cells['DEV02'])).toEqual(range(3, 10)); // Implement start → Prepare end
+    expect(activeMonths(s.cells['MIG'])).toEqual(range(2, 11)); // Implement start−1 → goLive+1
+    expect(activeMonths(s.cells['DEMO'])).toEqual(range(1, 10)); // start → go-live
     expect(activeMonths(s.cells['UAT'])).toEqual(range(3, 36));
     expect(activeMonths(s.cells['TRAIN'])).toEqual(range(9, 11)); // Prepare start → goLive+1
+  });
+
+  it('the lead DEV rule applies to DEV01 only, and no DEVs exist with zero developers', () => {
+    const est = newEstimate('test');
+    est.team.concurrentDevs = 2;
+    const s = buildSchedule(est, config);
+    expect(s.cells['DEV01'][20].ruleIds).toContain('dev-lead-forever');
+    expect(activeMonths(s.cells['DEV02'])).toEqual(range(3, 10));
+
+    est.team.concurrentDevs = 0;
+    const none = buildSchedule(est, config);
+    expect(none.instances.some((i) => i.typeId === 'DEV')).toBe(false);
   });
 
   it('prodLeadMonths setting moves the PROD start', () => {
@@ -50,14 +63,14 @@ describe('schedule rules (default SbD timeline: Initiate 1–2, Implement 3–8,
   it('grid overrides win over rules and are flagged', () => {
     const est = newEstimate('test');
     est.gridOverrides = [
-      { envInstanceId: 'PERF', month: 8, active: false }, // turn off a rule month
-      { envInstanceId: 'PERF', month: 20, active: true }, // add an extra month
+      { envInstanceId: 'TRAIN', month: 9, active: false }, // turn off a rule month
+      { envInstanceId: 'TRAIN', month: 20, active: true }, // add an extra month
     ];
     const s = buildSchedule(est, config);
-    expect(activeMonths(s.cells['PERF'])).toEqual([9, 10, 20]);
-    expect(s.cells['PERF'][7].overridden).toBe(true);
-    expect(s.cells['PERF'][19].overridden).toBe(true);
-    expect(s.cells['PERF'][8].overridden).toBe(false);
+    expect(activeMonths(s.cells['TRAIN'])).toEqual([10, 11, 20]);
+    expect(s.cells['TRAIN'][8].overridden).toBe(true);
+    expect(s.cells['TRAIN'][19].overridden).toBe(true);
+    expect(s.cells['TRAIN'][9].overridden).toBe(false);
   });
 
   it('cells carry the rule ids that scheduled them', () => {
@@ -66,20 +79,23 @@ describe('schedule rules (default SbD timeline: Initiate 1–2, Implement 3–8,
     expect(s.cells['PROD'][9].ruleIds).toContain('prod-lead');
   });
 
-  it('multi-rollout: perRollout windows re-fire; global envs extend', () => {
+  it('multi-rollout: per-rollout windows re-fire; long-lived envs extend', () => {
     let est = newEstimate('test');
     est = addRollout(est);
     // Rollout 2: Implement 11–14, Prepare 15–16 → goLive 16
     expect(goLiveMonth(est.rollouts[1])).toBe(16);
     const s = buildSchedule(est, config);
-    // PERF re-fires: 8–10 (R1) and 14–16 (R2)
-    expect(activeMonths(s.cells['PERF'])).toEqual([...range(8, 10), ...range(14, 16)]);
-    // MIG: 3–11 (R1) ∪ 11–17 (R2) = 3–17
-    expect(activeMonths(s.cells['MIG'])).toEqual(range(3, 17));
+    // TRAIN re-fires: 9–11 (R1) and 15–17 (R2)
+    expect(activeMonths(s.cells['TRAIN'])).toEqual([...range(9, 11), ...range(15, 17)]);
+    // MIG: 2–11 (R1) ∪ 10–17 (R2) = 2–17
+    expect(activeMonths(s.cells['MIG'])).toEqual(range(2, 17));
     // PROD starts at FIRST goLive − 2 and never turns off
     expect(activeMonths(s.cells['PROD'])).toEqual(range(8, 36));
-    // DEV extends through rollout 2's build: 3–10 ∪ 11–16
-    expect(activeMonths(s.cells['DEV01'])).toEqual([...range(3, 10), ...range(11, 16)]);
+    // DEMO stays until the LAST go-live
+    expect(activeMonths(s.cells['DEMO'])).toEqual(range(1, 16));
+    // Lead DEV runs to the horizon; other DEVs cover both builds: 3–10 ∪ 11–16
+    expect(activeMonths(s.cells['DEV01'])).toEqual(range(3, 36));
+    expect(activeMonths(s.cells['DEV02'])).toEqual(range(3, 16));
   });
 
   it('user-added instances survive; rule instances regenerate with dev count', () => {

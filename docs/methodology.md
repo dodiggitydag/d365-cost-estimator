@@ -19,10 +19,14 @@ PERF, TRAIN) re-fire while long-lived ones (PROD, Hotfix, DEV) extend.
 
 The environment plan and the prose descriptions shipped in `src/catalog/environments.json`
 describe a proven D365 F&SCM delivery approach: dedicated environments for development
-(one per concurrent developer, mandated by version control), SIT for promotion testing,
-a GOLD seed environment that becomes Production, a dedicated data-migration environment
-so corrupted test runs can't hurt the wider project, a production-sized performance
-environment before go-live, and a hotfix environment after it.
+(one per concurrent developer, mandated by version control — the lead developer's
+environment is kept for the life of the system to support ISV upgrades, installs, and
+troubleshooting), SIT for promotion testing, a GOLD seed environment that becomes
+Production, a dedicated data-migration environment starting a month before build so
+corrupted test runs can't hurt the wider project, a demo environment retained until the
+last go-live for out-of-the-box comparisons, and a hotfix environment after go-live.
+A production-sized performance environment is available as an add-on instance when a
+project needs one (not in the default plan).
 
 Every default is editable — see [customize.md](customize.md).
 

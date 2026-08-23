@@ -60,6 +60,8 @@ export interface RuleWindow {
   rolloutId: string;
   from: number;
   to: number;
+  /** Window only applies to the first instance of the type (e.g. DEV01). */
+  firstInstanceOnly: boolean;
 }
 
 /** Every rule is evaluated once per rollout; a rule whose phase anchor is missing
@@ -80,7 +82,13 @@ export function ruleWindows(
       const clampedTo = Math.min(horizon, to);
       if (clampedTo < clampedFrom) continue;
       const list = byEnvType.get(rule.envTypeId) ?? [];
-      list.push({ ruleId: rule.id, rolloutId: rollout.id, from: clampedFrom, to: clampedTo });
+      list.push({
+        ruleId: rule.id,
+        rolloutId: rollout.id,
+        from: clampedFrom,
+        to: clampedTo,
+        firstInstanceOnly: rule.appliesTo === 'firstInstance',
+      });
       byEnvType.set(rule.envTypeId, list);
     }
   }
@@ -147,7 +155,10 @@ export function buildSchedule(
   const instances = deriveInstances(estimate, config);
 
   const cells: Record<string, ScheduleCell[]> = {};
+  const seenOfType = new Map<string, number>();
   for (const inst of instances) {
+    const ordinal = (seenOfType.get(inst.typeId) ?? 0) + 1;
+    seenOfType.set(inst.typeId, ordinal);
     const row: ScheduleCell[] = Array.from({ length: horizon }, () => ({
       active: false,
       ruleIds: [],
@@ -155,6 +166,7 @@ export function buildSchedule(
       overridden: false,
     }));
     for (const w of windows.get(inst.typeId) ?? []) {
+      if (w.firstInstanceOnly && ordinal > 1) continue;
       for (let m = w.from; m <= w.to; m++) {
         const cell = row[m - 1];
         cell.active = true;

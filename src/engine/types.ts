@@ -159,6 +159,9 @@ export interface ScheduleRule {
   to: Anchor;
   /** Number of instances (DEV): fixed or driven by an input. */
   count?: number | { input: 'concurrentDevs' };
+  /** For allowMultiple environments: which instances this window applies to
+   *  (default 'all'). 'firstInstance' targets only e.g. DEV01 — the lead box. */
+  appliesTo?: 'all' | 'firstInstance';
   /** Why — shown verbatim in explanations. */
   rationale: string;
 }
