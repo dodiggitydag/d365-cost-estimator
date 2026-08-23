@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "name": "",
+    "createdAt": "2026-08-22T00:00:00.000Z",
+    "catalogVersion": "2026-08"
+  },
+  "horizonMonths": 36,
+  "rollouts": [
+    {
+      "id": "rollout-1",
+      "name": "Rollout 1",
+      "phases": [
+        { "id": "r1-initiate", "kind": "initiate", "name": "Initiate", "startMonth": 1, "lengthMonths": 2 },
+        { "id": "r1-implement", "kind": "implement", "name": "Implement", "startMonth": 3, "lengthMonths": 6 },
+        { "id": "r1-prepare", "kind": "prepare", "name": "Prepare", "startMonth": 9, "lengthMonths": 2 },
+        { "id": "r1-operate", "kind": "operate", "name": "Operate", "startMonth": 11, "lengthMonths": 26 }
+      ]
+    }
+  ],
+  "team": {
+    "concurrentDevs": 4,
+    "functionalConsultants": 6,
+    "solutionArchitects": 2
+  },
+  "licenseSteps": [
+    {
+      "fromMonth": 1,
+      "counts": {
+        "erpPremium": 0,
+        "erpFull": 100,
+        "cePremium": 0,
+        "ceEnterprise": 0,
+        "csProfessional": 0,
+        "attach": 0,
+        "activity": 0,
+        "teamMember": 0,
+        "device": 0
+      }
+    }
+  ],
+  "licenseCostMode": { "kind": "lumpSum", "monthlyTotal": 0 },
+  "licenseStartMonth": 1,
+  "copilotAgents": [],
+  "copilotPacksOwned": 0,
+  "customerInsightsAddon": false,
+  "environments": [],
+  "disabledEnvIds": [],
+  "customItems": [
+    {
+      "id": "example-fabric",
+      "name": "Fabric capacity (example — replace with your sizing)",
+      "category": "payg-ms",
+      "monthlyAmount": 0,
+      "fromMonth": 1,
+      "toMonth": 36,
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/microsoft-fabric/",
+      "notes": "Reserved capacity example. Set the monthly amount for your F-SKU."
+    }
+  ],
+  "gridOverrides": [],
+  "standardItems": {
+    "azdoBasic": { "enabled": true },
+    "azdoTestPlans": { "enabled": false },
+    "azdoPipelines": { "enabled": true },
+    "azdoArtifacts": { "enabled": true },
+    "azureIntegration": { "enabled": false }
+  },
+  "settings": {
+    "prodLeadMonths": 2
+  }
+}

@@ -3,4 +3,6 @@ dist/
 *.local
 # Golden fixtures extracted from the real (client) workbook stay local-only.
 tests/golden/fixtures/local/
+# Copied into the Cowork skill by cowork/build-skill-zip.ps1; ../estimator.html is the source.
+cowork/skills/d365-cost-estimate/estimator.html
 .DS_Store
