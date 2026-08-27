@@ -111,7 +111,7 @@ E-commerce ISVs that come with Commerce get their own `isv` rows.
 - Annual price ÷ 12; one-time fees: spread over the remaining horizon and say so in notes.
 
 ### IP in scope → `customItems` row(s), category `custom`
-Same shape as ISVs (e.g. MCA IP subscription). Unknown price → $0 + TBD.
+Same shape as ISVs (e.g. a partner IP subscription). Unknown price → $0 + TBD.
 
 ### Copilot Studio agents in scope → `copilotAgents[]`
 ```json

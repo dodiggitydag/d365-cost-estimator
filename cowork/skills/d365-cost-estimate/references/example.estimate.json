@@ -142,7 +142,7 @@
     },
     {
       "id": "ip-mca",
-      "name": "MCA Connect IP subscription",
+      "name": "Partner IP subscription",
       "category": "custom",
       "monthlyAmount": 0,
       "fromMonth": 12,

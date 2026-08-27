@@ -2,7 +2,7 @@
 name: d365-cost-estimate
 description: |
   Interviews a seller through D365 F&SCM discovery questions and produces a
-  .estimate.json file that imports directly into MCA's D365 cloud cost estimator
+  .estimate.json file that imports directly into the D365 cloud cost estimator
   (estimator.html, "Open JSON" button). Estimates the Microsoft cloud run-rate:
   environments, storage, user subscriptions, Copilot Studio credits, Azure DevOps,
   ISVs, and other monthly items. Use when user asks to "create a D365 estimate",
@@ -11,7 +11,7 @@ description: |
   Dynamics 365 Finance / Supply Chain opportunity.
 license: MIT
 metadata:
-  author: Dag Calafell, MCA Connect
+  author: Dag Calafell
   version: "1.0"
 ---
 
@@ -20,7 +20,7 @@ metadata:
 ## What This Skill Does
 
 Turns discovery answers for a Dynamics 365 Finance & Supply Chain opportunity into a
-ready-to-import estimate file for MCA's D365 cost estimator. The estimator models the
+ready-to-import estimate file for the D365 cost estimator. The estimator models the
 **Microsoft cloud run-rate** — environments over the project timeline, storage
 entitlement vs. overage, user subscriptions, Copilot Studio credits, Azure DevOps,
 and custom monthly items (ISVs, Fabric, IP). It does **not** estimate implementation
@@ -54,7 +54,7 @@ into at most three conversational messages — never one question at a time.
 9. Is Commerce in scope?
 10. Which interfaces/integrations are in scope?
 11. Which ISVs are in scope? (Names and monthly pricing if known.)
-12. Is any IP (MCA or third-party) in scope?
+12. Is any IP (your own or third-party) in scope?
 13. Are Copilot Studio agents in scope? (What agents, expected usage?)
 14. Do they plan to use M365 Copilot / Cowork with D365? For how many users?
 15. Should Microsoft Fabric be budgeted? (Capacity size if known.)

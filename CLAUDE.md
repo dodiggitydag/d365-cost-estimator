@@ -40,8 +40,10 @@ for the new era.
   discovery answers. Its `references/` mirror `schemas.ts` and the catalogs — update
   them (and rebuild `cowork/dist/` via `cowork/build-skill-zip.ps1`) whenever the
   schema or catalog changes. See `cowork/README.md` for the sync table.
-- Destined for public GitHub: before publishing, scan for MCA/client strings
-  (case-sensitive — 'ItemCategory' false-matches case-insensitive 'MCA').
+- Public repo: before publishing, scan for employer or client names, internal
+  paths, and partner pricing (cost/margin/discount columns). Match case-sensitively
+  and check whole words — a short acronym otherwise hits inside ordinary
+  identifiers and buries the real result.
 
 ## Commands
 

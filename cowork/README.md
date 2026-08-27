@@ -37,7 +37,7 @@ Then in Cowork (as the skill owner):
 3. After editing the skill, rebuild, re-upload, and **Re-share** — updates flow to
    everyone you shared with.
 
-No tenant admin needed for this route. If MCA later wants it in the M365 admin
+No tenant admin needed for this route. To publish it through the M365 admin
 center / App Store instead, wrap it as a plugin package with the
 [Agents Toolkit CLI](https://learn.microsoft.com/microsoft-365/copilot/cowork/cowork-plugin-development):
 `atk import openplugin` (requires privacy/terms URLs and a `manifest.json`).
