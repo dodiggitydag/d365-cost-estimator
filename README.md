@@ -23,12 +23,15 @@ exported will open in every future version (enforced by `tests/compat.test.ts`).
 1. **Timeline** — phases follow Microsoft's Success by Design (Initiate → Implement →
    Prepare → Operate). Supports **multiple rollouts**, each with its own go-live.
 2. **Rules + grid** — methodology rules derive when each environment (PROD, UAT, SIT,
-   GOLD, MIG, DEMO, Hotfix, Training, one DEV per developer — the lead DEV box runs for
-   the life of the system) runs. Override any cell in the environment × month grid;
+   GOLD, MIG, DEMO, Hotfix, Training, one DEV per developer for design & development —
+   the lead DEV box stands up in month 2 and runs for the life of the system) runs.
+   Override any cell in the environment × month grid;
    overrides are visually flagged and reversible.
 3. **Storage math** — tenant base + per-license entitlement accrual vs. the demand of
-   active environments, per pool (F&SCM data/file, Dataverse data/file), overage billed
-   monthly at add-on prices.
+   active environments, overage billed monthly at add-on prices. F&SCM and Dataverse
+   share one data pool and one file pool (Microsoft's merged capacity model), so demand
+   and entitlement are summed across both before the overage is taken; each half still
+   shows in the explanation.
 4. **Copilot Studio** — agents consume credits; packs required are netted against
    entitled credits and owned packs.
 5. **Explanations** — click any figure for the cost lines behind it, each with its

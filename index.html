@@ -1,4 +1,19 @@
 <!doctype html>
+<!--
+  Vite's build/dev entry point — NOT the deliverable.
+
+  `npm run dev` serves this file, and `npm run build` transforms it into the
+  single-file bundle that scripts/postbuild.mjs copies to ./estimator.html.
+  Vite resolves its entry from the project-root index.html, so this file has to
+  stay put and keep the /src/main.tsx script tag.
+
+  Opening this file directly (double-click, file://, or a plain static server)
+  renders nothing: the browser rejects /src/main.tsx because it isn't compiled
+  and isn't served as a JS module. The fallback in <body> below says so; it is
+  cleared when React mounts, so it never shows during a real dev session.
+
+  To use the app, open estimator.html instead.
+-->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,7 +21,54 @@
     <title>D365 F&SCM Cost Estimator</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Replaced by the app on mount. Inline styles on purpose: the stylesheet
+           arrives through the module graph, which is exactly what has failed if
+           the reader is seeing this. -->
+      <div
+        id="boot-fallback"
+        hidden
+        style="
+          max-width: 40rem;
+          margin: 4rem auto;
+          padding: 0 1.5rem;
+          font: 15px/1.6 system-ui, -apple-system, 'Segoe UI', sans-serif;
+          color: #24292f;
+        "
+      >
+        <h1 style="font-size: 1.25rem; margin: 0 0 0.5rem">Development entry point</h1>
+        <p style="margin: 0 0 1rem">
+          This file is the Vite entry for building the estimator. On its own it loads
+          nothing — the app source has to be compiled first.
+        </p>
+        <p style="margin: 0 0 0.5rem"><strong>To use the estimator:</strong></p>
+        <p style="margin: 0 0 1rem">
+          Open <code style="background: #f3f4f6; padding: 1px 5px; border-radius: 4px"
+            >estimator.html</code
+          >
+          from this folder. It is the whole app in one file and needs no server.
+        </p>
+        <p style="margin: 0 0 0.5rem"><strong>To work on the source:</strong></p>
+        <p style="margin: 0">
+          Run <code style="background: #f3f4f6; padding: 1px 5px; border-radius: 4px"
+            >npm run dev</code
+          >
+          and use the URL it prints, or
+          <code style="background: #f3f4f6; padding: 1px 5px; border-radius: 4px"
+            >npm run build</code
+          >
+          to regenerate <code>estimator.html</code>.
+        </p>
+      </div>
+    </div>
+    <script>
+      // Reveal the fallback only if the app hasn't mounted shortly after load, so
+      // it never flashes while the dev server compiles on a first request.
+      setTimeout(function () {
+        var el = document.getElementById('boot-fallback');
+        if (el) el.hidden = false;
+      }, 1500);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

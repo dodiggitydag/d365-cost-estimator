@@ -1,5 +1,6 @@
-import type { Estimate } from '../engine/types';
+import type { Estimate, EstimatorConfig } from '../engine/types';
 import type { ConfigOverrides } from './config';
+import { migrateStandardItems } from './estimate';
 import { configOverridesSchema, estimateSchema } from './schemas';
 
 const ESTIMATE_KEY = 'd365-estimator.estimate';
@@ -22,11 +23,11 @@ function safeSet(key: string, value: string): void {
   }
 }
 
-export function loadSavedEstimate(): Estimate | null {
+export function loadSavedEstimate(config: EstimatorConfig): Estimate | null {
   const raw = safeGet(ESTIMATE_KEY);
   if (!raw) return null;
   try {
-    return estimateSchema.parse(JSON.parse(raw)) as Estimate;
+    return migrateStandardItems(estimateSchema.parse(JSON.parse(raw)) as Estimate, config);
   } catch {
     return null;
   }
@@ -58,8 +59,8 @@ export function saveOverrides(overrides: ConfigOverrides | null): void {
   safeSet(OVERRIDES_KEY, JSON.stringify(overrides));
 }
 
-export function parseEstimateJson(text: string): Estimate {
-  return estimateSchema.parse(JSON.parse(text)) as Estimate;
+export function parseEstimateJson(text: string, config: EstimatorConfig): Estimate {
+  return migrateStandardItems(estimateSchema.parse(JSON.parse(text)) as Estimate, config);
 }
 
 export function parseOverridesJson(text: string): ConfigOverrides {

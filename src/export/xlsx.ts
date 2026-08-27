@@ -16,6 +16,8 @@ import {
   parseYearMonth,
   yearBuckets,
 } from '../engine/aggregate';
+import { subscriptionStartMonth } from '../engine/licensing';
+import { STORAGE_POOLS, STORAGE_POOL_LABELS } from '../engine/types';
 import { triggerDownload } from '../model/persistence';
 
 const MONEY_FMT = '#,##0.00;[Red]-#,##0.00';
@@ -59,12 +61,20 @@ export async function buildWorkbook(
   addKV('Concurrent developers', estimate.team.concurrentDevs);
   addKV('Functional consultants', estimate.team.functionalConsultants);
   addKV('Solution architects', estimate.team.solutionArchitects);
+  addKV('Microsoft-hosted ADO agents', estimate.team.hostedAgents);
   addKV(
     'License cost mode',
     estimate.licenseCostMode.kind === 'lumpSum'
       ? `Negotiated total: $${estimate.licenseCostMode.monthlyTotal}/mo`
       : 'Computed from list prices',
   );
+  addKV('Subscriptions start', `Month ${subscriptionStartMonth(estimate)} (first count step with users)`);
+  addKV('PROD lead time (months)', estimate.settings.prodLeadMonths);
+  const growth = STORAGE_POOLS.map((pool) => {
+    const gb = estimate.settings.prodGrowthGBPerYear?.[pool] ?? 0;
+    return gb > 0 ? `${STORAGE_POOL_LABELS[pool]}: ${gb}` : null;
+  }).filter(Boolean);
+  addKV('PROD storage growth (GB/yr)', growth.length ? growth.join(', ') : 'none');
   for (const r of estimate.rollouts) {
     addKV(
       `${r.name} phases`,
@@ -200,6 +210,15 @@ export async function buildWorkbook(
     'BUDGETARY ESTIMATE ONLY — USD list prices as of the dates below. Actual pricing varies by agreement (EA/CSP, discounts). No inflation or future Microsoft price changes are assumed. Environments are created, destroyed, and rescheduled as needed to support efficient project work.',
   ]).font = { bold: true };
   assumptions.addRow([]);
+  // Schedule problems travel with the workbook: a reviewer looking at an empty
+  // environment row on the Schedule sheet needs to know it was a mistake, not a choice.
+  if (result.warnings.length > 0) {
+    assumptions.addRow([`SCHEDULE WARNINGS (${result.warnings.length})`]).font = {
+      bold: true,
+    };
+    for (const w of result.warnings) assumptions.addRow([w.message]);
+    assumptions.addRow([]);
+  }
   const hdr = assumptions.addRow(['Price', 'Value', 'Unit', 'Source', 'As of']);
   hdr.font = { bold: true };
   for (const p of config.pricing.entries) {

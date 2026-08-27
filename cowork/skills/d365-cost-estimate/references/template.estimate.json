@@ -20,8 +20,9 @@
   ],
   "team": {
     "concurrentDevs": 4,
-    "functionalConsultants": 6,
-    "solutionArchitects": 2
+    "functionalConsultants": 3,
+    "solutionArchitects": 1,
+    "hostedAgents": 2
   },
   "licenseSteps": [
     {
@@ -40,13 +41,69 @@
     }
   ],
   "licenseCostMode": { "kind": "lumpSum", "monthlyTotal": 0 },
-  "licenseStartMonth": 1,
-  "copilotAgents": [],
+  "copilotAgents": [
+    {
+      "id": "m365-copilot-cowork",
+      "name": "M365 Copilot Cowork (assume 10,000 credits/user/mo — set your usage)",
+      "creditsPerMonth": 0,
+      "fromMonth": 10,
+      "toMonth": 36
+    }
+  ],
   "copilotPacksOwned": 0,
   "customerInsightsAddon": false,
   "environments": [],
   "disabledEnvIds": [],
   "customItems": [
+    {
+      "id": "ado-basic",
+      "name": "Azure DevOps Basic licenses (consulting team)",
+      "category": "payg-ms",
+      "monthlyAmount": 24,
+      "fromMonth": 1,
+      "toMonth": 36,
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/devops/azure-devops-services/",
+      "notes": "4 consulting seats × $6/user/mo. First 5 users are free — assumed used by the client's own team."
+    },
+    {
+      "id": "ado-agents",
+      "name": "Microsoft-hosted Azure DevOps agents",
+      "category": "payg-ms",
+      "monthlyAmount": 80,
+      "fromMonth": 1,
+      "toMonth": 36,
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/devops/azure-devops-services/",
+      "notes": "2 parallel jobs × $40/mo. One Microsoft-hosted parallel job is free for private projects — deduct it if that applies."
+    },
+    {
+      "id": "ado-artifacts",
+      "name": "Azure DevOps artifact storage",
+      "category": "payg-ms",
+      "monthlyAmount": 10,
+      "fromMonth": 1,
+      "toMonth": 36,
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/devops/azure-devops-services/"
+    },
+    {
+      "id": "ado-test-plans",
+      "name": "Azure DevOps Test Plans licenses",
+      "category": "payg-ms",
+      "monthlyAmount": 0,
+      "fromMonth": 1,
+      "toMonth": 10,
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/devops/azure-devops-services/",
+      "notes": "Off by default. 4 consulting seats × $52/user/mo = $208/mo if the project uses Test Plans."
+    },
+    {
+      "id": "azure-integration",
+      "name": "Azure Integration Services (Logic Apps / Functions)",
+      "category": "payg-ms",
+      "monthlyAmount": 0,
+      "fromMonth": 1,
+      "toMonth": 36,
+      "sourceUrl": "https://azure.microsoft.com/pricing/details/logic-apps/",
+      "notes": "Off by default. About $50/mo for light workloads — size it for the interfaces in scope."
+    },
     {
       "id": "example-fabric",
       "name": "Fabric capacity (example — replace with your sizing)",
@@ -59,14 +116,8 @@
     }
   ],
   "gridOverrides": [],
-  "standardItems": {
-    "azdoBasic": { "enabled": true },
-    "azdoTestPlans": { "enabled": false },
-    "azdoPipelines": { "enabled": true },
-    "azdoArtifacts": { "enabled": true },
-    "azureIntegration": { "enabled": false }
-  },
   "settings": {
-    "prodLeadMonths": 2
+    "prodLeadMonths": 2,
+    "prodGrowthGBPerYear": { "fscmData": 0, "fscmFile": 0, "dvData": 0, "dvFile": 0 }
   }
 }

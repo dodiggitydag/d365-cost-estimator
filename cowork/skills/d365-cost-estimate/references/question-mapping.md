@@ -32,6 +32,10 @@ derives it; only set `goLiveMonthOverride` when the client names a month that di
   of DEV environments (DEV01, DEV02, …) and their cost for the whole build.
 - Example: 4,500 h over 7 months → 4,500 ÷ 910 = 4.95 → **5** concurrent devs.
 
+### Microsoft-hosted ADO build agents → `team.hostedAgents`
+Default 2 parallel jobs. Also update the `ado-agents` custom item to
+`hostedAgents × $40/mo` — the row does not recalculate itself.
+
 ### Max Functional Consultants → `team.functionalConsultants`
 ### Max Solution Architects → `team.solutionArchitects`
 Both integers ≥ 0. Together with devs they drive Azure DevOps seat counts.
@@ -67,9 +71,11 @@ Step function: for month *m*, the last step with `fromMonth <= m` wins. Example 
 ]
 ```
 
-Pair with `licenseStartMonth`: subscriptions are usually bought some months before
-go-live (UAT needs real licenses). Default `licenseStartMonth` to the start of the
-first `prepare` phase unless the client says otherwise; note the assumption.
+The steps also decide when billing starts — the first step with any nonzero count.
+Subscriptions are usually bought some months before go-live (UAT needs real
+licenses), so default the first counted step to the start of the first `prepare`
+phase unless the client says otherwise, with an all-zero step at month 1 ahead of
+it; note the assumption. There is no `licenseStartMonth` field.
 
 ### Negotiated vs list pricing → `licenseCostMode`
 - Negotiated monthly total known: `{ "kind": "lumpSum", "monthlyTotal": <USD/month> }`
@@ -86,11 +92,12 @@ first `prepare` phase unless the client says otherwise; note the assumption.
 Price it if the user knows the CSU tier; otherwise leave $0 + TBD and list in summary.
 E-commerce ISVs that come with Commerce get their own `isv` rows.
 
-### Interfaces in scope → `standardItems.azureIntegration` + optional custom item
-- Any interfaces at all → `"azureIntegration": { "enabled": true }`.
+### Interfaces in scope → the `azure-integration` custom item + optional extra rows
+- Any interfaces at all → set the `azure-integration` row's `monthlyAmount`
+  (~$50/mo covers light Logic Apps / Functions workloads; size it up for real volume).
 - If the user can estimate monthly Azure integration spend (Logic Apps, Service Bus,
-  Functions, VMs), add a `customItems` row category `payg-ms` with that amount;
-  otherwise the standard item's default pricing stands alone.
+  Functions, VMs), put that amount on the `azure-integration` row, or add another
+  `payg-ms` row alongside it for a separately-quoted piece.
 
 ### ISVs in scope → one `customItems` row each, category `isv`
 ```json
@@ -122,7 +129,9 @@ If yes, model the credit consumption as one agent entry:
   "creditsPerMonth": <10000 × N users>, "fromMonth": <go-live>, "toMonth": <horizon> }
 ```
 **Assume 10,000 credits per user per month.** Always state this assumption in the
-summary. If the user count is unknown, ask; don't guess.
+summary. If the user count is unknown, ask; don't guess. The template already carries
+a `m365-copilot-cowork` row at 0 credits — size that row rather than adding a second
+one, and leave it at 0 (it then costs nothing) if Cowork is out of scope.
 
 ### Fabric budgeted? (always ask) → `customItems` row, category `payg-ms`
 ```json

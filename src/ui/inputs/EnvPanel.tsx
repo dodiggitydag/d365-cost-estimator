@@ -22,6 +22,18 @@ export function EnvPanel() {
   const storageOf = (inst: EnvInstance, pool: StoragePool): number =>
     instanceStorageAt(inst, config, 1, pool);
 
+  const growthOf = (pool: StoragePool): number =>
+    estimate.settings.prodGrowthGBPerYear?.[pool] ?? 0;
+
+  const setGrowth = (pool: StoragePool, gb: number) =>
+    update((e) => ({
+      ...e,
+      settings: {
+        ...e.settings,
+        prodGrowthGBPerYear: { ...e.settings.prodGrowthGBPerYear, [pool]: gb },
+      },
+    }));
+
   const setStorage = (inst: EnvInstance, pool: StoragePool, gb: number) =>
     update((e) => {
       const current = e.environments.find((x) => x.id === inst.id);
@@ -57,6 +69,32 @@ export function EnvPanel() {
           }
           help="before first go-live"
         />
+        <div className="row" style={{ gap: 6 }}>
+          <label title="Annual data growth added to Production, prorated monthly from the month PROD starts">
+            PROD growth (GB/yr)
+          </label>
+          {EDIT_POOLS.map((pool) => (
+            <span key={pool} style={{ whiteSpace: 'nowrap' }}>
+              <span className="muted" style={{ fontSize: 11 }}>
+                {POOL_SHORT[pool]}{' '}
+              </span>
+              <input
+                style={{ width: 58 }}
+                type="number"
+                min={0}
+                value={growthOf(pool)}
+                onChange={(ev) =>
+                  setGrowth(pool, Math.max(0, parseFloat(ev.target.value) || 0))
+                }
+              />
+            </span>
+          ))}
+        </div>
+        <p className="help">
+          Growth accrues on Production only, prorated monthly from the month PROD starts
+          (24 GB/yr = +2 GB after one month). The per-environment figures below are the
+          starting demand.
+        </p>
         {result.schedule.instances.map((inst) => {
           const t = config.environments.find((e) => e.id === inst.typeId);
           return (

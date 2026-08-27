@@ -1,19 +1,23 @@
 import type { Estimate, EstimateResult, EstimatorConfig } from './types';
-import { buildSchedule, goLiveMonth } from './schedule';
+import { buildSchedule, goLiveMonth, scheduleWarnings } from './schedule';
 import { computeStorage } from './storage';
 import { computeCopilot } from './copilot';
 import { computeLicensing } from './licensing';
-import {
-  computeCustomItems,
-  computeEnvironmentCosts,
-  computeStandardItems,
-} from './costs';
+import { computeCustomItems, computeEnvironmentCosts } from './costs';
 
 export * from './types';
 export * from './aggregate';
-export { goLiveMonth, buildSchedule } from './schedule';
-export { includedGB, neededGB, licenseCountsAt, instanceStorageAt } from './storage';
-export { STANDARD_ITEMS } from './costs';
+export { goLiveMonth, buildSchedule, scheduleWarnings } from './schedule';
+export {
+  includedGB,
+  neededGB,
+  licenseCountsAt,
+  instanceStorageAt,
+  growthGB,
+  firstActiveMonth,
+  billingGroups,
+} from './storage';
+export { subscriptionStartMonth } from './licensing';
 export { money, cents, priceEntry, stepAt } from './catalogUtil';
 
 export function computeEstimate(
@@ -28,7 +32,6 @@ export function computeEstimate(
     ...storage.lines,
     ...copilot.lines,
     ...computeEnvironmentCosts(estimate, config, schedule),
-    ...computeStandardItems(estimate, config),
     ...computeCustomItems(estimate),
   ];
   return {
@@ -40,5 +43,6 @@ export function computeEstimate(
       rolloutId: r.id,
       month: goLiveMonth(r),
     })),
+    warnings: scheduleWarnings(estimate, config, schedule),
   };
 }

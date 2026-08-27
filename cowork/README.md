@@ -54,7 +54,7 @@ re-share:
 | `src/model/estimate.ts` (`newEstimate()`) | `references/template.estimate.json` |
 | `src/catalog/licenses.json` (license ids) | `references/question-mapping.md`, `references/estimate-schema.md` |
 | `src/catalog/environments.json` (env type ids) | `references/estimate-schema.md` |
-| `src/engine/costs.ts` (`STANDARD_ITEMS`) | `references/estimate-schema.md` |
+| `src/model/estimate.ts` (`seededItems()`) | `references/estimate-schema.md`, `references/template.estimate.json` |
 | `estimator.html` (any rebuild) | re-run `build-skill-zip.ps1` |
 
 Sanity check after schema changes: load both reference JSON files through the real

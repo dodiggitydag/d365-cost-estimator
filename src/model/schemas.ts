@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const storagePoolId = z.enum(['fscmData', 'fscmFile', 'dvData', 'dvFile', 'dvLog']);
+
 const storageGB = z.object({
   fscmData: z.number().nonnegative().optional(),
   fscmFile: z.number().nonnegative().optional(),
@@ -13,7 +15,7 @@ export const priceEntrySchema = z.object({
   label: z.string().min(1),
   value: z.number().nonnegative(),
   currency: z.literal('USD'),
-  unit: z.enum(['user/mo', 'env/mo', 'GB/mo', 'pack', 'mo', 'device/mo']),
+  unit: z.enum(['user/mo', 'env/mo', 'GB/mo', 'pack', 'mo', 'device/mo', 'agent/mo']),
   sourceUrl: z.string().url(),
   guideSection: z.string().optional(),
   asOf: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -61,6 +63,18 @@ export const licenseCatalogSchema = z.object({
     }),
   ),
   overagePriceIds: z.record(z.string(), z.string()),
+  // Optional so config-overrides saved before pools merged still parse.
+  billingPools: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        label: z.string().min(1),
+        pools: z.array(storagePoolId).min(1),
+        priceId: z.string().optional(),
+        notes: z.string().optional(),
+      }),
+    )
+    .optional(),
   copilot: z.object({
     creditsPerPack: z.number().positive(),
     packPriceId: z.string(),
@@ -73,6 +87,7 @@ export const environmentTypeSchema = z.object({
   description: z.string().min(1),
   componentPriceIds: z.array(z.string()),
   defaultStorageGB: storageGB,
+  prodGrowthApplies: z.boolean().optional(),
   allowMultiple: z.boolean().optional(),
   optional: z.boolean().optional(),
 });
@@ -145,6 +160,8 @@ export const estimateSchema = z.object({
     concurrentDevs: z.number().int().nonnegative(),
     functionalConsultants: z.number().int().nonnegative(),
     solutionArchitects: z.number().int().nonnegative(),
+    // default(2) keeps estimates saved before this field existed loadable
+    hostedAgents: z.number().int().nonnegative().default(2),
   }),
   licenseSteps: z.array(
     z.object({
@@ -156,7 +173,8 @@ export const estimateSchema = z.object({
     z.object({ kind: z.literal('listPrices') }),
     z.object({ kind: z.literal('lumpSum'), monthlyTotal: z.number().nonnegative() }),
   ]),
-  licenseStartMonth: z.number().int().min(1),
+  // Deprecated in favour of licenseSteps; kept optional so older files still parse.
+  licenseStartMonth: z.number().int().min(1).optional(),
   copilotAgents: z.array(
     z.object({
       id: z.string(),
@@ -200,15 +218,21 @@ export const estimateSchema = z.object({
       active: z.boolean(),
     }),
   ),
-  standardItems: z.record(
-    z.string(),
-    z.object({
-      enabled: z.boolean(),
-      fromMonth: z.number().int().min(1).optional(),
-      toMonth: z.number().int().min(1).optional(),
-    }),
-  ),
+  // Retired in favour of custom items; kept optional so older files still parse
+  // (migrateStandardItems converts the enabled ones on load).
+  standardItems: z
+    .record(
+      z.string(),
+      z.object({
+        enabled: z.boolean(),
+        fromMonth: z.number().int().min(1).optional(),
+        toMonth: z.number().int().min(1).optional(),
+      }),
+    )
+    .optional(),
   settings: z.object({
     prodLeadMonths: z.number().int().nonnegative(),
+    // default({}) keeps estimates saved before this field existed loadable
+    prodGrowthGBPerYear: storageGB.default({}),
   }),
 });

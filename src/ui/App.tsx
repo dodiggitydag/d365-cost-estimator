@@ -53,7 +53,7 @@ export function App() {
         <JsonFileButton
           label="Open JSON"
           tooltip="Open a previously saved estimate JSON file (replaces what's on screen)"
-          onText={(text) => update(() => parseEstimateJson(text))}
+          onText={(text) => update(() => parseEstimateJson(text, config))}
           onError={(err) => alert(`Not a valid estimate file:\n${String(err)}`)}
         />
         <button
@@ -85,11 +85,11 @@ export function App() {
             <div className="panel-col">
               <TimelinePanel />
               <TeamPanel />
-              <CopilotPanel />
+              <ItemsPanel />
             </div>
             <div className="panel-col">
               <LicensesPanel />
-              <ItemsPanel />
+              <CopilotPanel />
             </div>
             <div className="panel-col">
               <EnvPanel />

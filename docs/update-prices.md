@@ -20,11 +20,42 @@ new guide PDFs, to an AI assistant (Claude, Copilot, etc.) and review the diff i
    Note: some prices are **no longer printed in any guide** (observed August 2026:
    attach, Team Members, Operations Activity/Device, and the Operations database/file
    storage add-ons). For those, check the product pricing pages
-   (microsoft.com/en-us/dynamics-365/products/*/pricing); if a price appears nowhere
-   official, keep the last verified value, keep its old `asOf`, and note that it must be
-   verified via CSP price sheet or agreement. Watch out for subscription add-on vs
-   pay-as-you-go meter prices for the same capacity (e.g. Dataverse File is $2/GB as an
-   add-on but $2.40/GB on the meter) — this catalog uses the subscription add-on prices.
+   (microsoft.com/en-us/dynamics-365/products/*/pricing), then fall back to the CSP price
+   sheet as described below. Watch out for subscription add-on vs pay-as-you-go meter
+   prices for the same capacity (e.g. Dataverse File is $2/GB as an add-on but $2.40/GB on
+   the meter) — this catalog uses the subscription add-on prices.
+
+### Fallback: the NCE (CSP) price sheet
+
+Microsoft reissues a commercial NCE price list to partners monthly. It carries every SKU
+whose price the guides have stopped printing, so it is the authority of last resort. Use
+the **`ERP Price`** column (Estimated Retail Price) — never `UnitPrice`, which is partner
+cost, and never any margin or discount column: those are not list prices and must not
+enter this catalog.
+
+Term normalization matters, because the sheet has three rows per SKU and this catalog
+stores the **annual-term list price per month**:
+
+| Sheet row | What it is | Convert with |
+|---|---|---|
+| `TermDuration P1M` | monthly commitment, carries a **20% uplift** | `ERP Price / 1.2` |
+| `TermDuration P1Y`, `BillingPlan Annual` | annual term paid up front — the true list | `ERP Price / 12` |
+| `TermDuration P1Y`, `BillingPlan Monthly` | annual term paid monthly, **5% uplift** | `ERP Price / 12 / 1.05` |
+
+Derive from the P1M row and confirm against the P1Y/Annual row; they should agree. Worked
+example (August 2026): Dynamics 365 Finance is $252.00 at P1M and $2,520.00 at P1Y/Annual
+— $252 / 1.2 = $210 and $2,520 / 12 = $210, so the catalog value is $210. The same check
+across the catalog in August 2026 confirmed fourteen entries and corrected one
+(Operations – Device was $75; the sheet shows $102 P1M and $1,020 P1Y, i.e. $85).
+
+Two gotchas: SKU titles use an en dash in "Operations – Activity"/"– Device", so match on
+a wildcard rather than a literal hyphen; and several products share one catalog entry
+(Sales Premium $150 vs Customer Service Premium $195, F&SCM attach $30 vs CE attach $20)
+— record which one the value represents in `notes`.
+
+Azure and Azure DevOps items (`env.appInsights`, `env.devVm`, `ado.*`,
+`azure.integration`) are **not** in this sheet — they stay sourced from the Azure pricing
+pages, and the tier/add-on environment fees stay $0 until entered from an agreement.
 
 2. **Locate each catalog entry in the guide.** Open
    `src/catalog/pricing.v<current>.json`. Every entry has a `guideSection` naming the

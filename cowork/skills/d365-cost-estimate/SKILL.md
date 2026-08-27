@@ -43,23 +43,24 @@ into at most three conversational messages — never one question at a time.
 2. How many hours of development are in the budget, and over how long? (Used to derive concurrent developers and DEV environments.)
 3. Maximum number of Functional Consultants on the project?
 4. Maximum number of Solution Architects?
+5. How many Microsoft-hosted Azure DevOps build agents (parallel jobs) are needed? (Default 2.)
 
 **Licensing**
-5. Which SKUs is Microsoft selling, and how many users of each? (ERP Premium / ERP full / CE Premium / CE Enterprise / Sales-CS Professional / Attach / Activity / Team Members / Device; Customer Insights?)
-6. How do users ramp per wave — how many at each go-live vs. full deployment?
-7. Is there a negotiated monthly subscription total from Microsoft, or should we compute from list prices?
+6. Which SKUs is Microsoft selling, and how many users of each? (ERP Premium / ERP full / CE Premium / CE Enterprise / Sales-CS Professional / Attach / Activity / Team Members / Device; Customer Insights?)
+7. How do users ramp per wave — how many at each go-live vs. full deployment?
+8. Is there a negotiated monthly subscription total from Microsoft, or should we compute from list prices?
 
 **Scope**
-8. Is Commerce in scope?
-9. Which interfaces/integrations are in scope?
-10. Which ISVs are in scope? (Names and monthly pricing if known.)
-11. Is any IP (MCA or third-party) in scope?
-12. Are Copilot Studio agents in scope? (What agents, expected usage?)
-13. Do they plan to use M365 Copilot / Cowork with D365? For how many users?
-14. Should Microsoft Fabric be budgeted? (Capacity size if known.)
-15. Are multiple production environments required?
+9. Is Commerce in scope?
+10. Which interfaces/integrations are in scope?
+11. Which ISVs are in scope? (Names and monthly pricing if known.)
+12. Is any IP (MCA or third-party) in scope?
+13. Are Copilot Studio agents in scope? (What agents, expected usage?)
+14. Do they plan to use M365 Copilot / Cowork with D365? For how many users?
+15. Should Microsoft Fabric be budgeted? (Capacity size if known.)
+16. Are multiple production environments required?
 
-**Always close with:** 16. *"What other facts might pertain to making the IT budget?"*
+**Always close with:** 17. *"What other facts might pertain to making the IT budget?"*
 
 Do not ask about HQ location or Azure region — it doesn't affect this estimate.
 

@@ -4,14 +4,15 @@
     "label": "Production",
     "description": "The environment used for mock go-live and by end users after go-live. All approved code is merged into the release branch to create a deployable package that moves through UAT into Production in a scheduled window.",
     "componentPriceIds": ["env.appInsights"],
-    "defaultStorageGB": { "fscmData": 100, "fscmFile": 40, "dvData": 5, "dvFile": 10 }
+    "defaultStorageGB": { "fscmData": 150, "fscmFile": 16, "dvData": 3, "dvFile": 3 },
+    "prodGrowthApplies": true
   },
   {
     "id": "UAT",
     "label": "UAT / Sandbox",
     "description": "Where the functional team spends most of its time: setup, configuration, and modeling. Custom modifications are integrated here for regression and acceptance testing before promotion to GOLD.",
     "componentPriceIds": ["env.appInsights"],
-    "defaultStorageGB": { "fscmData": 60, "fscmFile": 20, "dvData": 3, "dvFile": 5 }
+    "defaultStorageGB": { "fscmData": 61, "fscmFile": 1, "dvData": 5, "dvFile": 10 }
   },
   {
     "id": "SIT",
@@ -25,14 +26,14 @@
     "label": "GOLD (seed)",
     "description": "Stores and prepares approved data and code. As configuration is finalized in UAT, functional users update GOLD so it becomes the seed environment eventually used to create PROD. Deprecated when comfortable after go-live.",
     "componentPriceIds": ["env.appInsights", "env.addonTier2"],
-    "defaultStorageGB": { "fscmData": 40, "fscmFile": 10 }
+    "defaultStorageGB": { "fscmData": 61, "fscmFile": 1, "dvData": 5, "dvFile": 10 }
   },
   {
     "id": "MIG",
     "label": "Data Migration",
     "description": "Dedicated to data migration from legacy systems. A corrupted test run can be restored from backup with minimal disruption to the rest of the project. Uses the data entity framework; treated as a development server when customization is needed.",
     "componentPriceIds": ["env.appInsights", "env.addonTier2"],
-    "defaultStorageGB": { "fscmData": 80, "fscmFile": 20 }
+    "defaultStorageGB": { "fscmData": 61, "fscmFile": 1, "dvData": 5, "dvFile": 10 }
   },
   {
     "id": "PERF",
@@ -47,7 +48,7 @@
     "label": "Demo / CRP",
     "description": "For reviewing out-of-the-box functionality with Microsoft demo data. Errors are reproduced here before opening Microsoft tickets, proving custom code was not responsible. No custom code is deployed, keeping it pristine.",
     "componentPriceIds": ["env.devVm"],
-    "defaultStorageGB": {}
+    "defaultStorageGB": { "fscmData": 9, "fscmFile": 1, "dvData": 6, "dvFile": 5 }
   },
   {
     "id": "SUP",
@@ -69,7 +70,7 @@
     "label": "Developer",
     "description": "One per concurrent developer. All custom code projects originate here; code is tested by developers and functional consultants, compiles cleanly, and is reasonably free of best-practice violations before promotion.",
     "componentPriceIds": ["env.devVm"],
-    "defaultStorageGB": { "fscmData": 5, "fscmFile": 2 },
+    "defaultStorageGB": { "fscmData": 80, "fscmFile": 3, "dvData": 5, "dvFile": 15 },
     "allowMultiple": true
   },
   {

@@ -34,16 +34,26 @@ Every default is editable — see [customize.md](customize.md).
 
 - **User subscriptions**: negotiated monthly total (recommended — real deals mix license
   types and discounts) or computed from cataloged list prices.
-- **Storage**: per month, per pool — entitled capacity is the tenant base (which depends
-  on whether any Premium/full ERP license exists) plus per-license accruals; demand is
-  the sum of active environments' storage; overage = MAX(demand − entitlement, 0) ×
-  add-on price.
+- **Storage**: per month, per **billed pool**. Entitled capacity is the tenant base
+  (which depends on whether any Premium/full ERP license exists) plus per-license
+  accruals; demand is the sum of active environments' storage; overage =
+  MAX(demand − entitlement, 0) × add-on price.
+
+  Microsoft's merged capacity model bills F&SCM and Dataverse out of **one data pool and
+  one file pool**, so demand and entitlement are summed across both systems *before* the
+  overage is taken — spare Dataverse capacity absorbs an F&SCM shortfall and vice versa.
+  Demand is still tracked per pool, so the explanation shows each half. Dataverse log is
+  tracked separately and not billed. The grouping lives in `licenses.json`
+  (`billingPools`), so if Microsoft splits the pools again it is a catalog edit, not a
+  code change.
 - **Copilot Studio**: agent credit demand → packs (rounded up) − entitled credits
   (Premium/attach users × 1000) − owned packs, priced per pack.
 - **Environment components**: AppInsights, dev VM allotments, add-on environment fees —
   billed for active months only.
-- **Tenant items**: Azure DevOps seats (driven by team size), pipelines, artifacts,
-  integration services — plus fully user-defined custom items (ISVs, Fabric capacity…).
+- **Tenant items**: every non-environment monthly cost is a plain editable row —
+  Azure DevOps seats, Microsoft-hosted build agents, artifacts, Azure Integration
+  Services, ISVs, Fabric capacity. A new estimate seeds the usual ones from the price
+  catalog and the team/agent inputs; the amounts are flat from then on.
 
 Every computed line carries provenance: the scheduling rule (with its rationale), the
 formula in words, and the price citation. The point of the tool is not just the number —

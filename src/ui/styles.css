@@ -185,6 +185,38 @@ table.report tr.total { font-weight: 700; background: #f2f4f7; }
 textarea.json-editor { width: 100%; min-height: 260px; font-family: Consolas, monospace; font-size: 12px; }
 .error-text { color: #a4262c; font-size: 12.5px; white-space: pre-wrap; }
 
+.chart-tooltip {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 11px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+}
+.chart-tooltip-label { font-weight: 600; }
+.chart-tooltip-sub { color: var(--muted); font-size: 11.5px; margin-bottom: 4px; }
+.chart-tooltip-total {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.warnings {
+  background: #fff4e5;
+  border: 1px solid #e8c39a;
+  border-left: 4px solid var(--warn);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  font-size: 12.5px;
+  color: #6b3f00;
+}
+.warnings strong { display: block; margin-bottom: 4px; }
+.warnings ul { margin: 0; padding-left: 18px; }
+.warnings li { margin: 2px 0; }
+
 .item-row { display: grid; grid-template-columns: minmax(80px, 1fr) 84px 58px 58px 28px; gap: 6px; align-items: center; margin: 4px 0; }
 .phase-row { display: grid; grid-template-columns: minmax(80px, 1fr) 92px 62px 62px 28px; gap: 6px; align-items: center; margin: 4px 0; }
 /* Grid children must be allowed to shrink below their intrinsic input width,

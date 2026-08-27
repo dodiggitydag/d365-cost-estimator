@@ -38,6 +38,20 @@
       "fromMonth": 1,
       "counts": {
         "erpPremium": 0,
+        "erpFull": 0,
+        "cePremium": 0,
+        "ceEnterprise": 0,
+        "csProfessional": 0,
+        "attach": 0,
+        "activity": 0,
+        "teamMember": 0,
+        "device": 0
+      }
+    },
+    {
+      "fromMonth": 10,
+      "counts": {
+        "erpPremium": 0,
         "erpFull": 250,
         "cePremium": 0,
         "ceEnterprise": 0,
@@ -64,7 +78,6 @@
     }
   ],
   "licenseCostMode": { "kind": "listPrices" },
-  "licenseStartMonth": 10,
   "copilotAgents": [
     {
       "id": "agent-returns",
@@ -146,6 +159,7 @@
     "azureIntegration": { "enabled": true }
   },
   "settings": {
-    "prodLeadMonths": 2
+    "prodLeadMonths": 2,
+    "prodGrowthGBPerYear": { "fscmData": 120, "fscmFile": 24, "dvData": 6, "dvFile": 12 }
   }
 }

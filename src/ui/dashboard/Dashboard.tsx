@@ -22,10 +22,53 @@ import {
   parseYearMonth,
   yearBuckets,
 } from '../../engine';
-import type { ItemCategory, StoragePool } from '../../engine/types';
-import { STORAGE_POOL_LABELS } from '../../engine/types';
+import type { ItemCategory } from '../../engine/types';
 
 const COLORS = ['#0f6cbd', '#77b7e5', '#f2a900', '#8764b8', '#1a7f37', '#d13438', '#5b6675', '#00b7c3'];
+
+/**
+ * Replaces Recharts' default tooltip, which lists the stack segments but not their
+ * sum — the monthly total is the number people are usually after. Zero segments are
+ * dropped so a month with one active category doesn't render a column of $0.00 rows.
+ * Props are injected by Recharts via `content`.
+ */
+function CostTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: {
+    name?: string;
+    value?: number;
+    color?: string;
+    dataKey?: string | number;
+    /** The whole chart row, which carries the project month/year numbers. */
+    payload?: { monthNo?: number; yearNo?: number };
+  }[];
+  label?: string;
+}) {
+  if (!active || !payload?.length) return null;
+  const total = payload.reduce((sum, p) => sum + (p.value ?? 0), 0);
+  const rows = payload.filter((p) => (p.value ?? 0) !== 0);
+  const row = payload[0]?.payload;
+  return (
+    <div className="chart-tooltip">
+      <div className="chart-tooltip-label">{label}</div>
+      {row?.monthNo !== undefined && (
+        <div className="chart-tooltip-sub">
+          Month {row.monthNo} · Year {row.yearNo}
+        </div>
+      )}
+      {rows.map((p, i) => (
+        <div key={String(p.dataKey ?? i)} style={{ color: p.color }}>
+          {p.name} : {money(p.value ?? 0)}
+        </div>
+      ))}
+      <div className="chart-tooltip-total">Total : {money(total)}</div>
+    </div>
+  );
+}
 
 export function Dashboard() {
   const estimate = useStore((s) => s.estimate);
@@ -57,7 +100,13 @@ export function Dashboard() {
         : byEnvMonth(result.lines, months);
     const keys = [...groups.keys()];
     const data = Array.from({ length: months }, (_, i) => {
-      const row: Record<string, number | string> = { month: monthLabel(i + 1, start) };
+      // monthNo/yearNo are elapsed project numbers for the tooltip; they are not
+      // plotted (only `keys` become bars), and complement the calendar label.
+      const row: Record<string, number | string> = {
+        month: monthLabel(i + 1, start),
+        monthNo: i + 1,
+        yearNo: Math.floor(i / 12) + 1,
+      };
       for (const k of keys) row[k] = groups.get(k)![i];
       return row;
     });
@@ -120,7 +169,7 @@ export function Dashboard() {
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e9ef" />
             <XAxis dataKey="month" tick={{ fontSize: 11 }} interval={2} />
             <YAxis tick={{ fontSize: 11 }} tickFormatter={(v: number) => `$${(v / 1000).toFixed(0)}k`} />
-            <Tooltip formatter={(v: number) => money(v)} />
+            <Tooltip content={<CostTooltip />} />
             <Legend wrapperStyle={{ fontSize: 12 }} />
             {stacked.keys.map((k, i) => (
               <Bar
@@ -210,13 +259,21 @@ function StoragePanel() {
       </div>
     );
   }
-  const byPool = new Map<string, { months: number; maxOver: number; cost: number }>();
+  const byPool = new Map<
+    string,
+    { label: string; months: number; maxOver: number; cost: number }
+  >();
   for (const s of overageMonths) {
-    const cur = byPool.get(s.pool) ?? { months: 0, maxOver: 0, cost: 0 };
+    const cur = byPool.get(s.groupId) ?? {
+      label: s.label,
+      months: 0,
+      maxOver: 0,
+      cost: 0,
+    };
     cur.months++;
     cur.maxOver = Math.max(cur.maxOver, s.overageGB);
     cur.cost += s.overageCost;
-    byPool.set(s.pool, cur);
+    byPool.set(s.groupId, cur);
   }
   return (
     <div className="chart-panel">
@@ -224,16 +281,16 @@ function StoragePanel() {
       <table className="report" style={{ marginTop: 8 }}>
         <thead>
           <tr>
-            <th>Pool</th>
+            <th>Billed pool</th>
             <th>Months with overage</th>
             <th>Peak overage (GB)</th>
             <th>Total cost</th>
           </tr>
         </thead>
         <tbody>
-          {[...byPool.entries()].map(([pool, v]) => (
-            <tr key={pool}>
-              <td>{STORAGE_POOL_LABELS[pool as StoragePool]}</td>
+          {[...byPool.entries()].map(([groupId, v]) => (
+            <tr key={groupId}>
+              <td>{v.label}</td>
               <td>{v.months}</td>
               <td>{v.maxOver.toFixed(1)}</td>
               <td>{money(v.cost)}</td>
@@ -243,7 +300,9 @@ function StoragePanel() {
       </table>
       <p className="help">
         Overage = MAX(demand of active environments − entitlement, 0) × add-on price,
-        computed per month. Click a month in the chart for the full breakdown.
+        computed per month. F&SCM and Dataverse share one data pool and one file pool, so
+        spare entitlement in one absorbs demand from the other. Click a month in the chart
+        for the full breakdown.
       </p>
     </div>
   );

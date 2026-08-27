@@ -11,8 +11,8 @@
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Additional Operations capacity (Operations Database)",
-      "asOf": "2025-02-01",
-      "notes": "The August 2026 guide describes the add-on but no longer prints its price; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
+      "asOf": "2026-08-24",
+      "notes": "Dynamics 365 Operations - Database Capacity. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "storage.fscmFile.overage",
@@ -22,8 +22,8 @@
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Additional Operations capacity (Operations File)",
-      "asOf": "2025-02-01",
-      "notes": "The August 2026 guide describes the add-on but no longer prints its price; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
+      "asOf": "2026-08-24",
+      "notes": "Dynamics 365 Operations - File Capacity. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "storage.dvData.overage",
@@ -33,8 +33,8 @@
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Microsoft Copilot Studio Licensing Guide — Dataverse capacity add-ons (Database)",
-      "asOf": "2026-08-01",
-      "notes": "Subscription add-on. Tier 2 add-on is $30/GB/mo at 1,000+ GB. Pay-as-you-go meter is $48/GB/mo. Table also appears in the Power Platform Licensing Guide."
+      "asOf": "2026-08-24",
+      "notes": "Dataverse Database Capacity add-on. Tier 2 (1,000+ GB) is $30/GB/mo. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "storage.dvFile.overage",
@@ -44,8 +44,8 @@
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Microsoft Copilot Studio Licensing Guide — Dataverse capacity add-ons (File)",
-      "asOf": "2026-08-01",
-      "notes": "Subscription add-on. Pay-as-you-go meter is $2.40/GB/mo — the prior catalog value (2.4) was the meter price, corrected 2026-08. Table also appears in the Power Platform Licensing Guide."
+      "asOf": "2026-08-24",
+      "notes": "Dataverse File Capacity add-on. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "storage.dvLog.overage",
@@ -55,8 +55,8 @@
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Microsoft Copilot Studio Licensing Guide — Dataverse capacity add-ons (Log)",
-      "asOf": "2026-08-01",
-      "notes": "Tracked but not billed by default in this tool (mirrors source workbook). Pay-as-you-go meter is $12/GB/mo."
+      "asOf": "2026-08-24",
+      "notes": "Dataverse Log Capacity add-on. Tracked but not billed by default in this tool (mirrors the source workbook). Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "license.erpPremium",
@@ -66,8 +66,8 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/en-us/dynamics-365/products/finance/pricing",
       "guideSection": "Dynamics 365 Licensing Guide — Finance / Supply Chain Management entitlements (Premium)",
-      "asOf": "2026-08-01",
-      "notes": "List price. Includes 1,000 Copilot Credits per user/month. Actuals vary by agreement."
+      "asOf": "2026-08-24",
+      "notes": "Finance Premium / Supply Chain Management Premium. Includes 1,000 Copilot Credits per user/month. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "license.erpFull",
@@ -77,8 +77,8 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/en-us/dynamics-365/products/finance/pricing",
       "guideSection": "Dynamics 365 Licensing Guide — Finance / Supply Chain Management entitlements",
-      "asOf": "2026-08-01",
-      "notes": "List price. Verify against the current licensing guide."
+      "asOf": "2026-08-24",
+      "notes": "Dynamics 365 Finance / Supply Chain Management base licence. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "license.cePremium",
@@ -88,8 +88,8 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Sales entitlements (Sales Premium)",
-      "asOf": "2026-08-01",
-      "notes": "Sales Premium list. Customer Service Premium is $195 — verify which applies."
+      "asOf": "2026-08-24",
+      "notes": "Sales Premium list. Customer Service Premium is $195 — swap the value if CE is primary. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "license.ceEnterprise",
@@ -99,7 +99,8 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Sales / Customer Service entitlements (Enterprise)",
-      "asOf": "2026-08-01"
+      "asOf": "2026-08-24",
+      "notes": "Sales Enterprise / Customer Service Enterprise. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "license.csProfessional",
@@ -109,8 +110,8 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Sales entitlements (Sales Professional)",
-      "asOf": "2026-08-01",
-      "notes": "Sales Professional list (was 70 in catalog 2025-12; guide shows $65). Customer Service Professional is $50 — verify which applies."
+      "asOf": "2026-08-24",
+      "notes": "Sales Professional list. Customer Service Professional is $50. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "license.attach",
@@ -120,8 +121,8 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Base and attach licenses",
-      "asOf": "2025-02-01",
-      "notes": "The August 2026 guide describes attach licensing but no longer prints a general attach price; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
+      "asOf": "2026-08-24",
+      "notes": "F&SCM attach (Finance / SCM / Commerce / HR attach to a qualifying base offer). CE attach licences are $20. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "license.activity",
@@ -131,8 +132,8 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Operations Activity",
-      "asOf": "2025-02-01",
-      "notes": "Not printed in the August 2026 guide; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
+      "asOf": "2026-08-24",
+      "notes": "Dynamics 365 Operations - Activity. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "license.teamMember",
@@ -142,19 +143,19 @@
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Team Members",
-      "asOf": "2025-02-01",
-      "notes": "Not printed in the August 2026 guide; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
+      "asOf": "2026-08-24",
+      "notes": "Adds no storage entitlement. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "license.device",
       "label": "Dynamics 365 Operations – Device",
-      "value": 75,
+      "value": 85,
       "currency": "USD",
       "unit": "device/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Dynamics 365 Licensing Guide — Operations Device",
-      "asOf": "2025-02-01",
-      "notes": "Not printed in the August 2026 guide; last printed in the February 2025 guide. Verify via CSP price sheet or agreement."
+      "asOf": "2026-08-24",
+      "notes": "Dynamics 365 Operations - Device. Corrected from $75: the NCE sheet lists $102 monthly-term and $1,020/year annual-term. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "copilotstudio.pack",
@@ -164,8 +165,8 @@
       "unit": "pack",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
       "guideSection": "Microsoft Copilot Studio Licensing Guide — Copilot Studio License (Capacity pack)",
-      "asOf": "2026-08-01",
-      "notes": "$200 per credit pack/month, billed annually; 1 pack = 25,000 Copilot Credits/month, unused credits do not roll over. Pay-as-you-go alternative: $0.01/Copilot Credit. Moved from the Power Platform guide to the dedicated Copilot Studio Licensing Guide."
+      "asOf": "2026-08-24",
+      "notes": "$200 per credit pack/month, billed annually; 1 pack = 25,000 Copilot Credits. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
       "id": "env.appInsights",
@@ -234,14 +235,14 @@
     },
     {
       "id": "ado.pipelines",
-      "label": "Microsoft-hosted pipelines (3 parallel jobs)",
-      "value": 120,
+      "label": "Microsoft-hosted Azure DevOps agent (parallel job)",
+      "value": 40,
       "currency": "USD",
-      "unit": "mo",
+      "unit": "agent/mo",
       "sourceUrl": "https://azure.microsoft.com/pricing/details/devops/azure-devops-services/",
       "guideSection": "Azure DevOps Services pricing — Microsoft-hosted CI/CD",
       "asOf": "2025-02-01",
-      "notes": "$40 per additional parallel job; default assumes 3."
+      "notes": "Priced per parallel job (build agent). One Microsoft-hosted parallel job is free for private projects — deduct it if that applies."
     },
     {
       "id": "ado.artifacts",

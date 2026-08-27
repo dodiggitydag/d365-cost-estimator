@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useStore } from '../store';
 import { monthLabel, parseYearMonth } from '../../engine';
+import { Warnings } from '../Warnings';
 
 /**
  * Environment × month grid. Rules paint the base schedule; clicking or dragging
@@ -41,6 +42,7 @@ export function ScheduleGrid() {
 
   return (
     <div>
+      <Warnings warnings={result.warnings} />
       <p className="help">
         Solid cells come from the methodology rules — click a cell for the why. Click or
         drag to override (⤴ orange corner = manual override); right-click a cell to revert

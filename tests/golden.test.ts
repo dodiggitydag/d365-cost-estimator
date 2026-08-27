@@ -29,7 +29,7 @@ describe.skipIf(!hasFixture)('golden parity with source workbook', () => {
   const pools: StoragePool[] = ['fscmData', 'fscmFile', 'dvData', 'dvFile'];
 
   function estimateForMonth(m: number) {
-    const est = newEstimate('golden');
+    const est = newEstimate(config);
     est.horizonMonths = 60;
     const counts: Record<string, number> = {};
     for (const [id, arr] of Object.entries(fixture.licenseCounts)) {

@@ -10,6 +10,7 @@ import {
   scheduleRuleSchema,
 } from '../src/model/schemas';
 import { z } from 'zod';
+import { STORAGE_POOLS } from '../src/engine/types';
 
 describe('catalog validation', () => {
   it('pricing catalog is valid and every entry is cited', () => {
@@ -30,6 +31,21 @@ describe('catalog validation', () => {
       expect(priceIds.has(id), `overage price ${id}`).toBe(true);
     }
     expect(priceIds.has(parsed.copilot.packPriceId)).toBe(true);
+  });
+
+  it('billing pools cover every storage pool exactly once', () => {
+    const parsed = licenseCatalogSchema.parse(licenses);
+    const priceIds = new Set(pricing.entries.map((e) => e.id));
+    const groups = parsed.billingPools ?? [];
+    expect(groups.length).toBeGreaterThan(0);
+    const seen: string[] = [];
+    for (const g of groups) {
+      // A pool listed twice would be billed twice; one listed nowhere is invisible.
+      seen.push(...g.pools);
+      if (g.priceId) expect(priceIds.has(g.priceId), `pool price ${g.priceId}`).toBe(true);
+    }
+    expect(new Set(seen).size, 'a pool appears in two billing groups').toBe(seen.length);
+    expect([...seen].sort()).toEqual([...STORAGE_POOLS].sort());
   });
 
   it('environment catalog is valid and component price refs resolve', () => {

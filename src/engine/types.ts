@@ -11,7 +11,8 @@ export type PriceUnit =
   | 'GB/mo'
   | 'pack'
   | 'mo'
-  | 'device/mo';
+  | 'device/mo'
+  | 'agent/mo';
 
 export interface PriceEntry {
   id: string;
@@ -80,6 +81,16 @@ export interface TenantBaseEntitlement {
   notes?: string;
 }
 
+/** A set of storage pools charged as one bucket. */
+export interface StorageBillingPool {
+  id: string;
+  label: string;
+  pools: StoragePool[];
+  /** Overage price ref; omit for a pool that is tracked but never billed. */
+  priceId?: string;
+  notes?: string;
+}
+
 export interface LicenseCatalog {
   types: LicenseType[];
   tenantBases: TenantBaseEntitlement[];
@@ -92,6 +103,14 @@ export interface LicenseCatalog {
   }[];
   /** Storage overage price refs per pool (pricing catalog ids). */
   overagePriceIds: Partial<Record<StoragePool, string>>;
+  /**
+   * How pools are charged. Microsoft's merged capacity model bills F&SCM and
+   * Dataverse out of ONE data pool and ONE file pool, so demand and entitlement
+   * are summed across `pools` before the overage is taken — netting a surplus in
+   * one system against a shortfall in the other. Omit to bill each pool alone
+   * (the pre-merge behaviour, kept for older config overrides).
+   */
+  billingPools?: StorageBillingPool[];
   copilot: {
     creditsPerPack: number;
     packPriceId: string;
@@ -111,6 +130,8 @@ export interface EnvironmentType {
   componentPriceIds: string[];
   /** Default storage demand in GB while active. */
   defaultStorageGB: Partial<Record<StoragePool, number>>;
+  /** Production-like: the estimate's per-year storage growth accrues here. */
+  prodGrowthApplies?: boolean;
   /** DEV-style: one instance per concurrent developer. */
   allowMultiple?: boolean;
   /** Not part of the default plan; user can add it. */
@@ -242,11 +263,17 @@ export interface Estimate {
     concurrentDevs: number;
     functionalConsultants: number;
     solutionArchitects: number;
+    /** Microsoft-hosted Azure DevOps parallel jobs (build agents). */
+    hostedAgents: number;
   };
   licenseSteps: LicenseStep[];
   licenseCostMode: LicenseCostMode;
-  /** Month user subscriptions start being paid (default: project start). */
-  licenseStartMonth: number;
+  /**
+   * @deprecated Superseded by the license steps: subscriptions now start at the
+   * first step that has users. Still accepted on import so older saved estimates
+   * keep loading; never written by the app and ignored by the engine.
+   */
+  licenseStartMonth?: number;
   copilotAgents: CopilotAgent[];
   copilotPacksOwned: number;
   customerInsightsAddon: boolean;
@@ -255,10 +282,17 @@ export interface Estimate {
   disabledEnvIds: string[];
   customItems: CustomCostItem[];
   gridOverrides: GridOverride[];
-  /** Built-in tenant-level items (AzDO, integrations...) the user can toggle. */
-  standardItems: Record<string, StandardItemSettings>;
+  /**
+   * @deprecated Built-in tenant-level toggles (AzDO, integrations...). Retired in
+   * favour of plain custom items, which are editable. Still accepted on import so
+   * older saved estimates keep loading — `migrateStandardItems` converts the
+   * enabled ones into `customItems`; never written by the app.
+   */
+  standardItems?: Record<string, StandardItemSettings>;
   settings: {
     prodLeadMonths: number; // PROD starts N months before first go-live
+    /** Annual data growth of production environments, GB per year per pool. */
+    prodGrowthGBPerYear: Partial<Record<StoragePool, number>>;
   };
 }
 
@@ -313,7 +347,11 @@ export interface CostLine {
 
 export interface StorageMonth {
   month: number;
-  pool: StoragePool;
+  /** Billing bucket id — one or more pools charged together. */
+  groupId: string;
+  label: string;
+  /** The pools summed into this bucket. */
+  pools: StoragePool[];
   neededGB: number;
   includedGB: number;
   overageGB: number;
@@ -330,10 +368,21 @@ export interface CopilotMonth {
   cost: number;
 }
 
+export interface ScheduleWarning {
+  kind: 'inverted-window' | 'duplicate-phase-kind' | 'empty-environment';
+  message: string;
+  rolloutId?: string;
+  ruleId?: string;
+  envTypeId?: string;
+  envInstanceId?: string;
+}
+
 export interface EstimateResult {
   schedule: ScheduleMatrix;
   lines: CostLine[];
   storage: StorageMonth[];
   copilot: CopilotMonth[];
   goLiveMonths: { rolloutId: string; month: number }[];
+  /** Schedule problems that would otherwise fail silently. */
+  warnings: ScheduleWarning[];
 }

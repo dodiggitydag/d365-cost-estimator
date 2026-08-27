@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { Estimate } from '../engine/types';
 import { computeEstimate } from '../engine';
 import type { EstimateResult, EstimatorConfig } from '../engine/types';
-import { defaultConfig, effectiveConfig, type ConfigOverrides } from '../model/config';
+import { effectiveConfig, type ConfigOverrides } from '../model/config';
 import { newEstimate } from '../model/estimate';
 import {
   loadSavedEstimate,
@@ -42,7 +42,7 @@ function scheduleSave(estimate: Estimate): void {
 const initialOverrides = loadSavedOverrides();
 const initialConfig = effectiveConfig(initialOverrides);
 const initialEstimate =
-  loadSavedEstimate() ?? newEstimate(defaultConfig().pricing.version);
+  loadSavedEstimate(initialConfig) ?? newEstimate(initialConfig);
 
 export const useStore = create<Store>((set, get) => ({
   estimate: initialEstimate,
@@ -64,7 +64,7 @@ export const useStore = create<Store>((set, get) => ({
   },
   setExplain: (explain) => set({ explain }),
   reset: () => {
-    const estimate = newEstimate(get().config.pricing.version);
+    const estimate = newEstimate(get().config);
     saveEstimate(estimate);
     set({
       estimate,

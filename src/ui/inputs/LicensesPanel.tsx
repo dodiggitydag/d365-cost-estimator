@@ -1,4 +1,5 @@
 import { useStore } from '../store';
+import { monthLabel, parseYearMonth, subscriptionStartMonth } from '../../engine';
 
 export function LicensesPanel() {
   const estimate = useStore((s) => s.estimate);
@@ -6,6 +7,8 @@ export function LicensesPanel() {
   const update = useStore((s) => s.update);
 
   const mode = estimate.licenseCostMode;
+  const start = subscriptionStartMonth(estimate);
+  const calendarStart = parseYearMonth(estimate.startYearMonth);
 
   return (
     <details className="section" open>
@@ -14,7 +17,8 @@ export function LicensesPanel() {
         <p className="help">
           User counts drive storage entitlements and Copilot Studio credits even when the
           subscription cost is entered as a negotiated total. Steps let counts change over
-          time (e.g. pilot users at month 1, everyone at go-live).
+          time (e.g. pilot users at month 1, everyone at go-live) and also set when billing
+          starts — the first step with users. To buy later, add a zero-count step at month 1.
         </p>
         {estimate.licenseSteps.map((step, si) => (
           <div key={si} style={{ borderTop: si ? '1px dashed var(--border)' : undefined, paddingTop: si ? 6 : 0 }}>
@@ -136,18 +140,11 @@ export function LicensesPanel() {
         )}
         <div className="row">
           <label>Subscriptions start</label>
-          <input
-            type="number"
-            min={1}
-            value={estimate.licenseStartMonth}
-            onChange={(ev) =>
-              update((e) => ({
-                ...e,
-                licenseStartMonth: Math.max(1, parseInt(ev.target.value) || 1),
-              }))
-            }
-          />
-          <span className="muted">month</span>
+          <span className="badge">
+            month {start}
+            {calendarStart ? ` (${monthLabel(start, calendarStart)})` : ''}
+          </span>
+          <span className="muted">first count step with users</span>
         </div>
         <div className="row">
           <label>Customer Insights</label>

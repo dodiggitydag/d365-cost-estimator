@@ -1,5 +1,4 @@
 import { useStore } from '../store';
-import { STANDARD_ITEMS } from '../../engine';
 import { patchById } from '../../model/estimate';
 import type { CustomCostItem, ItemCategory } from '../../engine/types';
 
@@ -16,31 +15,11 @@ export function ItemsPanel() {
     <details className="section">
       <summary>Other cost items</summary>
       <div className="body">
-        <p className="help">Built-in tenant-level items:</p>
-        {STANDARD_ITEMS.map((def) => (
-          <div className="row" key={def.id}>
-            <input
-              type="checkbox"
-              checked={estimate.standardItems[def.id]?.enabled ?? false}
-              onChange={(ev) =>
-                update((e) => ({
-                  ...e,
-                  standardItems: {
-                    ...e.standardItems,
-                    [def.id]: {
-                      ...(e.standardItems[def.id] ?? {}),
-                      enabled: ev.target.checked,
-                    },
-                  },
-                }))
-              }
-            />
-            <span>{def.label}</span>
-          </div>
-        ))}
-        <p className="help" style={{ marginTop: 10 }}>
-          Custom items — ISVs, Fabric capacity, integration VMs, anything with a monthly
-          price. These are yours to define; the examples ship with $0.
+        <p className="help">
+          Every row here is yours: Azure DevOps tooling, ISVs, Fabric capacity, integration
+          VMs — anything with a monthly price. A new estimate seeds the usual tenant items
+          from the catalog and your team size; after that the amounts are flat, so revisit
+          them if the team or agent count changes. Rows left at $0 bill nothing.
         </p>
         <div className="item-row muted" style={{ fontSize: 12 }}>
           <span>Name</span>

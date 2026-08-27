@@ -12,7 +12,7 @@ describe('Copilot Studio packs (workbook parity)', () => {
   const config = defaultConfig();
 
   it('rounds packs up and nets out entitlement and owned packs', () => {
-    const est = newEstimate('test');
+    const est = newEstimate(config);
     est.licenseSteps = [{ fromMonth: 1, counts: { erpPremium: 10 } }]; // 10,000 credits = 0.4 packs
     est.copilotAgents = [
       { id: 'a1', name: 'Agent 1', creditsPerMonth: 30000, fromMonth: 1, toMonth: 12 },
@@ -28,7 +28,7 @@ describe('Copilot Studio packs (workbook parity)', () => {
   });
 
   it('attach licenses count toward entitlement (workbook H206)', () => {
-    const est = newEstimate('test');
+    const est = newEstimate(config);
     est.licenseSteps = [
       { fromMonth: 1, counts: { attach: 25, cePremium: 15, erpPremium: 10 } },
     ]; // 50 × 1000 credits = 2 packs entitled
@@ -42,7 +42,7 @@ describe('Copilot Studio packs (workbook parity)', () => {
   });
 
   it('agents outside their window cost nothing', () => {
-    const est = newEstimate('test');
+    const est = newEstimate(config);
     est.copilotAgents = [
       { id: 'a1', name: 'Agent 1', creditsPerMonth: 30000, fromMonth: 5, toMonth: 6 },
     ];

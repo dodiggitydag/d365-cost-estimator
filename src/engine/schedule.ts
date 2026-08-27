@@ -8,6 +8,7 @@ import type {
   ScheduleCell,
   ScheduleMatrix,
   ScheduleRule,
+  ScheduleWarning,
 } from './types';
 
 /** Go-live month of a rollout: explicit override, else end of the Prepare phase,
@@ -64,6 +65,28 @@ export interface RuleWindow {
   firstInstanceOnly: boolean;
 }
 
+/**
+ * One rule resolved against one rollout. `dropped` means the window inverted or fell
+ * outside the horizon, so it contributes no months — the schedule ignores it and
+ * `scheduleWarnings` reports it. `undefined` means the rollout has no phase of the
+ * anchor's kind, which is normal (the rule is simply silent for that rollout).
+ */
+function resolveWindow(
+  rule: ScheduleRule,
+  rollout: Rollout,
+  horizon: number,
+  settings: Estimate['settings'],
+):
+  | { from: number; to: number; rawFrom: number; rawTo: number; dropped: boolean }
+  | undefined {
+  const rawFrom = resolveAnchor(rule.from, rollout, horizon, settings);
+  const rawTo = resolveAnchor(rule.to, rollout, horizon, settings);
+  if (rawFrom === undefined || rawTo === undefined) return undefined;
+  const from = Math.max(1, rawFrom);
+  const to = Math.min(horizon, rawTo);
+  return { from, to, rawFrom, rawTo, dropped: to < from };
+}
+
 /** Every rule is evaluated once per rollout; a rule whose phase anchor is missing
  *  in a rollout is skipped for that rollout. Active months are the union. */
 export function ruleWindows(
@@ -75,24 +98,87 @@ export function ruleWindows(
   const byEnvType = new Map<string, RuleWindow[]>();
   for (const rule of rules) {
     for (const rollout of rollouts) {
-      const from = resolveAnchor(rule.from, rollout, horizon, settings);
-      const to = resolveAnchor(rule.to, rollout, horizon, settings);
-      if (from === undefined || to === undefined) continue;
-      const clampedFrom = Math.max(1, from);
-      const clampedTo = Math.min(horizon, to);
-      if (clampedTo < clampedFrom) continue;
+      const w = resolveWindow(rule, rollout, horizon, settings);
+      if (!w || w.dropped) continue;
       const list = byEnvType.get(rule.envTypeId) ?? [];
       list.push({
         ruleId: rule.id,
         rolloutId: rollout.id,
-        from: clampedFrom,
-        to: clampedTo,
+        from: w.from,
+        to: w.to,
         firstInstanceOnly: rule.appliesTo === 'firstInstance',
       });
       byEnvType.set(rule.envTypeId, list);
     }
   }
   return byEnvType;
+}
+
+/**
+ * Problems that make the schedule quietly wrong rather than loudly broken. All three
+ * have the same symptom — an environment row with no months and no cost — and none of
+ * them raise an error anywhere else, so this is the only place they surface.
+ */
+export function scheduleWarnings(
+  estimate: Estimate,
+  config: EstimatorConfig,
+  schedule: ScheduleMatrix,
+): ScheduleWarning[] {
+  const warnings: ScheduleWarning[] = [];
+  const horizon = estimate.horizonMonths;
+  const label = (id: string) =>
+    config.environments.find((e) => e.id === id)?.label ?? id;
+
+  // 1. A rule whose end resolves before its start (usually phases ordered so that
+  //    Prepare ends before Implement begins) contributes nothing at all.
+  for (const rule of config.rules) {
+    for (const rollout of estimate.rollouts) {
+      const w = resolveWindow(rule, rollout, horizon, estimate.settings);
+      if (!w || !w.dropped) continue;
+      const why =
+        w.rawFrom > horizon
+          ? `starts at month ${w.rawFrom}, past the ${horizon}-month horizon`
+          : `runs month ${w.rawFrom} → ${w.rawTo}, so it ends before it starts`;
+      warnings.push({
+        kind: 'inverted-window',
+        rolloutId: rollout.id,
+        ruleId: rule.id,
+        envTypeId: rule.envTypeId,
+        message: `${rollout.name}: rule “${rule.id}” for ${label(rule.envTypeId)} ${why} — it was ignored. Check the phase order and lengths in this rollout.`,
+      });
+    }
+  }
+
+  // 2. Rules anchor to the FIRST phase of a kind, so a duplicate kind is invisible.
+  for (const rollout of estimate.rollouts) {
+    const byKind = new Map<string, string[]>();
+    for (const phase of rollout.phases) {
+      byKind.set(phase.kind, [...(byKind.get(phase.kind) ?? []), phase.name]);
+    }
+    for (const [kind, names] of byKind) {
+      if (names.length < 2) continue;
+      warnings.push({
+        kind: 'duplicate-phase-kind',
+        rolloutId: rollout.id,
+        message: `${rollout.name} has ${names.length} “${kind}” phases (${names.join(', ')}). Rules anchor to the first one only, so the others do not schedule anything — use a separate rollout for a second build.`,
+      });
+    }
+  }
+
+  // 3. The visible symptom: a ruled environment that ended up with no months. Types
+  //    with no rules at all (PERF, BUILD) are legitimately empty until painted.
+  for (const inst of schedule.instances) {
+    if (!config.rules.some((r) => r.envTypeId === inst.typeId)) continue;
+    if (schedule.cells[inst.id]?.some((c) => c.active)) continue;
+    warnings.push({
+      kind: 'empty-environment',
+      envTypeId: inst.typeId,
+      envInstanceId: inst.id,
+      message: `${inst.name} has no active months, so it costs nothing. Its rules produced no window — fix the phase order above, or paint months in the grid.`,
+    });
+  }
+
+  return warnings;
 }
 
 export function resolveRuleCount(

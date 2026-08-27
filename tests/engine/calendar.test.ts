@@ -53,7 +53,7 @@ describe('calendar-year buckets', () => {
 describe('environment removal (disabledEnvIds)', () => {
   it('removes rule-derived instances and survives regeneration', () => {
     const config = defaultConfig();
-    const est = newEstimate('test');
+    const est = newEstimate(config);
     est.disabledEnvIds = ['TRAIN', 'GOLD', 'DEV03'];
     const s = buildSchedule(est, config);
     const ids = s.instances.map((i) => i.id);

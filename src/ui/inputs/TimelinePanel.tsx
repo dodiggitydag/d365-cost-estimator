@@ -2,11 +2,13 @@ import { useStore } from '../store';
 import { addRollout, patchById } from '../../model/estimate';
 import { goLiveMonth, monthLabel, parseYearMonth } from '../../engine';
 import type { Phase, PhaseKind, Rollout } from '../../engine/types';
+import { Warnings } from '../Warnings';
 
 const KINDS: PhaseKind[] = ['initiate', 'implement', 'prepare', 'operate', 'custom'];
 
 export function TimelinePanel() {
   const estimate = useStore((s) => s.estimate);
+  const result = useStore((s) => s.result);
   const update = useStore((s) => s.update);
 
   const patchRollout = (rolloutId: string, patch: Partial<Rollout>) =>
@@ -131,6 +133,10 @@ export function TimelinePanel() {
                 </button>
               </div>
             ))}
+            <Warnings
+              warnings={result.warnings.filter((w) => w.rolloutId === r.id)}
+              title="Phase order problem"
+            />
             <button
               className="small"
               title="Add a phase to this rollout (rules anchor to phase kinds, so set the kind)"

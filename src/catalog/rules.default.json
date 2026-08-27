@@ -10,18 +10,18 @@
     "id": "dev-during-build",
     "envTypeId": "DEV",
     "from": { "phaseKind": "implement", "edge": "start" },
-    "to": { "phaseKind": "prepare", "edge": "end" },
+    "to": { "phaseKind": "implement", "edge": "end" },
     "count": { "input": "concurrentDevs" },
-    "rationale": "Each concurrent developer needs a dedicated development environment from the start of build until go-live; version control requires one server per developer."
+    "rationale": "Each concurrent developer needs a dedicated development environment for design and development; version control requires one server per developer. Boxes go away when the build phase ends."
   },
   {
     "id": "dev-lead-forever",
     "envTypeId": "DEV",
-    "from": { "phaseKind": "implement", "edge": "start" },
+    "from": { "event": "projectStart", "offsetMonths": 1 },
     "to": { "event": "horizonEnd" },
     "count": { "input": "concurrentDevs" },
     "appliesTo": "firstInstance",
-    "rationale": "The lead developer environment is kept for the life of the system to support ISV upgrades, installs, and troubleshooting after go-live."
+    "rationale": "The lead developer environment stands up in month 2, as soon as the project has a tenant, and is kept for the life of the system to support ISV upgrades, installs, and troubleshooting after go-live."
   },
   {
     "id": "gold-through-golive",

@@ -21,6 +21,7 @@ Scheduling rules) shows the effective JSON. Edit → **Validate & apply**. Chang
   `defaultStorageGB`. Then either add a scheduling rule for it or add an instance in the
   Environments panel and paint its months manually.
 - **Change when DEV environments run**: edit the `dev-during-build` rule's `from`/`to`
+  (it ships as Implement start → Implement end, i.e. design & development only)
   anchors. Anchors are either `{ "phaseKind": "implement", "edge": "start", "offsetMonths": 0 }`
   or `{ "event": "goLive" | "projectStart" | "horizonEnd", "offsetMonths": -2 }`.
   `offsetMonths` can also reference an estimate setting instead of a fixed number —

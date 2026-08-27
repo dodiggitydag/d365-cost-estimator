@@ -4,14 +4,24 @@
       "id": "erpPremium",
       "label": "ERP Premium (Finance / SCM Premium)",
       "priceId": "license.erpPremium",
-      "accrualGB": { "fscmData": 10, "fscmFile": 10, "dvData": 0.5, "dvFile": 3 },
+      "accrualGB": {
+        "fscmData": 10,
+        "fscmFile": 10,
+        "dvData": 0.5,
+        "dvFile": 3
+      },
       "copilotCreditsPerUser": 1000
     },
     {
       "id": "erpFull",
       "label": "ERP full user (Finance / SCM)",
       "priceId": "license.erpFull",
-      "accrualGB": { "fscmData": 5, "fscmFile": 5, "dvData": 0.25, "dvFile": 2 }
+      "accrualGB": {
+        "fscmData": 5,
+        "fscmFile": 5,
+        "dvData": 0.25,
+        "dvFile": 2
+      }
     },
     {
       "id": "cePremium",
@@ -45,7 +55,12 @@
       "id": "activity",
       "label": "Operations – Activity",
       "priceId": "license.activity",
-      "accrualGB": { "fscmData": 1, "fscmFile": 2, "dvData": 0.064, "dvFile": 0.512 }
+      "accrualGB": {
+        "fscmData": 1,
+        "fscmFile": 2,
+        "dvData": 0.064,
+        "dvFile": 0.512
+      }
     },
     {
       "id": "teamMember",
@@ -58,20 +73,41 @@
       "id": "device",
       "label": "Operations – Device",
       "priceId": "license.device",
-      "accrualGB": { "fscmData": 2, "fscmFile": 3, "dvData": 0.102, "dvFile": 0.819 }
+      "accrualGB": {
+        "fscmData": 2,
+        "fscmFile": 3,
+        "dvData": 0.102,
+        "dvFile": 0.819
+      }
     }
   ],
   "tenantBases": [
     {
       "id": "base-erp-premium",
-      "ifAnyOf": ["erpPremium"],
-      "gb": { "fscmData": 125, "fscmFile": 110, "dvData": 30, "dvFile": 40, "dvLog": 3 },
+      "ifAnyOf": [
+        "erpPremium"
+      ],
+      "gb": {
+        "fscmData": 125,
+        "fscmFile": 110,
+        "dvData": 30,
+        "dvFile": 40,
+        "dvLog": 3
+      },
       "notes": "Tenant base when any F&SCM Premium license is present."
     },
     {
       "id": "base-erp-full",
-      "ifAnyOf": ["erpFull"],
-      "gb": { "fscmData": 90, "fscmFile": 80, "dvData": 30, "dvFile": 40, "dvLog": 2 },
+      "ifAnyOf": [
+        "erpFull"
+      ],
+      "gb": {
+        "fscmData": 90,
+        "fscmFile": 80,
+        "dvData": 30,
+        "dvFile": 40,
+        "dvLog": 2
+      },
       "notes": "Tenant base when any F&SCM full user license is present (no Premium)."
     }
   ],
@@ -79,7 +115,10 @@
     {
       "id": "customerInsights",
       "label": "Customer Insights entitlement",
-      "gb": { "dvData": 15, "dvFile": 20 },
+      "gb": {
+        "dvData": 15,
+        "dvFile": 20
+      },
       "notes": "Additional Dataverse entitlement when Customer Insights is licensed."
     }
   ],
@@ -89,6 +128,36 @@
     "dvData": "storage.dvData.overage",
     "dvFile": "storage.dvFile.overage"
   },
+  "billingPools": [
+    {
+      "id": "data",
+      "label": "Data (F&SCM + Dataverse)",
+      "pools": [
+        "fscmData",
+        "dvData"
+      ],
+      "priceId": "storage.fscmData.overage",
+      "notes": "Merged capacity model: F&SCM database and Dataverse database are one billable pool, so spare entitlement in one covers demand in the other. Both add-on SKUs list at the same price, so either price ref gives the same number."
+    },
+    {
+      "id": "file",
+      "label": "File (F&SCM + Dataverse)",
+      "pools": [
+        "fscmFile",
+        "dvFile"
+      ],
+      "priceId": "storage.fscmFile.overage",
+      "notes": "Merged capacity model: F&SCM file and Dataverse file are one billable pool. Both add-on SKUs list at the same price."
+    },
+    {
+      "id": "log",
+      "label": "Dataverse log",
+      "pools": [
+        "dvLog"
+      ],
+      "notes": "Tracked but never billed by default (mirrors the source workbook). Give it a priceId to charge it."
+    }
+  ],
   "copilot": {
     "creditsPerPack": 25000,
     "packPriceId": "copilotstudio.pack"
