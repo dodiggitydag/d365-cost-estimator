@@ -46,6 +46,17 @@ Every default is editable — see [customize.md](customize.md).
   tracked separately and not billed. The grouping lives in `licenses.json`
   (`billingPools`), so if Microsoft splits the pools again it is a catalog edit, not a
   code change.
+
+  Two refinements track how storage actually behaves over a project:
+  - **Production growth**: the estimate's `prodGrowthGBPerYear` accrues on
+    environment types flagged `prodGrowthApplies` (PROD), prorated monthly from the
+    environment's first active month.
+  - **Post-go-live sandbox refresh**: environments that are refreshed from Production
+    after go-live carry production-sized data from then on. From the month after the
+    first go-live, a mirroring environment's demand becomes PROD's demand (base +
+    growth) instead of its own figures. UAT mirrors by default
+    (`mirrorsProdByDefault` on the environment type); any instance can opt in or out
+    with `mirrorProdStorage` — there is a checkbox per environment in the UI.
 - **Copilot Studio**: agent credit demand → packs (rounded up) − entitled credits
   (Premium/attach users × 1000) − owned packs, priced per pack.
 - **Environment components**: AppInsights, dev VM allotments, add-on environment fees —

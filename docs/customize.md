@@ -19,7 +19,10 @@ Scheduling rules) shows the effective JSON. Edit → **Validate & apply**. Chang
 - **Add an environment type**: append to the Environment plan array — give it an `id`,
   `label`, methodology `description`, `componentPriceIds` (must exist in Prices), and
   `defaultStorageGB`. Then either add a scheduling rule for it or add an instance in the
-  Environments panel and paint its months manually.
+  Environments panel and paint its months manually. Optional flags: `prodGrowthApplies`
+  (annual growth accrues here) and `mirrorsProdByDefault` (instances mirror Production's
+  storage after go-live unless unticked — UAT ships with this on; per instance the
+  estimate can override it with `mirrorProdStorage`).
 - **Change when DEV environments run**: edit the `dev-during-build` rule's `from`/`to`
   (it ships as Implement start → Implement end, i.e. design & development only)
   anchors. Anchors are either `{ "phaseKind": "implement", "edge": "start", "offsetMonths": 0 }`

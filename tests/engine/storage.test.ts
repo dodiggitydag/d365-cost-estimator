@@ -75,6 +75,8 @@ describe('storage entitlements (workbook parity)', () => {
     const uat = schedule.instances.find((i) => i.id === 'UAT')!;
     expect(growthGB(est, uat, config, 20, 'fscmData', 3)).toBe(0);
     // ...and it lands in the demand total, called out in the trace parts.
+    // Month 20 is past go-live, so UAT mirrors PROD by then and carries the
+    // same growth — the delta shows up twice (PROD + its mirror).
     const m20 = neededGB(est, schedule, config, 20, 'fscmData');
     const noGrowth = neededGB(
       { ...est, settings: { ...est.settings, prodGrowthGBPerYear: {} } },
@@ -83,8 +85,55 @@ describe('storage entitlements (workbook parity)', () => {
       20,
       'fscmData',
     );
-    expect(m20.total - noGrowth.total).toBeCloseTo(24, 6);
+    expect(m20.total - noGrowth.total).toBeCloseTo(48, 6);
     expect(Object.keys(m20.parts).some((k) => k.includes('growth'))).toBe(true);
+  });
+
+  it('UAT mirrors PROD storage after go-live by default', () => {
+    const est = estimateWith({ erpFull: 10 });
+    est.settings.prodGrowthGBPerYear = { fscmData: 24 };
+    const schedule = buildSchedule(est, config);
+    // At go-live (month 10) UAT still uses its own default demand (61 GB).
+    const m10 = neededGB(est, schedule, config, 10, 'fscmData');
+    const atGoLive = Object.entries(m10.parts).find(([k]) => k.startsWith('UAT'))!;
+    expect(atGoLive[0]).not.toContain('mirrors');
+    expect(atGoLive[1]).toBe(61);
+    // After go-live it tracks PROD: base 150 + (20−8)/12 × 24 = 174.
+    const m20 = neededGB(est, schedule, config, 20, 'fscmData');
+    const mirrored = Object.entries(m20.parts).find(([k]) => k.startsWith('UAT'))!;
+    expect(mirrored[0]).toContain('mirrors Production');
+    expect(mirrored[1]).toBeCloseTo(174, 6);
+  });
+
+  it('explicit mirrorProdStorage: false keeps the environment on its own storage', () => {
+    const est = estimateWith({ erpFull: 10 });
+    est.environments = [
+      { id: 'UAT', typeId: 'UAT', name: 'UAT / Sandbox', fromRule: true, mirrorProdStorage: false },
+    ];
+    const schedule = buildSchedule(est, config);
+    const m20 = neededGB(est, schedule, config, 20, 'fscmData');
+    expect(m20.parts['UAT / Sandbox']).toBe(61);
+  });
+
+  it('any environment can opt in with mirrorProdStorage: true', () => {
+    const est = estimateWith({ erpFull: 10 });
+    est.environments = [
+      { id: 'MIG', typeId: 'MIG', name: 'Data Migration', fromRule: true, mirrorProdStorage: true },
+    ];
+    const schedule = buildSchedule(est, config);
+    // MIG runs through go-live + 1 (month 11), so its last month mirrors PROD.
+    const m11 = neededGB(est, schedule, config, 11, 'fscmData');
+    const mig = Object.entries(m11.parts).find(([k]) => k.startsWith('Data Migration'))!;
+    expect(mig[0]).toContain('mirrors Production');
+    expect(mig[1]).toBe(150);
+  });
+
+  it('mirroring falls back to own storage when no production-like instance exists', () => {
+    const est = estimateWith({ erpFull: 10 });
+    est.disabledEnvIds = ['PROD'];
+    const schedule = buildSchedule(est, config);
+    const m20 = neededGB(est, schedule, config, 20, 'fscmData');
+    expect(m20.parts['UAT / Sandbox']).toBe(61);
   });
 
   it('growth with no figures set changes nothing', () => {

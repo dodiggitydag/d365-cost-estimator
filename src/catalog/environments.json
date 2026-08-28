@@ -10,9 +10,10 @@
   {
     "id": "UAT",
     "label": "UAT / Sandbox",
-    "description": "Where the functional team spends most of its time: setup, configuration, and modeling. Custom modifications are integrated here for regression and acceptance testing before promotion to GOLD.",
+    "description": "Where the functional team spends most of its time: setup, configuration, and modeling. Custom modifications are integrated here for regression and acceptance testing before promotion to GOLD. After go-live it is refreshed from Production, so its storage demand mirrors PROD.",
     "componentPriceIds": ["env.appInsights"],
-    "defaultStorageGB": { "fscmData": 61, "fscmFile": 1, "dvData": 5, "dvFile": 10 }
+    "defaultStorageGB": { "fscmData": 61, "fscmFile": 1, "dvData": 5, "dvFile": 10 },
+    "mirrorsProdByDefault": true
   },
   {
     "id": "SIT",
@@ -45,9 +46,9 @@
   },
   {
     "id": "DEMO",
-    "label": "Demo / CRP",
+    "label": "Demo",
     "description": "For reviewing out-of-the-box functionality with Microsoft demo data. Errors are reproduced here before opening Microsoft tickets, proving custom code was not responsible. No custom code is deployed, keeping it pristine.",
-    "componentPriceIds": ["env.devVm"],
+    "componentPriceIds": [],
     "defaultStorageGB": { "fscmData": 9, "fscmFile": 1, "dvData": 6, "dvFile": 5 }
   },
   {

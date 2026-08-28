@@ -132,6 +132,9 @@ export interface EnvironmentType {
   defaultStorageGB: Partial<Record<StoragePool, number>>;
   /** Production-like: the estimate's per-year storage growth accrues here. */
   prodGrowthApplies?: boolean;
+  /** Sandbox-style: instances of this type mirror Production's storage demand
+   *  after go-live unless the instance sets `mirrorProdStorage` explicitly. */
+  mirrorsProdByDefault?: boolean;
   /** DEV-style: one instance per concurrent developer. */
   allowMultiple?: boolean;
   /** Not part of the default plan; user can add it. */
@@ -204,6 +207,9 @@ export interface EnvInstance {
   storageSteps?: StorageStep[];
   /** Instance created by a rule (regenerated) vs. added by the user. */
   fromRule?: boolean;
+  /** Mirror Production's storage demand after go-live (refreshed-from-PROD
+   *  sandbox). Absent = the environment type's `mirrorsProdByDefault`. */
+  mirrorProdStorage?: boolean;
 }
 
 export interface LicenseStep {

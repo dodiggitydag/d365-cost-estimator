@@ -31,7 +31,9 @@ exported will open in every future version (enforced by `tests/compat.test.ts`).
    active environments, overage billed monthly at add-on prices. F&SCM and Dataverse
    share one data pool and one file pool (Microsoft's merged capacity model), so demand
    and entitlement are summed across both before the overage is taken; each half still
-   shows in the explanation.
+   shows in the explanation. Production grows by a configurable GB/yr, and UAT (or any
+   environment you tick) mirrors Production's size after go-live — the way a refreshed
+   sandbox behaves in real life.
 4. **Copilot Studio** — agents consume credits; packs required are netted against
    entitled credits and owned packs.
 5. **Explanations** — click any figure for the cost lines behind it, each with its

@@ -135,6 +135,14 @@ starting demand, prorated monthly from the month PROD starts (120 GB/yr = +10 GB
 after one month). It applies to Production environments only. Leave the pools at 0
 unless the client gave a growth figure — state the assumption either way.
 
+**Post-go-live sandbox refresh**: from the month after the first go-live, UAT's
+storage demand mirrors Production's (base + growth) instead of its own figures,
+because UAT is refreshed from PROD after go-live. This is on by default for UAT
+(`mirrorsProdByDefault` on the environment type). Any environment instance can opt
+in or out with an optional `"mirrorProdStorage": true|false` field on its
+`environments` entry — omit it to take the type default. Do NOT hand-model
+post-go-live UAT growth with `storageSteps`; the mirror does it.
+
 ## customItems
 
 ```json

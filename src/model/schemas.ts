@@ -88,6 +88,7 @@ export const environmentTypeSchema = z.object({
   componentPriceIds: z.array(z.string()),
   defaultStorageGB: storageGB,
   prodGrowthApplies: z.boolean().optional(),
+  mirrorsProdByDefault: z.boolean().optional(),
   allowMultiple: z.boolean().optional(),
   optional: z.boolean().optional(),
 });
@@ -195,6 +196,7 @@ export const estimateSchema = z.object({
         .array(z.object({ fromMonth: z.number().int().min(1), gb: storageGB }))
         .optional(),
       fromRule: z.boolean().optional(),
+      mirrorProdStorage: z.boolean().optional(),
     }),
   ),
   // default([]) keeps estimates saved before this field existed loadable

@@ -217,7 +217,7 @@ textarea.json-editor { width: 100%; min-height: 260px; font-family: Consolas, mo
 .warnings ul { margin: 0; padding-left: 18px; }
 .warnings li { margin: 2px 0; }
 
-.item-row { display: grid; grid-template-columns: minmax(80px, 1fr) 84px 58px 58px 28px; gap: 6px; align-items: center; margin: 4px 0; }
+.item-row { display: grid; grid-template-columns: minmax(80px, 1fr) 84px 58px 58px 28px 28px 28px; gap: 6px; align-items: center; margin: 4px 0; }
 .phase-row { display: grid; grid-template-columns: minmax(80px, 1fr) 92px 62px 62px 28px; gap: 6px; align-items: center; margin: 4px 0; }
 /* Grid children must be allowed to shrink below their intrinsic input width,
    otherwise number inputs force a horizontal scrollbar. */

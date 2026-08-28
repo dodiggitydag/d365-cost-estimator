@@ -17,8 +17,9 @@ import {
   yearBuckets,
 } from '../engine/aggregate';
 import { subscriptionStartMonth } from '../engine/licensing';
+import { mirrorsProdStorage, mirrorSourceFor } from '../engine/storage';
 import { STORAGE_POOLS, STORAGE_POOL_LABELS } from '../engine/types';
-import { triggerDownload } from '../model/persistence';
+import { isoDateStamp, triggerDownload } from '../model/persistence';
 
 const MONEY_FMT = '#,##0.00;[Red]-#,##0.00';
 
@@ -32,7 +33,7 @@ export async function exportXlsx(
     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   });
   const safeName = estimate.meta.name.replace(/[^\w\- ]+/g, '').trim() || 'estimate';
-  triggerDownload(`${safeName}.xlsx`, blob);
+  triggerDownload(`${safeName} ${isoDateStamp()}.xlsx`, blob);
 }
 
 /** Pure workbook construction — no DOM; unit-testable. */
@@ -75,6 +76,10 @@ export async function buildWorkbook(
     return gb > 0 ? `${STORAGE_POOL_LABELS[pool]}: ${gb}` : null;
   }).filter(Boolean);
   addKV('PROD storage growth (GB/yr)', growth.length ? growth.join(', ') : 'none');
+  const mirroring = result.schedule.instances
+    .filter((inst) => mirrorsProdStorage(inst, config) && mirrorSourceFor(result.schedule, config, inst))
+    .map((inst) => inst.name);
+  addKV('Mirrors PROD storage after go-live', mirroring.length ? mirroring.join(', ') : 'none');
   for (const r of estimate.rollouts) {
     addKV(
       `${r.name} phases`,

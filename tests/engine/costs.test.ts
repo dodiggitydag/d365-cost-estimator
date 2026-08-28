@@ -23,14 +23,20 @@ describe('cost lines & aggregation', () => {
     expect(prodAI).toHaveLength(29);
     expect(prodAI[0].amount).toBe(400);
     // DEV VMs: lead DEV01 months 2–36 (35) + DEV02–04 months 3–8 (3 × 6) → 53 lines of $180
-    const devVm = result.lines.filter(
-      (l) =>
-        l.trace.priceRefs.includes('env.devVm') &&
-        l.envInstanceId !== 'DEMO' &&
-        l.envInstanceId?.startsWith('DEV'),
-    );
+    const devVm = result.lines.filter((l) => l.trace.priceRefs.includes('env.devVm'));
+    expect(devVm.every((l) => l.envInstanceId?.startsWith('DEV'))).toBe(true);
     expect(devVm).toHaveLength(53);
     expect(devVm[0].amount).toBe(180);
+  });
+
+  it('the Demo environment carries no per-environment cost components', () => {
+    // DEMO is a Microsoft-hosted Tier-1-style sandbox with demo data: no dev VM,
+    // no AppInsights. It contributes storage demand only.
+    const est = newEstimate(config);
+    const result = computeEstimate(est, config);
+    const demoActive = result.schedule.cells['DEMO']?.some((c) => c.active);
+    expect(demoActive).toBe(true); // it runs — it just doesn't bill components
+    expect(result.lines.filter((l) => l.envInstanceId === 'DEMO')).toHaveLength(0);
   });
 
   it('a fresh estimate seeds the tenant tooling rows from the catalog', () => {

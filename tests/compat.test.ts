@@ -78,6 +78,16 @@ describe('estimate JSON backward compatibility', () => {
     );
   });
 
+  it('mirrorProdStorage flags survive the import path', () => {
+    const text = readFileSync(join(fixturesDir, '2026-08-uat-mirror.estimate.json'), 'utf-8');
+    const estimate = parseEstimateJson(text, config);
+    const byId = new Map(estimate.environments.map((e) => [e.id, e]));
+    expect(byId.get('GOLD')?.mirrorProdStorage).toBe(true);
+    expect(byId.get('MIG')?.mirrorProdStorage).toBe(false);
+    // Absent means "use the environment type's default" — must stay absent.
+    expect(byId.get('UAT')?.mirrorProdStorage).toBeUndefined();
+  });
+
   it('a current export round-trips through export → import', () => {
     const estimate = newEstimate(config);
     const exported = JSON.stringify(estimate, null, 2); // what downloadJson writes

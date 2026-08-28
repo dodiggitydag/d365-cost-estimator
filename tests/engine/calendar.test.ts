@@ -8,8 +8,14 @@ import {
 import { defaultConfig } from '../../src/model/config';
 import { newEstimate } from '../../src/model/estimate';
 import { buildSchedule } from '../../src/engine';
+import { isoDateStamp } from '../../src/model/persistence';
 
 describe('calendar-year buckets', () => {
+  it('isoDateStamp renders local YYYY-MM-DD with zero padding', () => {
+    expect(isoDateStamp(new Date(2026, 0, 5))).toBe('2026-01-05');
+    expect(isoDateStamp(new Date(2026, 11, 31))).toBe('2026-12-31');
+  });
+
   it('parses YYYY-MM and rejects junk', () => {
     expect(parseYearMonth('2026-10')).toEqual({ y: 2026, m: 10 });
     expect(parseYearMonth('2026-13')).toBeNull();

@@ -1,5 +1,5 @@
 import { useStore } from '../store';
-import { instanceStorageAt } from '../../engine';
+import { instanceStorageAt, mirrorsProdStorage } from '../../engine';
 import { STORAGE_POOLS } from '../../engine/types';
 import type { EnvInstance, StoragePool } from '../../engine/types';
 import { NumberRow } from './NumberRow';
@@ -33,6 +33,18 @@ export function EnvPanel() {
         prodGrowthGBPerYear: { ...e.settings.prodGrowthGBPerYear, [pool]: gb },
       },
     }));
+
+  const setMirror = (inst: EnvInstance, on: boolean) =>
+    update((e) => {
+      const current = e.environments.find((x) => x.id === inst.id);
+      const updated: EnvInstance = { ...(current ?? inst), mirrorProdStorage: on };
+      return {
+        ...e,
+        environments: current
+          ? e.environments.map((x) => (x.id === inst.id ? updated : x))
+          : [...e.environments, updated],
+      };
+    });
 
   const setStorage = (inst: EnvInstance, pool: StoragePool, gb: number) =>
     update((e) => {
@@ -97,12 +109,27 @@ export function EnvPanel() {
         </p>
         {result.schedule.instances.map((inst) => {
           const t = config.environments.find((e) => e.id === inst.typeId);
+          const mirrors = mirrorsProdStorage(inst, config);
           return (
             <div key={inst.id} style={{ borderBottom: '1px dashed var(--border)', padding: '4px 0' }}>
               <div className="row">
                 <strong style={{ minWidth: 150 }} title={t?.description}>
                   {inst.name}
                 </strong>
+                {!t?.prodGrowthApplies && (
+                  <label
+                    className="muted"
+                    style={{ fontSize: 11, whiteSpace: 'nowrap' }}
+                    title="Refreshed from Production after go-live: from the month after go-live this environment's storage demand tracks PROD (including growth) instead of the values below"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={mirrors}
+                      onChange={(ev) => setMirror(inst, ev.target.checked)}
+                    />{' '}
+                    mirrors PROD after go-live
+                  </label>
+                )}
                 <button
                   className="small danger"
                   title="Remove this environment from the plan"
@@ -148,6 +175,11 @@ export function EnvPanel() {
                     />
                   </span>
                 ))}
+                {mirrors && (
+                  <span className="muted" style={{ fontSize: 11 }}>
+                    until go-live, then tracks Production
+                  </span>
+                )}
               </div>
             </div>
           );

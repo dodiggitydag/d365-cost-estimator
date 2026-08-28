@@ -10,6 +10,7 @@ import type {
 } from './types';
 import { STORAGE_POOLS, STORAGE_POOL_LABELS } from './types';
 import { cents, money, priceEntry, stepAt } from './catalogUtil';
+import { goLiveMonth } from './schedule';
 
 /** License counts in effect for a given month (steps sorted by fromMonth). */
 export function licenseCountsAt(
@@ -111,6 +112,49 @@ export function growthGB(
   return (Math.max(0, month - startMonth) / 12) * perYear;
 }
 
+/** One instance's demand in a month: its steps/default plus any growth accrual. */
+function instanceDemandGB(
+  estimate: Estimate,
+  schedule: ScheduleMatrix,
+  config: EstimatorConfig,
+  inst: EnvInstance,
+  month: number,
+  pool: StoragePool,
+): { base: number; growth: number } {
+  const base = instanceStorageAt(inst, config, month, pool);
+  const growth = growthGB(
+    estimate,
+    inst,
+    config,
+    month,
+    pool,
+    firstActiveMonth(schedule, inst.id),
+  );
+  return { base, growth };
+}
+
+/** Whether an instance mirrors Production storage after go-live: the instance's
+ *  explicit flag wins, else its environment type's default. */
+export function mirrorsProdStorage(inst: EnvInstance, config: EstimatorConfig): boolean {
+  if (inst.mirrorProdStorage !== undefined) return inst.mirrorProdStorage;
+  return config.environments.find((e) => e.id === inst.typeId)?.mirrorsProdByDefault ?? false;
+}
+
+/** The production-like instance a mirroring environment tracks: the first
+ *  scheduled instance (other than itself) whose type has `prodGrowthApplies`. */
+export function mirrorSourceFor(
+  schedule: ScheduleMatrix,
+  config: EstimatorConfig,
+  inst: EnvInstance,
+): EnvInstance | undefined {
+  return schedule.instances.find(
+    (other) =>
+      other.id !== inst.id &&
+      config.environments.find((e) => e.id === other.typeId)?.prodGrowthApplies &&
+      (schedule.cells[other.id] ?? []).some((c) => c.active),
+  );
+}
+
 /** Storage demand from all environments active in a month. */
 export function neededGB(
   estimate: Estimate,
@@ -121,22 +165,30 @@ export function neededGB(
 ): { total: number; parts: Record<string, number> } {
   let total = 0;
   const parts: Record<string, number> = {};
+  const firstGoLive = Math.min(...estimate.rollouts.map(goLiveMonth));
   for (const inst of schedule.instances) {
     if (!schedule.cells[inst.id][month - 1].active) continue;
-    const base = instanceStorageAt(inst, config, month, pool);
-    const growth = growthGB(
-      estimate,
-      inst,
-      config,
-      month,
-      pool,
-      firstActiveMonth(schedule, inst.id),
-    );
+    let { base, growth } = instanceDemandGB(estimate, schedule, config, inst, month, pool);
+    let mirrored: EnvInstance | undefined;
+    // A refreshed-from-PROD sandbox carries production-sized data after go-live.
+    if (month > firstGoLive && mirrorsProdStorage(inst, config)) {
+      const source = mirrorSourceFor(schedule, config, inst);
+      if (source) {
+        ({ base, growth } = instanceDemandGB(estimate, schedule, config, source, month, pool));
+        mirrored = source;
+      }
+    }
     const gb = base + growth;
     if (gb > 0) {
-      // Growth is called out in the key so the explain drawer shows where it came from.
-      const key =
-        growth > 0 ? `${inst.name} (${round1(base)} + ${round1(growth)} growth)` : inst.name;
+      // Growth and mirroring are called out in the key so the explain drawer
+      // shows where the figure came from.
+      const detail =
+        growth > 0 ? `${round1(base)} + ${round1(growth)} growth` : `${round1(base)}`;
+      const key = mirrored
+        ? `${inst.name} (mirrors ${mirrored.name}: ${detail})`
+        : growth > 0
+          ? `${inst.name} (${detail})`
+          : inst.name;
       parts[key] = gb;
       total += gb;
     }

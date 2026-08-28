@@ -10,7 +10,7 @@ import { Dashboard } from './dashboard/Dashboard';
 import { ExplainDrawer } from './explain/ExplainDrawer';
 import { SettingsPanel } from './settings/SettingsPanel';
 import { JsonFileButton } from './JsonFileButton';
-import { downloadJson, parseEstimateJson } from '../model/persistence';
+import { downloadJson, isoDateStamp, parseEstimateJson } from '../model/persistence';
 import { exportXlsx } from '../export/xlsx';
 
 declare const __BUILD_DATE__: string;
@@ -46,7 +46,7 @@ export function App() {
         <div className="spacer" />
         <button
           title="Download this estimate as a JSON file — the durable save you can reopen or share"
-          onClick={() => downloadJson(`${fileName}.estimate.json`, estimate)}
+          onClick={() => downloadJson(`${fileName} ${isoDateStamp()}.estimate.json`, estimate)}
         >
           Save JSON
         </button>

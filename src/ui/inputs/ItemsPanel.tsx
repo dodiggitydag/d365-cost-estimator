@@ -11,6 +11,16 @@ export function ItemsPanel() {
   const patchItem = (id: string, patch: Partial<CustomCostItem>) =>
     update((e) => ({ ...e, customItems: patchById(e.customItems, id, patch) }));
 
+  const moveItem = (id: string, dir: -1 | 1) =>
+    update((e) => {
+      const idx = e.customItems.findIndex((x) => x.id === id);
+      const to = idx + dir;
+      if (idx < 0 || to < 0 || to >= e.customItems.length) return e;
+      const items = [...e.customItems];
+      [items[idx], items[to]] = [items[to], items[idx]];
+      return { ...e, customItems: items };
+    });
+
   return (
     <details className="section">
       <summary>Other cost items</summary>
@@ -27,8 +37,10 @@ export function ItemsPanel() {
           <span>From</span>
           <span>To</span>
           <span />
+          <span />
+          <span />
         </div>
-        {estimate.customItems.map((item) => (
+        {estimate.customItems.map((item, idx) => (
           <div key={item.id}>
             <div className="item-row">
               <input
@@ -62,6 +74,22 @@ export function ItemsPanel() {
                   patchItem(item.id, { toMonth: Math.max(1, parseInt(ev.target.value) || 1) })
                 }
               />
+              <button
+                className="small"
+                title="Move this item up"
+                disabled={idx === 0}
+                onClick={() => moveItem(item.id, -1)}
+              >
+                ↑
+              </button>
+              <button
+                className="small"
+                title="Move this item down"
+                disabled={idx === estimate.customItems.length - 1}
+                onClick={() => moveItem(item.id, 1)}
+              >
+                ↓
+              </button>
               <button
                 className="small danger"
                 title="Remove this cost item"

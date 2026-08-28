@@ -67,6 +67,12 @@ export function parseOverridesJson(text: string): ConfigOverrides {
   return configOverridesSchema.parse(JSON.parse(text)) as ConfigOverrides;
 }
 
+/** Today as YYYY-MM-DD in the user's local timezone, for export filenames. */
+export function isoDateStamp(date = new Date()): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
 export function downloadJson(filename: string, data: unknown): void {
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: 'application/json',

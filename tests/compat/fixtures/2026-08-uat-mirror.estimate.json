@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "name": "Compat era 2026-08c (mirrorProdStorage on environment instances)",
+    "createdAt": "2026-08-27T00:00:00.000Z",
+    "catalogVersion": "2026-08"
+  },
+  "horizonMonths": 36,
+  "startYearMonth": "2026-10",
+  "rollouts": [
+    {
+      "id": "rollout-1",
+      "name": "Big Bang",
+      "phases": [
+        { "id": "r1-initiate", "kind": "initiate", "name": "Initiate", "startMonth": 1, "lengthMonths": 3 },
+        { "id": "r1-implement", "kind": "implement", "name": "Implement", "startMonth": 4, "lengthMonths": 5 },
+        { "id": "r1-prepare", "kind": "prepare", "name": "Prepare", "startMonth": 9, "lengthMonths": 3 },
+        { "id": "r1-operate", "kind": "operate", "name": "Operate", "startMonth": 12, "lengthMonths": 25 }
+      ]
+    }
+  ],
+  "team": {
+    "concurrentDevs": 4,
+    "functionalConsultants": 3,
+    "solutionArchitects": 2,
+    "hostedAgents": 3
+  },
+  "licenseSteps": [
+    {
+      "fromMonth": 2,
+      "counts": {
+        "erpPremium": 0,
+        "erpFull": 20,
+        "cePremium": 0,
+        "ceEnterprise": 0,
+        "csProfessional": 0,
+        "attach": 0,
+        "activity": 0,
+        "teamMember": 30,
+        "device": 0
+      }
+    }
+  ],
+  "licenseCostMode": { "kind": "lumpSum", "monthlyTotal": 0 },
+  "copilotAgents": [],
+  "copilotPacksOwned": 0,
+  "customerInsightsAddon": false,
+  "environments": [
+    {
+      "id": "UAT",
+      "typeId": "UAT",
+      "name": "UAT / Sandbox",
+      "fromRule": true,
+      "storageSteps": [
+        { "fromMonth": 1, "gb": { "fscmData": 61, "fscmFile": 0.5, "dvData": 5, "dvFile": 10 } }
+      ]
+    },
+    {
+      "id": "GOLD",
+      "typeId": "GOLD",
+      "name": "GOLD (seed)",
+      "fromRule": true,
+      "mirrorProdStorage": true
+    },
+    {
+      "id": "MIG",
+      "typeId": "MIG",
+      "name": "Data Migration",
+      "fromRule": true,
+      "mirrorProdStorage": false
+    }
+  ],
+  "disabledEnvIds": ["SUP", "TRAIN"],
+  "customItems": [
+    {
+      "id": "isv-docentric",
+      "name": "Docentric",
+      "category": "isv",
+      "monthlyAmount": 300,
+      "fromMonth": 4,
+      "toMonth": 36
+    }
+  ],
+  "gridOverrides": [],
+  "settings": {
+    "prodLeadMonths": 2,
+    "prodGrowthGBPerYear": { "fscmData": 17, "fscmFile": 2.5, "dvData": 1, "dvFile": 1 }
+  }
+}
