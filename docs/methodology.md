@@ -59,6 +59,21 @@ Every default is editable — see [customize.md](customize.md).
     with `mirrorProdStorage` — there is a checkbox per environment in the UI.
 - **Copilot Studio**: agent credit demand → packs (rounded up) − entitled credits
   (Premium/attach users × 1000) − owned packs, priced per pack.
+- **Commerce (e-commerce & APIs)**: monthly volume steps carry e-commerce
+  transactions (a transaction = one completed cart, item count irrelevant) and
+  average order value. The AOV picks the licensing band; for each e-Commerce tier
+  the cost is `tier price + ROUNDUP(MAX(transactions − included, 0) ÷ band's
+  overage-unit size) × overage price`, and the cheapest tier wins (a tie keeps the
+  lower tier). Each tier includes one cloud Commerce Scale Unit, which also serves
+  headless / Commerce API traffic — Microsoft has no per-API-call meter, so "API
+  cost" *is* the tier. Standalone Scale Unit add-ons (extra geo, redundancy, device
+  capacity) and Ratings & Reviews are flat monthly lines. Two things to know when
+  defending the number: Microsoft licenses tiers monthly but enforces transactions
+  **annually** (12 × the monthly quantity) — this tool evaluates each month's
+  average, so a seasonal spike is smoothed rather than trued-up against the annual
+  pool; and additional e-commerce *environments* are bought as additional e-Commerce
+  tier units, not Scale Units. Tier/band quantities live in
+  `src/catalog/commerce.json`; prices stay in the pricing catalog.
 - **Environment components**: AppInsights, dev VM allotments, add-on environment fees —
   billed for active months only.
 - **Tenant items**: every non-environment monthly cost is a plain editable row —

@@ -3,7 +3,9 @@ import pricing from '../src/catalog/pricing.v2026-08.json';
 import licenses from '../src/catalog/licenses.json';
 import environments from '../src/catalog/environments.json';
 import rules from '../src/catalog/rules.default.json';
+import commerce from '../src/catalog/commerce.json';
 import {
+  commerceCatalogSchema,
   environmentTypeSchema,
   licenseCatalogSchema,
   pricingCatalogSchema,
@@ -63,6 +65,31 @@ describe('catalog validation', () => {
     const envIds = new Set(environments.map((e) => e.id));
     for (const r of parsed) {
       expect(envIds.has(r.envTypeId), `rule ${r.id} env ${r.envTypeId}`).toBe(true);
+    }
+  });
+
+  it('commerce catalog is valid and every price ref resolves', () => {
+    // The schema itself enforces band-array lengths, ascending AOV bounds, and
+    // included transactions strictly decreasing across bands.
+    const parsed = commerceCatalogSchema.parse(commerce);
+    const priceIds = new Set(pricing.entries.map((e) => e.id));
+    for (const t of parsed.tiers) {
+      expect(priceIds.has(t.priceId), `tier price ${t.priceId}`).toBe(true);
+      expect(priceIds.has(t.overagePriceId), `overage price ${t.overagePriceId}`).toBe(true);
+    }
+    for (const s of parsed.scaleUnits) {
+      expect(priceIds.has(s.priceId), `CSU price ${s.priceId}`).toBe(true);
+    }
+    expect(priceIds.has(parsed.ratingsReviewsPriceId)).toBe(true);
+    // Bigger tiers must include more transactions in every band, or tier
+    // selection could never prefer them.
+    for (let i = 1; i < parsed.tiers.length; i++) {
+      for (let b = 0; b < parsed.bandUpperBoundsAOV.length + 1; b++) {
+        expect(
+          parsed.tiers[i].includedTransactionsPerMonth[b],
+          `${parsed.tiers[i].id} band ${b + 1} should include more than ${parsed.tiers[i - 1].id}`,
+        ).toBeGreaterThan(parsed.tiers[i - 1].includedTransactionsPerMonth[b]);
+      }
     }
   });
 });

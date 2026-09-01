@@ -5,7 +5,8 @@ Two ways, depending on whether you rebuild:
 ## 1. In the app (no rebuild)
 
 Open **Settings**. Each section (Prices, License types & entitlements, Environment plan,
-Scheduling rules) shows the effective JSON. Edit → **Validate & apply**. Changes:
+Scheduling rules, Commerce tiers & bands) shows the effective JSON. Edit → **Validate &
+apply**. Changes:
 
 - apply immediately to the current estimate,
 - persist in your browser (localStorage),
@@ -32,6 +33,10 @@ Scheduling rules) shows the effective JSON. Edit → **Validate & apply**. Chang
   ties PROD's start to the "PROD lead time" input.
 - **Price a Tier-4 performance environment**: set `env.perfTier`'s `value` in Prices —
   it ships as 0 because add-on environment pricing depends on your agreement.
+- **Adjust Commerce sizing**: the e-Commerce tier/band transaction matrices, AOV band
+  boundaries, and Scale Unit sizes live in **Commerce tiers & bands**; the dollar values
+  they reference stay in **Prices** (`commerce.*` entries). If Microsoft changes the
+  "Number of monthly transactions per SKU" table, edit the matrices here.
 - **ISVs / Fabric / anything monthly**: use custom cost items in the left panel — those
   live in the estimate, not the config, so they travel with the saved estimate JSON.
 

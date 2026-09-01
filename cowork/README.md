@@ -53,6 +53,7 @@ re-share:
 | `src/model/schemas.ts` (estimateSchema) | `references/estimate-schema.md`, both `.estimate.json` files |
 | `src/model/estimate.ts` (`newEstimate()`) | `references/template.estimate.json` |
 | `src/catalog/licenses.json` (license ids) | `references/question-mapping.md`, `references/estimate-schema.md` |
+| `src/catalog/commerce.json` (tier/band/CSU ids) | `references/question-mapping.md`, `references/estimate-schema.md` |
 | `src/catalog/environments.json` (env type ids) | `references/estimate-schema.md` |
 | `src/model/estimate.ts` (`seededItems()`) | `references/estimate-schema.md`, `references/template.estimate.json` |
 | `estimator.html` (any rebuild) | re-run `build-skill-zip.ps1` |

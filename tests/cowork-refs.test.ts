@@ -30,5 +30,8 @@ describe('cowork skill reference estimates', () => {
     expect(tpl.horizonMonths).toBe(fresh.horizonMonths);
     expect(tpl.copilotAgents.map((a) => a.id)).toEqual(fresh.copilotAgents.map((a) => a.id));
     expect(tpl.customItems).toEqual(fresh.customItems);
+    expect(tpl.commerceSteps).toEqual(fresh.commerceSteps);
+    expect(tpl.commerceScaleUnits).toEqual(fresh.commerceScaleUnits);
+    expect(tpl.commerceRatingsReviews).toBe(fresh.commerceRatingsReviews);
   });
 });

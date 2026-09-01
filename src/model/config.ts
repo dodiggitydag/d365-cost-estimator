@@ -2,7 +2,9 @@ import pricingJson from '../catalog/pricing.v2026-08.json';
 import licensesJson from '../catalog/licenses.json';
 import environmentsJson from '../catalog/environments.json';
 import rulesJson from '../catalog/rules.default.json';
+import commerceJson from '../catalog/commerce.json';
 import type {
+  CommerceCatalog,
   EnvironmentType,
   EstimatorConfig,
   LicenseCatalog,
@@ -17,6 +19,7 @@ export function defaultConfig(): EstimatorConfig {
     licenses: structuredClone(licensesJson) as LicenseCatalog,
     environments: structuredClone(environmentsJson) as EnvironmentType[],
     rules: structuredClone(rulesJson) as ScheduleRule[],
+    commerce: structuredClone(commerceJson) as CommerceCatalog,
   };
 }
 
@@ -31,6 +34,7 @@ export interface ConfigOverrides {
   licenses?: LicenseCatalog;
   environments?: EnvironmentType[];
   rules?: ScheduleRule[];
+  commerce?: CommerceCatalog;
 }
 
 export function effectiveConfig(overrides: ConfigOverrides | null): EstimatorConfig {
@@ -41,5 +45,7 @@ export function effectiveConfig(overrides: ConfigOverrides | null): EstimatorCon
     licenses: overrides.licenses ?? base.licenses,
     environments: overrides.environments ?? base.environments,
     rules: overrides.rules ?? base.rules,
+    // Overrides saved before Commerce support existed lack this section; fall back.
+    commerce: overrides.commerce ?? base.commerce,
   };
 }

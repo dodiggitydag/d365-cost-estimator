@@ -22,7 +22,8 @@ metadata:
 Turns discovery answers for a Dynamics 365 Finance & Supply Chain opportunity into a
 ready-to-import estimate file for the D365 cost estimator. The estimator models the
 **Microsoft cloud run-rate** — environments over the project timeline, storage
-entitlement vs. overage, user subscriptions, Copilot Studio credits, Azure DevOps,
+entitlement vs. overage, user subscriptions, Commerce e-commerce tiers (sized from
+transaction volume and average order value), Copilot Studio credits, Azure DevOps,
 and custom monthly items (ISVs, Fabric, IP). It does **not** estimate implementation
 services effort.
 
@@ -51,7 +52,7 @@ into at most three conversational messages — never one question at a time.
 8. Is there a negotiated monthly subscription total from Microsoft, or should we compute from list prices?
 
 **Scope**
-9. Is Commerce in scope?
+9. Is Commerce in scope? If yes: expected e-commerce transactions per month (or per year) and average order value; Commerce HQ users; POS registers; Ratings & Reviews; any extra Commerce Scale Units (extra geo/redundancy)?
 10. Which interfaces/integrations are in scope?
 11. Which ISVs are in scope? (Names and monthly pricing if known.)
 12. Is any IP (your own or third-party) in scope?
@@ -68,7 +69,9 @@ Do not ask about HQ location or Azure region — it doesn't affect this estimate
 
 Read `references/question-mapping.md` and map every answer per its rules. Key points:
 
-- Several questions have **no native field** (Commerce, interfaces, ISVs, IP, M365
+- Commerce is native: e-commerce volume + average order value go into
+  `commerceSteps` and the tool derives the e-Commerce tier, band, and overage itself.
+- Several questions have **no native field** (interfaces, ISVs, IP, M365
   Copilot, Fabric) and are modeled as `customItems` rows or `copilotAgents` entries.
   When a price is unknown, add the row anyway with `monthlyAmount: 0` and a
   `notes: "pricing TBD"` — $0 rows keep the scope item visible in the tool.
@@ -100,7 +103,7 @@ Produce two things:
 | # | Item | Value used | Source / assumption |
 |---|------|-----------|---------------------|
 | 1 | Concurrent developers | 5 | 4,500 h ÷ (7 mo × 130 h) = 4.95 → 5 (confirmed) |
-| 2 | Commerce Scale Unit | $0 placeholder | In scope, pricing TBD |
+| 2 | Commerce e-commerce volume | 3,000 tx/mo @ $60 AOV | Client estimate — tool sizes the e-Commerce tier from it |
 
 List every $0 placeholder row and every derived or assumed number. These are the
 follow-ups the seller must price before the estimate is final.

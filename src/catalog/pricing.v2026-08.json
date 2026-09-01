@@ -264,6 +264,127 @@
       "guideSection": "Azure Logic Apps / Functions consumption estimate",
       "asOf": "2025-02-01",
       "notes": "Placeholder for light integration workloads; replace with a sized estimate."
+    },
+    {
+      "id": "license.commerce",
+      "label": "Dynamics 365 Commerce (full user)",
+      "value": 210,
+      "currency": "USD",
+      "unit": "user/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Dynamics 365 Commerce",
+      "asOf": "2026-09-01",
+      "notes": "Dynamics 365 Commerce base licence; accrues Operations storage like Finance/SCM full users (guide capacity table). Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (P1M $252; annual-term/annual-billing $2,520/yr ÷ 12)."
+    },
+    {
+      "id": "commerce.ecomTier1",
+      "label": "Dynamics 365 e-Commerce Tier 1 (per tenant)",
+      "value": 4000,
+      "currency": "USD",
+      "unit": "mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (e-Commerce tiers)",
+      "asOf": "2026-09-01",
+      "notes": "All six AOV bands list at the same price; the band sets the included transaction quantity (see commerce.json), not the price. Includes 1 Commerce Scale Unit – Cloud. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $4,800 / 1.2, cross-checked against the annual-term/annual-billing row $48,000/yr ÷ 12."
+    },
+    {
+      "id": "commerce.ecomTier1.overage",
+      "label": "Dynamics 365 e-Commerce Tier 1 overage unit",
+      "value": 500,
+      "currency": "USD",
+      "unit": "pack",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — e-Commerce tiers and transaction capacities (overage)",
+      "asOf": "2026-09-01",
+      "notes": "One overage unit adds a band-dependent block of transactions/month (see commerce.json). Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $600 / 1.2, cross-checked against the annual-term/annual-billing row $6,000/yr ÷ 12."
+    },
+    {
+      "id": "commerce.ecomTier2",
+      "label": "Dynamics 365 e-Commerce Tier 2 (per tenant)",
+      "value": 14500,
+      "currency": "USD",
+      "unit": "mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (e-Commerce tiers)",
+      "asOf": "2026-09-01",
+      "notes": "All six AOV bands list at the same price; the band sets the included transaction quantity (see commerce.json), not the price. Includes 1 Commerce Scale Unit – Cloud. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $17,400 / 1.2, cross-checked against the annual-term/annual-billing row $174,000/yr ÷ 12."
+    },
+    {
+      "id": "commerce.ecomTier2.overage",
+      "label": "Dynamics 365 e-Commerce Tier 2 overage unit",
+      "value": 500,
+      "currency": "USD",
+      "unit": "pack",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — e-Commerce tiers and transaction capacities (overage)",
+      "asOf": "2026-09-01",
+      "notes": "One overage unit adds a band-dependent block of transactions/month (see commerce.json). Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $600 / 1.2, cross-checked against the annual-term/annual-billing row $6,000/yr ÷ 12."
+    },
+    {
+      "id": "commerce.ecomTier3",
+      "label": "Dynamics 365 e-Commerce Tier 3 (per tenant)",
+      "value": 31000,
+      "currency": "USD",
+      "unit": "mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (e-Commerce tiers)",
+      "asOf": "2026-09-01",
+      "notes": "All six AOV bands list at the same price; the band sets the included transaction quantity (see commerce.json), not the price. Includes 1 Commerce Scale Unit – Cloud. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $37,200 / 1.2, cross-checked against the annual-term/annual-billing row $372,000/yr ÷ 12."
+    },
+    {
+      "id": "commerce.ecomTier3.overage",
+      "label": "Dynamics 365 e-Commerce Tier 3 overage unit",
+      "value": 500,
+      "currency": "USD",
+      "unit": "pack",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — e-Commerce tiers and transaction capacities (overage)",
+      "asOf": "2026-09-01",
+      "notes": "One overage unit adds a band-dependent block of transactions/month (see commerce.json). Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $600 / 1.2, cross-checked against the annual-term/annual-billing row $6,000/yr ÷ 12."
+    },
+    {
+      "id": "commerce.csuBasic",
+      "label": "Commerce Scale Unit Basic – Cloud (additional)",
+      "value": 6000,
+      "currency": "USD",
+      "unit": "env/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Dynamics 365 Commerce Scale Unit (Cloud capacity)",
+      "asOf": "2026-09-01",
+      "notes": "Standalone cloud CSU add-on; entitles 65 Operations – Device plus 130 GB operations database / 195 GB operations file capacity (guide capacity table). The NCE sheet describes it as 'includes 3K Dynamics 365 Commerce transactions per month OR 65 Devices'. Every e-Commerce tier already includes one cloud CSU. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $7,200 / 1.2, cross-checked against the annual-term/annual-billing row $72,000/yr ÷ 12."
+    },
+    {
+      "id": "commerce.csuStandard",
+      "label": "Commerce Scale Unit Standard – Cloud (additional)",
+      "value": 17000,
+      "currency": "USD",
+      "unit": "env/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Dynamics 365 Commerce Scale Unit (Cloud capacity)",
+      "asOf": "2026-09-01",
+      "notes": "Standalone cloud CSU add-on; entitles 225 Operations – Device plus 450 GB operations database / 675 GB operations file capacity (guide capacity table). The NCE sheet describes it as 'includes 10K Dynamics 365 Commerce transactions per month OR 225 Devices'. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $20,400 / 1.2, cross-checked against the annual-term/annual-billing row $204,000/yr ÷ 12."
+    },
+    {
+      "id": "commerce.csuPremium",
+      "label": "Commerce Scale Unit Premium – Cloud (additional)",
+      "value": 37000,
+      "currency": "USD",
+      "unit": "env/mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Dynamics 365 Commerce Scale Unit (Cloud capacity)",
+      "asOf": "2026-09-01",
+      "notes": "Standalone cloud CSU add-on; entitles 500 Operations – Device plus 1,000 GB operations database / 1,500 GB operations file capacity (guide capacity table). The NCE sheet describes it as 'includes 25K Dynamics 365 Commerce transactions per month OR 500 Devices'. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $44,400 / 1.2, cross-checked against the annual-term/annual-billing row $444,000/yr ÷ 12."
+    },
+    {
+      "id": "commerce.ratingsReviews",
+      "label": "Dynamics 365 Commerce Ratings and Reviews add-on",
+      "value": 750,
+      "currency": "USD",
+      "unit": "mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (Ratings and Reviews)",
+      "asOf": "2026-09-01",
+      "notes": "DERIVED: the NCE sheet (Aug 2026 snapshot, Commercial segment) carries only a monthly-term row at $900; $900 / 1.2 = $750 assumes the standard annual-term uplift convention used throughout this catalog. Replace with the published annual-term figure if one appears. Requires e-commerce."
     }
   ]
 }

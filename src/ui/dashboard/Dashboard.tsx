@@ -241,6 +241,76 @@ export function Dashboard() {
       </div>
 
       <StoragePanel />
+      <CommerceSummaryPanel />
+    </div>
+  );
+}
+
+/**
+ * Commerce tier-selection summary: which e-Commerce tier/band the engine chose
+ * and for how long. Renders nothing when Commerce isn't in scope, so existing
+ * dashboards are unchanged.
+ */
+function CommerceSummaryPanel() {
+  const result = useStore((s) => s.result);
+  if (result.commerce.length === 0) return null;
+
+  const byChoice = new Map<
+    string,
+    { tierLabel: string; band: number; months: number; peakTx: number; peakOverage: number; cost: number }
+  >();
+  for (const c of result.commerce) {
+    const key = `${c.tierId}|b${c.band}`;
+    const cur = byChoice.get(key) ?? {
+      tierLabel: c.tierLabel,
+      band: c.band,
+      months: 0,
+      peakTx: 0,
+      peakOverage: 0,
+      cost: 0,
+    };
+    cur.months++;
+    cur.peakTx = Math.max(cur.peakTx, c.transactions);
+    cur.peakOverage = Math.max(cur.peakOverage, c.overageUnits);
+    cur.cost += c.tierCost + c.overageCost + c.rnrCost;
+    byChoice.set(key, cur);
+  }
+  const csuTotal = result.commerce.reduce((s, c) => s + c.csuCost, 0);
+  return (
+    <div className="chart-panel">
+      <strong>Commerce e-commerce sizing</strong>
+      <table className="report" style={{ marginTop: 8 }}>
+        <thead>
+          <tr>
+            <th>Cheapest tier</th>
+            <th>AOV band</th>
+            <th>Months</th>
+            <th>Peak transactions/mo</th>
+            <th>Peak overage units</th>
+            <th>Cost (tier + overage + R&amp;R)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[...byChoice.values()].map((v, i) => (
+            <tr key={i}>
+              <td>{v.tierLabel}</td>
+              <td>Band {v.band}</td>
+              <td>{v.months}</td>
+              <td>{v.peakTx.toLocaleString()}</td>
+              <td>{v.peakOverage}</td>
+              <td>{money(v.cost)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="help">
+        Tier and band are re-derived monthly from the volume step in effect (band from
+        average order value; cheapest tier + overage wins). Each tier includes one cloud
+        Commerce Scale Unit, which also serves headless/API traffic.
+        {csuTotal > 0 ? ` Standalone Scale Unit add-ons total ${money(csuTotal)}.` : ''}{' '}
+        Microsoft enforces transactions annually; this view prices the monthly average, so
+        seasonal spikes are smoothed. Click a month in the chart for the full breakdown.
+      </p>
     </div>
   );
 }

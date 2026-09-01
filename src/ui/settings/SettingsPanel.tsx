@@ -5,7 +5,7 @@ import { downloadJson, parseOverridesJson } from '../../model/persistence';
 import { configOverridesSchema } from '../../model/schemas';
 import { JsonFileButton } from '../JsonFileButton';
 
-type SectionKey = 'pricing' | 'licenses' | 'environments' | 'rules';
+type SectionKey = 'pricing' | 'licenses' | 'environments' | 'rules' | 'commerce';
 
 const SECTIONS: { key: SectionKey; label: string; help: string }[] = [
   {
@@ -28,6 +28,11 @@ const SECTIONS: { key: SectionKey; label: string; help: string }[] = [
     label: 'Scheduling rules',
     help: 'When each environment turns on/off relative to phases and go-live.',
   },
+  {
+    key: 'commerce',
+    label: 'Commerce tiers & bands',
+    help: 'e-Commerce tier/band transaction entitlements, Scale Unit sizes, add-on price refs. Dollar values stay in Prices.',
+  },
 ];
 
 /** Validate one section with the same schema the file-import path uses. */
@@ -49,7 +54,7 @@ export function SettingsPanel() {
       </p>
       <div className="row">
         <button
-          title="Download all four sections as one config-overrides.json to share your team's defaults"
+          title="Download all five sections as one config-overrides.json to share your team's defaults"
           onClick={() => downloadJson('config-overrides.json', overrides ?? config)}
         >
           Export overrides
@@ -63,7 +68,7 @@ export function SettingsPanel() {
         />
         <button
           className="danger"
-          title="Discard every customization in all four sections and return to the bundled catalog"
+          title="Discard every customization in all five sections and return to the bundled catalog"
           onClick={() => {
             if (confirm('Discard all config customizations and restore defaults?'))
               setOverrides(null);

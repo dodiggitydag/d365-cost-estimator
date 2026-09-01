@@ -49,15 +49,16 @@ Valid license ids (use these keys exactly; unknown keys are ignored by the engin
 |----|---------|
 | `erpPremium` | ERP Premium (Finance / SCM Premium) |
 | `erpFull` | ERP full user (Finance / SCM) |
+| `commerce` | Commerce full user (HQ / merchandising) |
 | `cePremium` | CE Premium (Sales / Customer Service / Contact Center) |
 | `ceEnterprise` | CE Enterprise (Sales / Customer Service) |
 | `csProfessional` | Professional (Sales or Customer Service) |
 | `attach` | Attach license |
 | `activity` | Operations – Activity |
 | `teamMember` | Team Members |
-| `device` | Operations – Device |
+| `device` | Operations – Device (also POS registers) |
 
-Include all nine keys in every step, zero where not sold (matches the tool's UI).
+Include all ten keys in every step, zero where not sold (matches the tool's UI).
 Customer Insights sold → `customerInsightsAddon: true` (adds Dataverse entitlement).
 
 ### User ramp per wave → multiple `licenseSteps`
@@ -83,14 +84,36 @@ it; note the assumption. There is no `licenseStartMonth` field.
 
 ## Scope items
 
-### Commerce in scope? → `customItems` row (no native field)
+### Commerce in scope? → `commerceSteps` (+ `commerceScaleUnits`, `commerceRatingsReviews`)
+Native fields — do **not** add the old `commerce-csu` $0 custom item any more. Ask for
+expected e-commerce order volume and average order value; the tool derives the
+e-Commerce tier, AOV band, and overage units itself (cheapest combination, re-evaluated
+monthly), and each tier already includes one cloud Commerce Scale Unit that also covers
+headless / Commerce API traffic.
+
 ```json
-{ "id": "commerce-csu", "name": "Commerce Scale Unit", "category": "licensing-ms",
-  "monthlyAmount": 0, "fromMonth": <go-live>, "toMonth": <horizon>,
-  "notes": "Commerce in scope - CSU tier and pricing TBD" }
+"commerceSteps": [
+  { "fromMonth": <go-live>, "transactionsPerMonth": 3000, "averageOrderValue": 60 }
+],
+"commerceScaleUnits": [],
+"commerceRatingsReviews": false
 ```
-Price it if the user knows the CSU tier; otherwise leave $0 + TBD and list in summary.
-E-commerce ISVs that come with Commerce get their own `isv` rows.
+
+- `transactionsPerMonth` = completed e-commerce carts per month (item count is
+  irrelevant). Given an annual figure, divide by 12 and say so.
+- `averageOrderValue` = annual e-commerce GMV ÷ transactions, in USD. Drives the band —
+  if it's unknown, ask; a wrong band changes the included transaction quantity.
+- Volume ramps like licenses: add more steps (`fromMonth` of each wave's go-live).
+- Volume completely unknown → leave `commerceSteps: []` (bills nothing) and list
+  Commerce as an unpriced follow-up in the summary.
+- Commerce HQ/merchandising users → `licenseSteps[].counts.commerce`; POS registers →
+  `counts.device`.
+- Extra Scale Units only when the client names them (extra geo, redundancy, device
+  capacity beyond the included CSU):
+  `{ "id": "csu-emea", "tier": "basic" | "standard" | "premium", "count": 1, "fromMonth": <go-live>, "toMonth": <horizon> }`
+- Ratings & Reviews in scope → `commerceRatingsReviews: true` (billed only in months
+  with e-commerce volume).
+- E-commerce ISVs that come with Commerce still get their own `isv` rows.
 
 ### Interfaces in scope → the `azure-integration` custom item + optional extra rows
 - Any interfaces at all → set the `azure-integration` row's `monthlyAmount`

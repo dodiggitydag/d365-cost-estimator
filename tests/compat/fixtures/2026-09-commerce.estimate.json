@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "name": "Compat era 2026-09 (Commerce feature-complete)",
+    "createdAt": "2026-09-01T00:00:00.000Z",
+    "catalogVersion": "2026-08"
+  },
+  "horizonMonths": 36,
+  "startYearMonth": "2027-01",
+  "rollouts": [
+    {
+      "id": "rollout-1",
+      "name": "Wave 1",
+      "phases": [
+        { "id": "r1-initiate", "kind": "initiate", "name": "Initiate", "startMonth": 1, "lengthMonths": 2 },
+        { "id": "r1-implement", "kind": "implement", "name": "Implement", "startMonth": 3, "lengthMonths": 6 },
+        { "id": "r1-prepare", "kind": "prepare", "name": "Prepare", "startMonth": 9, "lengthMonths": 2 },
+        { "id": "r1-operate", "kind": "operate", "name": "Operate", "startMonth": 11, "lengthMonths": 26 }
+      ]
+    }
+  ],
+  "team": {
+    "concurrentDevs": 4,
+    "functionalConsultants": 6,
+    "solutionArchitects": 2,
+    "hostedAgents": 2
+  },
+  "licenseSteps": [
+    {
+      "fromMonth": 10,
+      "counts": {
+        "erpPremium": 0,
+        "erpFull": 150,
+        "commerce": 25,
+        "cePremium": 0,
+        "ceEnterprise": 0,
+        "csProfessional": 0,
+        "attach": 10,
+        "activity": 20,
+        "teamMember": 40,
+        "device": 30
+      }
+    }
+  ],
+  "licenseCostMode": { "kind": "listPrices" },
+  "copilotAgents": [
+    { "id": "m365-copilot-cowork", "name": "M365 Copilot Cowork usage", "creditsPerMonth": 250000, "fromMonth": 11, "toMonth": 36 }
+  ],
+  "copilotPacksOwned": 0,
+  "customerInsightsAddon": false,
+  "commerceSteps": [
+    { "fromMonth": 10, "transactionsPerMonth": 3000, "averageOrderValue": 60 },
+    { "fromMonth": 18, "transactionsPerMonth": 40000, "averageOrderValue": 60 }
+  ],
+  "commerceScaleUnits": [
+    { "id": "csu-emea", "tier": "standard", "count": 1, "fromMonth": 10, "toMonth": 36 }
+  ],
+  "commerceRatingsReviews": true,
+  "environments": [
+    { "id": "PROD-x2", "typeId": "PROD", "name": "Production 2" }
+  ],
+  "disabledEnvIds": ["DEMO"],
+  "customItems": [
+    {
+      "id": "isv-avalara",
+      "name": "Avalara AvaTax",
+      "category": "isv",
+      "monthlyAmount": 1200,
+      "fromMonth": 11,
+      "toMonth": 36
+    }
+  ],
+  "gridOverrides": [],
+  "settings": {
+    "prodLeadMonths": 2,
+    "prodGrowthGBPerYear": { "fscmData": 120, "fscmFile": 24, "dvData": 6, "dvFile": 12 }
+  }
+}

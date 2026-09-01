@@ -30,6 +30,7 @@
       "counts": {
         "erpPremium": 0,
         "erpFull": 100,
+        "commerce": 0,
         "cePremium": 0,
         "ceEnterprise": 0,
         "csProfessional": 0,
@@ -52,6 +53,9 @@
   ],
   "copilotPacksOwned": 0,
   "customerInsightsAddon": false,
+  "commerceSteps": [],
+  "commerceScaleUnits": [],
+  "commerceRatingsReviews": false,
   "environments": [],
   "disabledEnvIds": [],
   "customItems": [

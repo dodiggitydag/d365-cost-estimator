@@ -4,6 +4,7 @@ import { TeamPanel } from './inputs/TeamPanel';
 import { LicensesPanel } from './inputs/LicensesPanel';
 import { EnvPanel } from './inputs/EnvPanel';
 import { CopilotPanel } from './inputs/CopilotPanel';
+import { CommercePanel } from './inputs/CommercePanel';
 import { ItemsPanel } from './inputs/ItemsPanel';
 import { ScheduleGrid } from './grid/ScheduleGrid';
 import { Dashboard } from './dashboard/Dashboard';
@@ -89,6 +90,7 @@ export function App() {
             </div>
             <div className="panel-col">
               <LicensesPanel />
+              <CommercePanel />
               <CopilotPanel />
             </div>
             <div className="panel-col">
@@ -111,7 +113,31 @@ export function App() {
       </main>
       <footer className="footer">
         Open source (MIT) · built {__BUILD_DATE__} · prices are cited per line — click any
-        figure for its explanation · not affiliated with Microsoft
+        figure for its explanation · not affiliated with Microsoft · Microsoft licensing
+        guidance:{' '}
+        <a
+          href="https://www.microsoft.com/licensing/guidance/Dynamics-365"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Dynamics 365
+        </a>
+        {' · '}
+        <a
+          href="https://www.microsoft.com/licensing/guidance/Power-Platform"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Power Platform
+        </a>
+        {' · '}
+        <a
+          href="https://www.microsoft.com/licensing/guidance/Microsoft-Copilot-Studio"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Copilot Studio
+        </a>
       </footer>
       <ExplainDrawer />
     </>

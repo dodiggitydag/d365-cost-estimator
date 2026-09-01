@@ -125,11 +125,66 @@ export const scheduleRuleSchema = z.object({
   rationale: z.string().min(1),
 });
 
+export const commerceCatalogSchema = z
+  .object({
+    bandUpperBoundsAOV: z.array(z.number().positive()).min(1),
+    bandLabels: z.array(z.string().min(1)).min(2),
+    tiers: z
+      .array(
+        z.object({
+          id: z.string().min(1),
+          label: z.string().min(1),
+          priceId: z.string().min(1),
+          overagePriceId: z.string().min(1),
+          includedTransactionsPerMonth: z.array(z.number().positive()),
+          overageUnitTransactions: z.array(z.number().positive()),
+        }),
+      )
+      .min(1),
+    scaleUnits: z.array(
+      z.object({
+        id: z.string().min(1),
+        label: z.string().min(1),
+        priceId: z.string().min(1),
+        devices: z.number().positive(),
+      }),
+    ),
+    ratingsReviewsPriceId: z.string().min(1),
+    notes: z.string().optional(),
+  })
+  .superRefine((c, ctx) => {
+    const bands = c.bandUpperBoundsAOV.length + 1;
+    if (c.bandLabels.length !== bands) {
+      ctx.addIssue({ code: 'custom', message: `bandLabels needs ${bands} entries (bounds + 1)` });
+    }
+    for (let i = 1; i < c.bandUpperBoundsAOV.length; i++) {
+      if (c.bandUpperBoundsAOV[i] <= c.bandUpperBoundsAOV[i - 1]) {
+        ctx.addIssue({ code: 'custom', message: 'bandUpperBoundsAOV must be strictly ascending' });
+      }
+    }
+    for (const t of c.tiers) {
+      if (t.includedTransactionsPerMonth.length !== bands) {
+        ctx.addIssue({ code: 'custom', message: `${t.id}: includedTransactionsPerMonth needs ${bands} entries` });
+      }
+      if (t.overageUnitTransactions.length !== bands) {
+        ctx.addIssue({ code: 'custom', message: `${t.id}: overageUnitTransactions needs ${bands} entries` });
+      }
+      // Higher AOV band = fewer included transactions; a non-decreasing pair is a data typo.
+      for (let i = 1; i < t.includedTransactionsPerMonth.length; i++) {
+        if (t.includedTransactionsPerMonth[i] >= t.includedTransactionsPerMonth[i - 1]) {
+          ctx.addIssue({ code: 'custom', message: `${t.id}: included transactions must decrease across bands` });
+        }
+      }
+    }
+  });
+
 export const configOverridesSchema = z.object({
   pricing: pricingCatalogSchema.optional(),
   licenses: licenseCatalogSchema.optional(),
   environments: z.array(environmentTypeSchema).optional(),
   rules: z.array(scheduleRuleSchema).optional(),
+  // Optional so config-overrides saved before Commerce support existed still parse.
+  commerce: commerceCatalogSchema.optional(),
 });
 
 export const estimateSchema = z.object({
@@ -187,6 +242,30 @@ export const estimateSchema = z.object({
   ),
   copilotPacksOwned: z.number().nonnegative(),
   customerInsightsAddon: z.boolean(),
+  // default([]) keeps estimates saved before Commerce support existed loadable
+  commerceSteps: z
+    .array(
+      z.object({
+        fromMonth: z.number().int().min(1),
+        transactionsPerMonth: z.number().nonnegative(),
+        averageOrderValue: z.number().nonnegative(),
+      }),
+    )
+    .default([]),
+  // default([]) keeps estimates saved before Commerce support existed loadable
+  commerceScaleUnits: z
+    .array(
+      z.object({
+        id: z.string(),
+        tier: z.string(),
+        count: z.number().int().nonnegative(),
+        fromMonth: z.number().int().min(1),
+        toMonth: z.number().int().min(1),
+      }),
+    )
+    .default([]),
+  // default(false) keeps estimates saved before Commerce support existed loadable
+  commerceRatingsReviews: z.boolean().default(false),
   environments: z.array(
     z.object({
       id: z.string(),

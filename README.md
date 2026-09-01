@@ -5,8 +5,9 @@
 > discounts, region). It is not a quote, and this project is not affiliated with Microsoft.
 
 Estimate the Microsoft cloud and licensing run-rate of a Dynamics 365 Finance & Supply
-Chain implementation project — environments, storage entitlements and overage, Copilot
-Studio credits, Azure DevOps, and your own custom cost items — over up to 60 months,
+Chain implementation project — environments, storage entitlements and overage, Commerce
+e-commerce tiers and Scale Units, Copilot Studio credits, Azure DevOps, and your own
+custom cost items — over up to 60 months,
 **with an explanation for every dollar**: the methodology rule that scheduled it, the
 formula in words, and a citation to the licensing-guide price it came from.
 
@@ -36,10 +37,14 @@ exported will open in every future version (enforced by `tests/compat.test.ts`).
    sandbox behaves in real life.
 4. **Copilot Studio** — agents consume credits; packs required are netted against
    entitled credits and owned packs.
-5. **Explanations** — click any figure for the cost lines behind it, each with its
+5. **Commerce** — enter e-commerce transactions/month and average order value; the tool
+   derives the AOV band and picks the cheapest e-Commerce tier + overage units per the
+   Dynamics 365 Licensing Guide (each tier includes a cloud Commerce Scale Unit that also
+   serves headless/API traffic). Extra Scale Units and Ratings & Reviews are one click.
+6. **Explanations** — click any figure for the cost lines behind it, each with its
    formula, scheduling rationale, and price citation (source URL + guide section + as-of
    date).
-6. **Exports** — a multi-sheet .xlsx (Inputs, Schedule, Worksheet, Report, By
+7. **Exports** — a multi-sheet .xlsx (Inputs, Schedule, Worksheet, Report, By
    Environment, Assumptions with citations) and estimate JSON.
 
 ## Customize without rebuilding
@@ -50,6 +55,8 @@ Everything opinionated is data, editable in **Settings** inside the app:
 - **License types & entitlements** — per-user storage accrual, tenant bases, Copilot credits.
 - **Environment plan** — types, methodology descriptions, cost components, default storage demand.
 - **Scheduling rules** — when environments turn on/off relative to phases and go-live.
+- **Commerce tiers & bands** — e-Commerce transaction entitlements per tier/band, Scale
+  Unit sizes, add-on price refs.
 
 Settings changes validate against a schema, apply live, persist in your browser, and can
 be exported/imported as `config-overrides.json` to share with a team. If you prefer to

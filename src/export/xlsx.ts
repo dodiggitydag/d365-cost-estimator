@@ -98,6 +98,29 @@ export async function buildWorkbook(
         .join(', ') || 'none',
     );
   }
+  // Commerce rows only when the workload is in scope, so pre-Commerce estimates
+  // keep producing the same Inputs sheet.
+  const commerceInScope =
+    estimate.commerceSteps.length > 0 ||
+    estimate.commerceScaleUnits.some((r) => r.count > 0) ||
+    estimate.commerceRatingsReviews;
+  if (commerceInScope) {
+    for (const step of estimate.commerceSteps) {
+      addKV(
+        `Commerce e-commerce from month ${step.fromMonth}`,
+        `${step.transactionsPerMonth.toLocaleString()} transactions/mo at $${step.averageOrderValue} average order value`,
+      );
+    }
+    for (const row of estimate.commerceScaleUnits) {
+      if (row.count > 0) {
+        addKV(
+          `Commerce Scale Units (${row.tier}, additional)`,
+          `${row.count} unit(s), months ${row.fromMonth}–${row.toMonth}`,
+        );
+      }
+    }
+    addKV('Commerce Ratings and Reviews', estimate.commerceRatingsReviews ? 'yes' : 'no');
+  }
   inputs.getColumn(1).font = { bold: true };
 
   // --- Schedule -----------------------------------------------------------
@@ -214,6 +237,15 @@ export async function buildWorkbook(
   assumptions.addRow([
     'BUDGETARY ESTIMATE ONLY — USD list prices as of the dates below. Actual pricing varies by agreement (EA/CSP, discounts). No inflation or future Microsoft price changes are assumed. Environments are created, destroyed, and rescheduled as needed to support efficient project work.',
   ]).font = { bold: true };
+  const guidance: [string, string][] = [
+    ['Dynamics 365 licensing guidance', 'https://www.microsoft.com/licensing/guidance/Dynamics-365'],
+    ['Power Platform licensing guidance', 'https://www.microsoft.com/licensing/guidance/Power-Platform'],
+    ['Microsoft Copilot Studio licensing guidance', 'https://www.microsoft.com/licensing/guidance/Microsoft-Copilot-Studio'],
+  ];
+  for (const [text, hyperlink] of guidance) {
+    const r = assumptions.addRow(['']);
+    r.getCell(1).value = { text, hyperlink };
+  }
   assumptions.addRow([]);
   // Schedule problems travel with the workbook: a reviewer looking at an empty
   // environment row on the Schedule sheet needs to know it was a mistake, not a choice.

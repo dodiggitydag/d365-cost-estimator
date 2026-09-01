@@ -32,6 +32,9 @@ describe('estimate JSON backward compatibility', () => {
     // Fields added after an era began must land with usable defaults.
     expect(Array.isArray(estimate.disabledEnvIds)).toBe(true);
     expect(typeof estimate.settings.prodGrowthGBPerYear).toBe('object');
+    expect(Array.isArray(estimate.commerceSteps)).toBe(true);
+    expect(Array.isArray(estimate.commerceScaleUnits)).toBe(true);
+    expect(typeof estimate.commerceRatingsReviews).toBe('boolean');
   });
 
   it.each(fixtures)('%s computes a full estimate without throwing', (file) => {
@@ -86,6 +89,32 @@ describe('estimate JSON backward compatibility', () => {
     expect(byId.get('MIG')?.mirrorProdStorage).toBe(false);
     // Absent means "use the environment type's default" — must stay absent.
     expect(byId.get('UAT')?.mirrorProdStorage).toBeUndefined();
+  });
+
+  it('pre-Commerce fixtures compute no commerce lines', () => {
+    // The Commerce feature must be invisible for estimates saved before it
+    // existed — same totals, no new rows.
+    const text = readFileSync(join(fixturesDir, '2026-08-full.estimate.json'), 'utf-8');
+    const estimate = parseEstimateJson(text, config);
+    const result = computeEstimate(estimate, config);
+    expect(result.commerce).toEqual([]);
+    expect(result.lines.some((l) => l.id.startsWith('commerce.'))).toBe(false);
+    // The old $0 "commerce-csu" custom placeholder still loads as a custom item.
+    expect(estimate.customItems.some((i) => i.id === 'commerce-csu')).toBe(true);
+  });
+
+  it('the 2026-09 era fixture prices its Commerce inputs', () => {
+    const text = readFileSync(join(fixturesDir, '2026-09-commerce.estimate.json'), 'utf-8');
+    const estimate = parseEstimateJson(text, config);
+    expect(estimate.commerceSteps.length).toBe(2);
+    const result = computeEstimate(estimate, config);
+    expect(result.commerce.length).toBeGreaterThan(0);
+    for (const prefix of ['commerce.ecom.m', 'commerce.csu.', 'commerce.rnr.']) {
+      expect(
+        result.lines.some((l) => l.id.startsWith(prefix)),
+        `expected a ${prefix}* line`,
+      ).toBe(true);
+    }
   });
 
   it('a current export round-trips through export → import', () => {

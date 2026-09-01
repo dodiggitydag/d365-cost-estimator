@@ -1,0 +1,59 @@
+{
+  "bandUpperBoundsAOV": [50, 150, 500, 2000, 5000],
+  "bandLabels": [
+    "Band 1 (AOV < $50)",
+    "Band 2 (AOV $50–$150)",
+    "Band 3 (AOV $150–$500)",
+    "Band 4 (AOV $500–$2K)",
+    "Band 5 (AOV $2K–$5K)",
+    "Band 6 (AOV $5K+)"
+  ],
+  "tiers": [
+    {
+      "id": "tier1",
+      "label": "e-Commerce Tier 1",
+      "priceId": "commerce.ecomTier1",
+      "overagePriceId": "commerce.ecomTier1.overage",
+      "includedTransactionsPerMonth": [4700, 2400, 1100, 480, 275, 200],
+      "overageUnitTransactions": [780, 365, 170, 80, 45, 30]
+    },
+    {
+      "id": "tier2",
+      "label": "e-Commerce Tier 2",
+      "priceId": "commerce.ecomTier2",
+      "overagePriceId": "commerce.ecomTier2.overage",
+      "includedTransactionsPerMonth": [29000, 12000, 5500, 2900, 1700, 1160],
+      "overageUnitTransactions": [1250, 540, 230, 125, 75, 50]
+    },
+    {
+      "id": "tier3",
+      "label": "e-Commerce Tier 3",
+      "priceId": "commerce.ecomTier3",
+      "overagePriceId": "commerce.ecomTier3.overage",
+      "includedTransactionsPerMonth": [86000, 38750, 15500, 8600, 5065, 3400],
+      "overageUnitTransactions": [1400, 625, 250, 140, 85, 55]
+    }
+  ],
+  "scaleUnits": [
+    {
+      "id": "basic",
+      "label": "Basic",
+      "priceId": "commerce.csuBasic",
+      "devices": 65
+    },
+    {
+      "id": "standard",
+      "label": "Standard",
+      "priceId": "commerce.csuStandard",
+      "devices": 225
+    },
+    {
+      "id": "premium",
+      "label": "Premium",
+      "priceId": "commerce.csuPremium",
+      "devices": 500
+    }
+  ],
+  "ratingsReviewsPriceId": "commerce.ratingsReviews",
+  "notes": "Quantities from the Dynamics 365 Licensing Guide (August 2026), 'Number of monthly transactions per SKU' and 'Commerce Scale Unit – Cloud capacity' tables. A transaction is the final purchase of an e-commerce shopping cart regardless of item count; AOV = annual e-commerce GMV ÷ transactions. Band lower edges are treated as inclusive ($50 AOV → Band 2). Microsoft licenses tiers per month but enforces transactions annually; this tool evaluates monthly averages."
+}

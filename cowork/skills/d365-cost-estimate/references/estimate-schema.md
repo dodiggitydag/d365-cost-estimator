@@ -7,7 +7,7 @@ are **silently stripped** — you cannot add your own fields for provenance. The
 free-text carriers that survive import are `meta.name`, `customItems[].name`,
 `customItems[].notes`, `customItems[].sourceUrl`, and `copilotAgents[].name`.
 
-## Top-level shape — all 13 required keys
+## Top-level shape — 13 required keys (+ defaulted Commerce keys the template includes)
 
 ```jsonc
 {
@@ -34,6 +34,9 @@ free-text carriers that survive import are `meta.name`, `customItems[].name`,
   "copilotAgents": [ ... ],        // may be []
   "copilotPacksOwned": 0,          // number >= 0
   "customerInsightsAddon": false,  // boolean, required
+  "commerceSteps": [ ... ],        // OPTIONAL (defaults []) — see Commerce below; include as []
+  "commerceScaleUnits": [ ... ],   // OPTIONAL (defaults []) — extra CSUs only
+  "commerceRatingsReviews": false, // OPTIONAL (defaults false)
   "environments": [ ... ],         // usually [] — see the fromRule trap
   "disabledEnvIds": [],            // array of strings (optional in schema; include as [])
   "customItems": [ ... ],          // may be []
@@ -71,14 +74,14 @@ free-text carriers that survive import are `meta.name`, `customItems[].name`,
 ## licenseSteps
 
 ```json
-{ "fromMonth": 1, "counts": { "erpPremium": 0, "erpFull": 100, "cePremium": 0,
-  "ceEnterprise": 0, "csProfessional": 0, "attach": 0, "activity": 0,
-  "teamMember": 0, "device": 0 } }
+{ "fromMonth": 1, "counts": { "erpPremium": 0, "erpFull": 100, "commerce": 0,
+  "cePremium": 0, "ceEnterprise": 0, "csProfessional": 0, "attach": 0,
+  "activity": 0, "teamMember": 0, "device": 0 } }
 ```
 
 - Step function: for month *m*, the **last** step with `fromMonth <= m` applies.
-- Counts: number ≥ 0 per license id. Only the nine ids above are priced; anything
-  else is ignored. Include all nine, zero-filled.
+- Counts: number ≥ 0 per license id. Only the ten ids above are priced; anything
+  else is ignored. Include all ten, zero-filled.
 - **The steps also set when subscription billing starts** — the first step with any
   nonzero count. To model licenses bought later (e.g. at UAT), add an all-zero step
   at month 1 and the real counts at the buying month. There is no separate
@@ -92,6 +95,32 @@ free-text carriers that survive import are `meta.name`, `customItems[].name`,
 ```
 All fields required. `toMonth` inclusive. Credits are pooled monthly and covered by
 25,000-credit packs after `copilotPacksOwned` is applied.
+
+## Commerce (native since schema era 2026-09)
+
+```json
+"commerceSteps": [
+  { "fromMonth": 12, "transactionsPerMonth": 3000, "averageOrderValue": 60 }
+],
+"commerceScaleUnits": [
+  { "id": "csu-emea", "tier": "standard", "count": 1, "fromMonth": 12, "toMonth": 36 }
+],
+"commerceRatingsReviews": true
+```
+
+- `commerceSteps` is a step function like `licenseSteps` — for month *m* the last
+  step with `fromMonth <= m` applies. `transactionsPerMonth` = completed e-commerce
+  carts (number ≥ 0); `averageOrderValue` = USD (number ≥ 0). The tool derives the
+  e-Commerce tier, AOV band, and overage units per month (cheapest combination) —
+  never pick a tier by hand. An empty array means Commerce e-commerce is out of
+  scope and bills nothing.
+- `commerceScaleUnits` is for **extra** cloud Scale Units only (extra geo,
+  redundancy, device capacity) — every e-Commerce tier already includes one CSU,
+  which also covers headless / Commerce API traffic. `tier` enum: `basic` |
+  `standard` | `premium`; `count` int ≥ 0; `toMonth` inclusive.
+- `commerceRatingsReviews: true` bills the add-on in months with e-commerce volume.
+- All three keys are optional with defaults (`[]` / `[]` / `false`) so older files
+  parse; the template includes them explicitly — keep them.
 
 ## environments — and the fromRule trap
 
@@ -193,7 +222,8 @@ Schema-enforced (import fails):
 - [ ] `startYearMonth`, if present, matches `YYYY-MM`
 
 Schema-silent (import succeeds but numbers are wrong):
-- [ ] `fromMonth <= toMonth` on every custom item and agent (inverted ranges emit nothing, silently)
+- [ ] `fromMonth <= toMonth` on every custom item, agent, and Commerce scale-unit row (inverted ranges emit nothing, silently)
+- [ ] Every `commerceScaleUnits[].tier` is `basic`, `standard`, or `premium` (unknown tiers are skipped silently)
 - [ ] No `fromMonth`/`toMonth`/`startMonth` beyond `horizonMonths`
 - [ ] Phases within a rollout are in chronological order and there is at most one phase
       of each `kind` — the estimator now shows a warning banner for both mistakes, so

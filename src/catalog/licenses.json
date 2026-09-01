@@ -24,6 +24,18 @@
       }
     },
     {
+      "id": "commerce",
+      "label": "Commerce full user",
+      "priceId": "license.commerce",
+      "accrualGB": {
+        "fscmData": 5,
+        "fscmFile": 5,
+        "dvData": 0.25,
+        "dvFile": 2
+      },
+      "notes": "D365 Commerce base licence (HQ/merchandising users). Same operations storage accrual as Finance/SCM full users per the licensing guide capacity table. Store staff usually use Operations – Device or Activity instead."
+    },
+    {
       "id": "cePremium",
       "label": "CE Premium (Sales / Customer Service / Contact Center)",
       "priceId": "license.cePremium",
@@ -99,7 +111,8 @@
     {
       "id": "base-erp-full",
       "ifAnyOf": [
-        "erpFull"
+        "erpFull",
+        "commerce"
       ],
       "gb": {
         "fscmData": 90,
@@ -108,7 +121,7 @@
         "dvFile": 40,
         "dvLog": 2
       },
-      "notes": "Tenant base when any F&SCM full user license is present (no Premium)."
+      "notes": "Tenant base when any F&SCM or Commerce full user license is present (no Premium). The licensing guide capacity table puts Commerce in the same row as Finance/SCM."
     }
   ],
   "addons": [

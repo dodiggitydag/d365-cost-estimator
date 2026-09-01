@@ -133,6 +133,7 @@ export function newEstimate(config: EstimatorConfig): Estimate {
         counts: {
           erpPremium: 0,
           erpFull: 100,
+          commerce: 0,
           cePremium: 0,
           ceEnterprise: 0,
           csProfessional: 0,
@@ -157,6 +158,10 @@ export function newEstimate(config: EstimatorConfig): Estimate {
     ],
     copilotPacksOwned: 0,
     customerInsightsAddon: false,
+    // Commerce is off until a volume step is added; empty inputs cost nothing.
+    commerceSteps: [],
+    commerceScaleUnits: [],
+    commerceRatingsReviews: false,
     environments: [],
     disabledEnvIds: [],
     // Filled in below, once the estimate object exists to derive amounts from.

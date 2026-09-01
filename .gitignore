@@ -8,3 +8,5 @@ tests/golden/fixtures/local/
 cowork/skills/d365-cost-estimate/estimator.html
 cowork/dist/
 .DS_Store
+# Local Claude Code tooling (launch config, etc.) — personal, not part of the app.
+.claude/

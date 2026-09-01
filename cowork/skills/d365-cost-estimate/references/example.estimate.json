@@ -39,6 +39,7 @@
       "counts": {
         "erpPremium": 0,
         "erpFull": 0,
+        "commerce": 0,
         "cePremium": 0,
         "ceEnterprise": 0,
         "csProfessional": 0,
@@ -53,6 +54,7 @@
       "counts": {
         "erpPremium": 0,
         "erpFull": 250,
+        "commerce": 15,
         "cePremium": 0,
         "ceEnterprise": 0,
         "csProfessional": 0,
@@ -67,6 +69,7 @@
       "counts": {
         "erpPremium": 0,
         "erpFull": 400,
+        "commerce": 25,
         "cePremium": 0,
         "ceEnterprise": 0,
         "csProfessional": 0,
@@ -96,21 +99,18 @@
   ],
   "copilotPacksOwned": 0,
   "customerInsightsAddon": false,
+  "commerceSteps": [
+    { "fromMonth": 12, "transactionsPerMonth": 3000, "averageOrderValue": 60 },
+    { "fromMonth": 18, "transactionsPerMonth": 8000, "averageOrderValue": 60 }
+  ],
+  "commerceScaleUnits": [],
+  "commerceRatingsReviews": false,
   "environments": [
     { "id": "PROD-x2", "typeId": "PROD", "name": "Production 2 (EMEA)" },
     { "id": "TRAIN-x2", "typeId": "TRAIN", "name": "Training 2 (EMEA)" }
   ],
   "disabledEnvIds": [],
   "customItems": [
-    {
-      "id": "commerce-csu",
-      "name": "Commerce Scale Unit",
-      "category": "licensing-ms",
-      "monthlyAmount": 0,
-      "fromMonth": 12,
-      "toMonth": 48,
-      "notes": "Commerce in scope - CSU tier and pricing TBD"
-    },
     {
       "id": "fabric-capacity",
       "name": "Microsoft Fabric capacity (F64 reserved)",

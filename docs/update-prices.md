@@ -57,6 +57,23 @@ Azure and Azure DevOps items (`env.appInsights`, `env.devVm`, `ado.*`,
 `azure.integration`) are **not** in this sheet — they stay sourced from the Azure pricing
 pages, and the tier/add-on environment fees stay $0 until entered from an agreement.
 
+### Commerce entries
+
+The `commerce.*` and `license.commerce` entries come from the Dynamics 365 Licensing
+Guide's "Additional Dynamics 365 Commerce applications, add-ons and capacities" section,
+cross-checked against the NCE sheet (SKU titles: "Dynamics 365 e-Commerce Tier N Band M"
+— all six bands of a tier share one price, so the catalog keeps one entry per tier;
+"Dynamics 365 Commerce Scale Unit Basic/Standard/Premium - Cloud"; "Dynamics 365
+Commerce Ratings and Reviews"). Two Commerce-specific gotchas:
+
+- **Ratings and Reviews has no annual-term row** on the NCE sheet (observed Aug 2026:
+  P1M only, $900). The catalog's $750 is derived via the standard /1.2 convention and
+  the entry's `notes` say so — replace with the published figure if one appears.
+- **The tier/band transaction quantities are not prices** — they live in
+  `src/catalog/commerce.json` (`includedTransactionsPerMonth`, `overageUnitTransactions`
+  per band, CSU device counts). When a new guide changes the "Number of monthly
+  transactions per SKU" table, update that file too, not just the pricing catalog.
+
 2. **Locate each catalog entry in the guide.** Open
    `src/catalog/pricing.v<current>.json`. Every entry has a `guideSection` naming the
    table or heading it came from. For each entry, find the current value in the new
@@ -73,7 +90,9 @@ pages, and the tier/add-on environment fees stay $0 until entered from an agreem
 
 4. **Check the entitlement tables too** (`src/catalog/licenses.json`): tenant base GB per
    pool, per-license accrual GB, Copilot credits per user, credits per pack. These change
-   less often than prices but matter more when they do.
+   less often than prices but matter more when they do. Same for
+   `src/catalog/commerce.json`: the e-Commerce tier/band transaction matrices and Scale
+   Unit device entitlements.
 
 5. **Write the new catalog**: copy `pricing.v<old>.json` to `pricing.vYYYY-MM.json`
    (year-month of the new guide), update `version`, `asOf` (top level and per changed

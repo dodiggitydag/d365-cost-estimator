@@ -118,6 +118,51 @@ export interface LicenseCatalog {
 }
 
 // ---------------------------------------------------------------------------
+// Commerce catalog (e-Commerce tiers, Scale Units, add-ons)
+// ---------------------------------------------------------------------------
+
+/**
+ * One e-Commerce tier SKU family. Arrays are indexed by AOV band (index 0 =
+ * Band 1). Quantities come from the Dynamics 365 Licensing Guide's "Number of
+ * monthly transactions per SKU" table; dollars stay in the pricing catalog.
+ */
+export interface CommerceTier {
+  id: string; // tier1, tier2, tier3
+  label: string;
+  priceId: string;
+  overagePriceId: string;
+  /** e-commerce transactions included per month, by band. */
+  includedTransactionsPerMonth: number[];
+  /** Transactions added by one overage unit, by band. */
+  overageUnitTransactions: number[];
+}
+
+/** A standalone Commerce Scale Unit – Cloud add-on size. */
+export interface CommerceCsuTier {
+  id: string; // basic, standard, premium
+  label: string;
+  priceId: string;
+  /** Operations – Device entitlement included per unit. */
+  devices: number;
+}
+
+export interface CommerceCatalog {
+  /**
+   * Ascending AOV band boundaries; lower edges are inclusive, so with
+   * [50, 150, 500, 2000, 5000] an AOV of $50 lands in Band 2. Band count is
+   * bounds + 1.
+   */
+  bandUpperBoundsAOV: number[];
+  /** One label per band (bounds + 1 entries). */
+  bandLabels: string[];
+  /** Evaluated in order; a cost tie keeps the earlier (lower) tier. */
+  tiers: CommerceTier[];
+  scaleUnits: CommerceCsuTier[];
+  ratingsReviewsPriceId: string;
+  notes?: string;
+}
+
+// ---------------------------------------------------------------------------
 // Environments
 // ---------------------------------------------------------------------------
 
@@ -229,6 +274,25 @@ export interface CopilotAgent {
   toMonth: number; // inclusive
 }
 
+/** Commerce e-commerce volume in effect from a month onward (stepAt semantics). */
+export interface CommerceStep {
+  fromMonth: number;
+  /** e-commerce transactions per month — a transaction is one completed cart. */
+  transactionsPerMonth: number;
+  /** Average order value in USD (annual GMV ÷ transactions); selects the band. */
+  averageOrderValue: number;
+}
+
+/** Standalone Commerce Scale Unit – Cloud add-ons bought for a window. */
+export interface CommerceScaleUnit {
+  id: string;
+  /** CommerceCsuTier id: basic, standard, premium. */
+  tier: string;
+  count: number;
+  fromMonth: number;
+  toMonth: number; // inclusive
+}
+
 export type ItemCategory = 'licensing-ms' | 'payg-ms' | 'isv' | 'custom';
 
 export interface CustomCostItem {
@@ -283,6 +347,16 @@ export interface Estimate {
   copilotAgents: CopilotAgent[];
   copilotPacksOwned: number;
   customerInsightsAddon: boolean;
+  /**
+   * D365 Commerce e-commerce volume over time. Empty = Commerce not in scope
+   * (the engine emits nothing). The tier/band is derived per month from the
+   * step in effect.
+   */
+  commerceSteps: CommerceStep[];
+  /** Standalone Commerce Scale Unit – Cloud add-ons (each e-Commerce tier already includes one). */
+  commerceScaleUnits: CommerceScaleUnit[];
+  /** Ratings & Reviews add-on; billed only in months with e-commerce volume. */
+  commerceRatingsReviews: boolean;
   environments: EnvInstance[];
   /** Rule-derived instances the user removed (e.g. TRAIN, GOLD, DEV03). */
   disabledEnvIds: string[];
@@ -311,6 +385,7 @@ export interface EstimatorConfig {
   licenses: LicenseCatalog;
   environments: EnvironmentType[];
   rules: ScheduleRule[];
+  commerce: CommerceCatalog;
 }
 
 // ---------------------------------------------------------------------------
@@ -374,6 +449,24 @@ export interface CopilotMonth {
   cost: number;
 }
 
+/** One month of Commerce e-commerce activity (emitted only when transactions > 0). */
+export interface CommerceMonth {
+  month: number;
+  transactions: number;
+  aov: number;
+  band: number; // 1-based
+  tierId: string;
+  tierLabel: string;
+  includedTransactions: number;
+  overageUnits: number;
+  tierCost: number;
+  overageCost: number;
+  /** Standalone CSU add-ons billed this month (independent of volume). */
+  csuCost: number;
+  rnrCost: number;
+  totalCost: number;
+}
+
 export interface ScheduleWarning {
   kind: 'inverted-window' | 'duplicate-phase-kind' | 'empty-environment';
   message: string;
@@ -388,6 +481,7 @@ export interface EstimateResult {
   lines: CostLine[];
   storage: StorageMonth[];
   copilot: CopilotMonth[];
+  commerce: CommerceMonth[];
   goLiveMonths: { rolloutId: string; month: number }[];
   /** Schedule problems that would otherwise fail silently. */
   warnings: ScheduleWarning[];
