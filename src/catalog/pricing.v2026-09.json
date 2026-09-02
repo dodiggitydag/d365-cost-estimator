@@ -1,6 +1,6 @@
 {
-  "version": "2026-08",
-  "asOf": "2026-08-01",
+  "version": "2026-09",
+  "asOf": "2026-09-01",
   "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
   "entries": [
     {
@@ -10,8 +10,8 @@
       "currency": "USD",
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Additional Operations capacity (Operations Database)",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Additional Operations capacity (Operations Database)",
+      "asOf": "2026-09-01",
       "notes": "Dynamics 365 Operations - Database Capacity. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -21,8 +21,8 @@
       "currency": "USD",
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Additional Operations capacity (Operations File)",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Additional Operations capacity (Operations File)",
+      "asOf": "2026-09-01",
       "notes": "Dynamics 365 Operations - File Capacity. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -32,8 +32,8 @@
       "currency": "USD",
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Microsoft Copilot Studio Licensing Guide — Dataverse capacity add-ons (Database)",
-      "asOf": "2026-08-24",
+      "guideSection": "Microsoft Copilot Studio Licensing Guide (September 2026) — Dataverse capacity add-ons (Database)",
+      "asOf": "2026-09-01",
       "notes": "Dataverse Database Capacity add-on. Tier 2 (1,000+ GB) is $30/GB/mo. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -43,8 +43,8 @@
       "currency": "USD",
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Microsoft Copilot Studio Licensing Guide — Dataverse capacity add-ons (File)",
-      "asOf": "2026-08-24",
+      "guideSection": "Microsoft Copilot Studio Licensing Guide (September 2026) — Dataverse capacity add-ons (File)",
+      "asOf": "2026-09-01",
       "notes": "Dataverse File Capacity add-on. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -54,8 +54,8 @@
       "currency": "USD",
       "unit": "GB/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Microsoft Copilot Studio Licensing Guide — Dataverse capacity add-ons (Log)",
-      "asOf": "2026-08-24",
+      "guideSection": "Microsoft Copilot Studio Licensing Guide (September 2026) — Dataverse capacity add-ons (Log)",
+      "asOf": "2026-09-01",
       "notes": "Dataverse Log Capacity add-on. Tracked but not billed by default in this tool (mirrors the source workbook). Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -65,8 +65,8 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/en-us/dynamics-365/products/finance/pricing",
-      "guideSection": "Dynamics 365 Licensing Guide — Finance / Supply Chain Management entitlements (Premium)",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Finance / Supply Chain Management entitlements (Premium)",
+      "asOf": "2026-09-01",
       "notes": "Finance Premium / Supply Chain Management Premium. Includes 1,000 Copilot Credits per user/month. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -76,8 +76,8 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/en-us/dynamics-365/products/finance/pricing",
-      "guideSection": "Dynamics 365 Licensing Guide — Finance / Supply Chain Management entitlements",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Finance / Supply Chain Management entitlements",
+      "asOf": "2026-09-01",
       "notes": "Dynamics 365 Finance / Supply Chain Management base licence. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -87,8 +87,8 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Sales entitlements (Sales Premium)",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Sales entitlements (Sales Premium)",
+      "asOf": "2026-09-01",
       "notes": "Sales Premium list. Customer Service Premium is $195 — swap the value if CE is primary. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -98,8 +98,8 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Sales / Customer Service entitlements (Enterprise)",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Sales / Customer Service entitlements (Enterprise)",
+      "asOf": "2026-09-01",
       "notes": "Sales Enterprise / Customer Service Enterprise. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -109,8 +109,8 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Sales entitlements (Sales Professional)",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Sales entitlements (Sales Professional)",
+      "asOf": "2026-09-01",
       "notes": "Sales Professional list. Customer Service Professional is $50. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -120,8 +120,8 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Base and attach licenses",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Base and attach licenses",
+      "asOf": "2026-09-01",
       "notes": "F&SCM attach (Finance / SCM / Commerce / HR attach to a qualifying base offer). CE attach licences are $20. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -131,8 +131,8 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Operations Activity",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Operations Activity",
+      "asOf": "2026-09-01",
       "notes": "Dynamics 365 Operations - Activity. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -142,8 +142,8 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Team Members",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Team Members",
+      "asOf": "2026-09-01",
       "notes": "Adds no storage entitlement. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -153,8 +153,8 @@
       "currency": "USD",
       "unit": "device/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Dynamics 365 Licensing Guide — Operations Device",
-      "asOf": "2026-08-24",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Operations Device",
+      "asOf": "2026-09-01",
       "notes": "Dynamics 365 Operations - Device. Corrected from $75: the NCE sheet lists $102 monthly-term and $1,020/year annual-term. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -164,8 +164,8 @@
       "currency": "USD",
       "unit": "pack",
       "sourceUrl": "https://www.microsoft.com/licensing/docs/view/Licensing-Guides",
-      "guideSection": "Microsoft Copilot Studio Licensing Guide — Copilot Studio License (Capacity pack)",
-      "asOf": "2026-08-24",
+      "guideSection": "Microsoft Copilot Studio Licensing Guide (September 2026) — Copilot Studio License (Capacity pack)",
+      "asOf": "2026-09-01",
       "notes": "$200 per credit pack/month, billed annually; 1 pack = 25,000 Copilot Credits. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (cross-checked against the annual-term/annual-billing row / 12)."
     },
     {
@@ -272,7 +272,7 @@
       "currency": "USD",
       "unit": "user/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Dynamics 365 Commerce",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Dynamics 365 Commerce",
       "asOf": "2026-09-01",
       "notes": "Dynamics 365 Commerce base licence; accrues Operations storage like Finance/SCM full users (guide capacity table). Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: the monthly-term (P1M) retail price carries a 20% uplift, so the annual-term list price this catalog uses is that figure / 1.2 (P1M $252; annual-term/annual-billing $2,520/yr ÷ 12)."
     },
@@ -283,7 +283,7 @@
       "currency": "USD",
       "unit": "mo",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (e-Commerce tiers)",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (e-Commerce tiers)",
       "asOf": "2026-09-01",
       "notes": "All six AOV bands list at the same price; the band sets the included transaction quantity (see commerce.json), not the price. Includes 1 Commerce Scale Unit – Cloud. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $4,800 / 1.2, cross-checked against the annual-term/annual-billing row $48,000/yr ÷ 12."
     },
@@ -294,7 +294,7 @@
       "currency": "USD",
       "unit": "pack",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — e-Commerce tiers and transaction capacities (overage)",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — e-Commerce tiers and transaction capacities (overage)",
       "asOf": "2026-09-01",
       "notes": "One overage unit adds a band-dependent block of transactions/month (see commerce.json). Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $600 / 1.2, cross-checked against the annual-term/annual-billing row $6,000/yr ÷ 12."
     },
@@ -305,7 +305,7 @@
       "currency": "USD",
       "unit": "mo",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (e-Commerce tiers)",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (e-Commerce tiers)",
       "asOf": "2026-09-01",
       "notes": "All six AOV bands list at the same price; the band sets the included transaction quantity (see commerce.json), not the price. Includes 1 Commerce Scale Unit – Cloud. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $17,400 / 1.2, cross-checked against the annual-term/annual-billing row $174,000/yr ÷ 12."
     },
@@ -316,7 +316,7 @@
       "currency": "USD",
       "unit": "pack",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — e-Commerce tiers and transaction capacities (overage)",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — e-Commerce tiers and transaction capacities (overage)",
       "asOf": "2026-09-01",
       "notes": "One overage unit adds a band-dependent block of transactions/month (see commerce.json). Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $600 / 1.2, cross-checked against the annual-term/annual-billing row $6,000/yr ÷ 12."
     },
@@ -327,7 +327,7 @@
       "currency": "USD",
       "unit": "mo",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (e-Commerce tiers)",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (e-Commerce tiers)",
       "asOf": "2026-09-01",
       "notes": "All six AOV bands list at the same price; the band sets the included transaction quantity (see commerce.json), not the price. Includes 1 Commerce Scale Unit – Cloud. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $37,200 / 1.2, cross-checked against the annual-term/annual-billing row $372,000/yr ÷ 12."
     },
@@ -338,7 +338,7 @@
       "currency": "USD",
       "unit": "pack",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — e-Commerce tiers and transaction capacities (overage)",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — e-Commerce tiers and transaction capacities (overage)",
       "asOf": "2026-09-01",
       "notes": "One overage unit adds a band-dependent block of transactions/month (see commerce.json). Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $600 / 1.2, cross-checked against the annual-term/annual-billing row $6,000/yr ÷ 12."
     },
@@ -349,7 +349,7 @@
       "currency": "USD",
       "unit": "env/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Dynamics 365 Commerce Scale Unit (Cloud capacity)",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Dynamics 365 Commerce Scale Unit (Cloud capacity)",
       "asOf": "2026-09-01",
       "notes": "Standalone cloud CSU add-on; entitles 65 Operations – Device plus 130 GB operations database / 195 GB operations file capacity (guide capacity table). The NCE sheet describes it as 'includes 3K Dynamics 365 Commerce transactions per month OR 65 Devices'. Every e-Commerce tier already includes one cloud CSU. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $7,200 / 1.2, cross-checked against the annual-term/annual-billing row $72,000/yr ÷ 12."
     },
@@ -360,7 +360,7 @@
       "currency": "USD",
       "unit": "env/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Dynamics 365 Commerce Scale Unit (Cloud capacity)",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Dynamics 365 Commerce Scale Unit (Cloud capacity)",
       "asOf": "2026-09-01",
       "notes": "Standalone cloud CSU add-on; entitles 225 Operations – Device plus 450 GB operations database / 675 GB operations file capacity (guide capacity table). The NCE sheet describes it as 'includes 10K Dynamics 365 Commerce transactions per month OR 225 Devices'. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $20,400 / 1.2, cross-checked against the annual-term/annual-billing row $204,000/yr ÷ 12."
     },
@@ -371,7 +371,7 @@
       "currency": "USD",
       "unit": "env/mo",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Dynamics 365 Commerce Scale Unit (Cloud capacity)",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Dynamics 365 Commerce Scale Unit (Cloud capacity)",
       "asOf": "2026-09-01",
       "notes": "Standalone cloud CSU add-on; entitles 500 Operations – Device plus 1,000 GB operations database / 1,500 GB operations file capacity (guide capacity table). The NCE sheet describes it as 'includes 25K Dynamics 365 Commerce transactions per month OR 500 Devices'. Verified against the Microsoft NCE (CSP) commercial price list, Aug 2026 snapshot: P1M $44,400 / 1.2, cross-checked against the annual-term/annual-billing row $444,000/yr ÷ 12."
     },
@@ -382,9 +382,32 @@
       "currency": "USD",
       "unit": "mo",
       "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
-      "guideSection": "Dynamics 365 Licensing Guide (August 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (Ratings and Reviews)",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Additional Dynamics 365 Commerce applications, add-ons and capacities (Ratings and Reviews)",
       "asOf": "2026-09-01",
       "notes": "DERIVED: the NCE sheet (Aug 2026 snapshot, Commercial segment) carries only a monthly-term row at $900; $900 / 1.2 = $750 assumes the standard annual-term uplift convention used throughout this catalog. Replace with the published annual-term figure if one appears. Requires e-commerce."
+    },
+    {
+      "id": "commerce.headlessImport",
+      "label": "Dynamics 365 Headless Commerce – import add-on",
+      "value": 0,
+      "currency": "USD",
+      "unit": "mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Headless Commerce add-ons",
+      "asOf": "2026-09-01",
+      "notes": "NEW in the September 2026 Dynamics 365 Licensing Guide (Headless Commerce reached GA). PLACEHOLDER — $0 until entered from your agreement: Microsoft does not print a price for this SKU in the guide, and it is absent from the 2026-08-24 Microsoft NCE (CSP) commercial price sheet, so no list price could be sourced. Replace the value once the SKU appears on the CSP sheet or a pricing page. Supports importing completed retail transactions captured outside Dynamics 365 Commerce. Base capacity 30,000 retail transaction imports/month plus one Commerce Scale Unit – Cloud (Headless Commerce scenarios only); overage unit 5,000 retail transaction imports/month. Capacities are stated monthly but enforced annually in aggregate. Not yet modeled by the engine — this entry documents the SKU; it is not referenced by commerce.json, so it does not appear in the UI."
+    },
+    {
+      "id": "commerce.headlessOrchestration",
+      "label": "Dynamics 365 Headless Commerce – orchestration add-on",
+      "value": 0,
+      "currency": "USD",
+      "unit": "mo",
+      "sourceUrl": "https://www.microsoft.com/licensing/guidance/Dynamics-365",
+      "guideSection": "Dynamics 365 Licensing Guide (September 2026) — Headless Commerce add-ons",
+      "asOf": "2026-09-01",
+      "notes": "NEW in the September 2026 Dynamics 365 Licensing Guide (Headless Commerce reached GA). PLACEHOLDER — $0 until entered from your agreement: Microsoft does not print a price for this SKU in the guide, and it is absent from the 2026-08-24 Microsoft NCE (CSP) commercial price sheet, so no list price could be sourced. Replace the value once the SKU appears on the CSP sheet or a pricing page. Supports capturing retail transactions from third-party clients via the Dynamics 365 Commerce APIs. Base capacity 30,000 retail transactions/month plus one Commerce Scale Unit – Cloud (Headless Commerce scenarios only); overage unit 5,000 retail transactions/month. Capacities are stated monthly but enforced annually in aggregate. Required to reach the retail transaction tables and retail order processing workflows, which Operations – Order Lines does not entitle. Not yet modeled by the engine — this entry documents the SKU; it is not referenced by commerce.json, so it does not appear in the UI."
     }
-  ]
+  ],
+  "notes": "Re-verified in full against the September 2026 Dynamics 365, Power Platform, and Microsoft Copilot Studio licensing guides: no price or capacity-entitlement value changed from the previous edition (every currency and GB figure in all three guides is identical). Entries whose asOf is 2026-09-01 were confirmed against those guides. Entries still dated 2025-02-01 are sourced from the Azure / Azure DevOps pricing pages or entered from a customer agreement and were NOT re-checked in this pass. Prices the guides do not print (attach, Team Members, Operations Activity/Device, and the storage add-ons) remain sourced from the Microsoft NCE (CSP) commercial price sheet, still the 2026-08-24 snapshot."
 }

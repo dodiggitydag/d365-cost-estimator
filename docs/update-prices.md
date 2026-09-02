@@ -17,8 +17,9 @@ new guide PDFs, to an AI assistant (Claude, Copilot, etc.) and review the diff i
 
    Plus the Azure DevOps pricing page for the AzDO entries.
 
-   Note: some prices are **no longer printed in any guide** (observed August 2026:
-   attach, Team Members, Operations Activity/Device, and the Operations database/file
+   Note: some prices are **no longer printed in any guide** (observed August 2026 and
+   still true in the September 2026 edition: attach, Team Members, Operations
+   Activity/Device, and the Operations database/file
    storage add-ons). For those, check the product pricing pages
    (microsoft.com/en-us/dynamics-365/products/*/pricing), then fall back to the CSP price
    sheet as described below. Watch out for subscription add-on vs pay-as-you-go meter
@@ -73,6 +74,18 @@ Commerce Ratings and Reviews"). Two Commerce-specific gotchas:
   `src/catalog/commerce.json` (`includedTransactionsPerMonth`, `overageUnitTransactions`
   per band, CSU device counts). When a new guide changes the "Number of monthly
   transactions per SKU" table, update that file too, not just the pricing catalog.
+- **Headless Commerce is unpriced and unmodeled.** The September 2026 guide added
+  Dynamics 365 Headless Commerce (GA) with two add-on SKUs — `Headless import` and
+  `Headless orchestration`, each 30,000 retail transactions/month plus one Commerce
+  Scale Unit – Cloud, overage 5,000/month, enforced annually in aggregate. Microsoft
+  prints no price for either, and neither appears on the 2026-08-24 NCE sheet, so
+  `commerce.headlessImport` / `commerce.headlessOrchestration` sit at $0 as documented
+  placeholders. They are **not referenced by `commerce.json`**, so the engine does not
+  price them and they never reach the UI. Next refresh: check the NCE sheet for the
+  SKUs; if they list, set the values and wire the tier/overage mechanics into
+  `commerce.json` and the engine before charging for them. Related: the same edition
+  notes that Operations – Order Lines does **not** entitle the retail transaction
+  tables or retail order processing workflows — those need the Headless add-ons.
 
 2. **Locate each catalog entry in the guide.** Open
    `src/catalog/pricing.v<current>.json`. Every entry has a `guideSection` naming the

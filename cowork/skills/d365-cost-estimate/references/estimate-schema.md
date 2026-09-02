@@ -15,7 +15,7 @@ free-text carriers that survive import are `meta.name`, `customItems[].name`,
   "meta": {
     "name": "Contoso",             // string, required (drives the save filename)
     "createdAt": "2026-08-22T00:00:00.000Z",  // string, required (ISO convention)
-    "catalogVersion": "2026-08"    // string, required; informational only
+    "catalogVersion": "2026-09"    // string, required; informational only
   },
   "horizonMonths": 36,             // int 1..60
   "startYearMonth": "2027-01",     // OPTIONAL, "YYYY-MM" — anchors month 1 to a calendar date
